@@ -1,9 +1,11 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using System;
+using Microsoft.Data.SqlClient;
 
 namespace DatabaseOperations.Interfaces
 {
-    public interface ISqlConnectionWrapper
+    public interface ISqlConnectionWrapper : IDisposable
     {
-        SqlConnection GetConnection();
+        SqlConnection Get();
+        void Open();
     }
 }

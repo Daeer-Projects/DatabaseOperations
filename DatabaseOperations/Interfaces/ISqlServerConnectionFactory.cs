@@ -2,10 +2,7 @@
 {
     public interface ISqlServerConnectionFactory
 	{
-        IBackupOperator GenerateBackupOperator(IConsoleWrapper console);
-        IBackupWrapper GenerateBackupWrapper(string databaseName, string connectionString);
-        ISqlConnectionWrapper GenerateSqlConnectionWrapper(string connectionString);
-        IServerConnectionWrapper GenerateServerConnectionWrapper(ISqlConnectionWrapper connectionWrapper);
-        IServerWrapper GenerateServerWrapper(IServerConnectionWrapper connectionWrapper);
+        ISqlConnectionWrapper CreateConnection(string connectionString);
+        ISqlCommandWrapper CreateCommand(string commandText, ISqlConnectionWrapper connection);
 	}
 }

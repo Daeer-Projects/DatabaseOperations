@@ -3,18 +3,28 @@ using Microsoft.Data.SqlClient;
 
 namespace DatabaseOperations.Wrappers
 {
-    public class SqlConnectionWrapper : ISqlConnectionWrapper
+    public sealed class SqlConnectionWrapper : ISqlConnectionWrapper
 	{
         public SqlConnectionWrapper(string connectionString)
         {
-            _connection = new SqlConnection(connectionString);
+            _sqlConnection = new SqlConnection(connectionString);
         }
 
-        private readonly SqlConnection _connection;
+        private readonly SqlConnection _sqlConnection;
 
-        public SqlConnection GetConnection()
+        public SqlConnection Get()
         {
-            return _connection;
+            return _sqlConnection;
+        }
+
+        public void Open()
+        {
+            _sqlConnection.Open();
+        }
+
+        public void Dispose()
+        {
+            _sqlConnection.Dispose();
         }
 	}
 }

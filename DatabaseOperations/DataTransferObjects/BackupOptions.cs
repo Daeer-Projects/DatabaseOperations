@@ -1,7 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-[assembly: InternalsVisibleTo("DatabaseOperations.Tests")]
-namespace DatabaseOperations.DataTransferObjects
+﻿namespace DatabaseOperations.DataTransferObjects
 {
     internal class BackupOptions
     {

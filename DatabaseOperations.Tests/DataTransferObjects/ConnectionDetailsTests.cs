@@ -1,0 +1,125 @@
+﻿using System.Collections.Generic;
+using DatabaseOperations.DataTransferObjects;
+using FluentAssertions;
+using Xunit;
+
+namespace DatabaseOperations.Tests.DataTransferObjects
+{
+
+	public class ConnectionDetailsTests
+	{
+        private const string BackupPath = @"C:\Database Backups\";
+
+		[Theory]
+		[MemberData(nameof(ConnectionStrings))]
+		internal void TestConstructorWithConnectionStringReturnsExpectedDatabaseName(string connectionString,
+			ConnectionDetails expected)
+		{
+			// Arrange.
+			// Act.
+			var actual = new ConnectionDetails(connectionString, BackupPath);
+
+			// Assert.
+			actual.DatabaseName.Should().Be(expected.DatabaseName);
+		}
+
+		[Theory]
+		[MemberData(nameof(ConnectionStrings))]
+		internal void TestConstructorWithConnectionStringReturnsExpectedConnectionString(string connectionString,
+			ConnectionDetails expected)
+		{
+			// Arrange.
+			// Act.
+            var actual = new ConnectionDetails(connectionString, BackupPath);
+
+			// Assert.
+			actual.ConnectionString.Should().Be(expected.ConnectionString);
+		}
+
+		[Theory]
+		[MemberData(nameof(ConnectionStrings))]
+		internal void TestConstructorWithConnectionStringReturnsExpectedBackupLocation(string connectionString,
+			ConnectionDetails expected)
+		{
+			// Arrange.
+			// Act.
+            var actual = new ConnectionDetails(connectionString, BackupPath);
+			var actualLocation = RemoveLastSecondFromLocation(actual.BackupLocation);
+			var expectedLocation = RemoveLastSecondFromLocation(expected.BackupLocation);
+
+			// Assert.
+			actualLocation.Should().Be(expectedLocation);
+		}
+
+		[Theory]
+		[MemberData(nameof(ConnectionStrings))]
+		internal void TestConstructorWithConnectionStringReturnsExpectedDescription(string connectionString,
+			ConnectionDetails expected)
+		{
+			// Arrange.
+			// Act.
+            var actual = new ConnectionDetails(connectionString, BackupPath);
+
+			// Assert.
+			actual.Description.Should().Be(expected.Description);
+		}
+
+		[Theory]
+		[MemberData(nameof(ConnectionStrings))]
+		internal void TestConstructorWithConnectionStringReturnsExpectedParameters(string connectionString,
+			ConnectionDetails expected)
+		{
+			// Arrange.
+            var expectedParameters = expected.Parameters();
+
+			// Act.
+            var actual = new ConnectionDetails(connectionString, BackupPath);
+            var actualParameters = actual.Parameters();
+
+			// Assert.
+			for (var i = 0; i < actualParameters.Length; i++)
+			{
+				if (actualParameters[i].ParameterName != Constants.Parameters.LocationParameter)
+				{
+                    actualParameters[i].Value.Should().BeEquivalentTo(expectedParameters[i].Value);
+					continue;
+				}
+
+				var actualLocation = RemoveLastSecondFromLocation(actualParameters[i].Value.ToString());
+				var expectedLocation = RemoveLastSecondFromLocation(expectedParameters[i].Value.ToString());
+
+				actualLocation.Should().Be(expectedLocation);
+			}
+		}
+
+		public static IEnumerable<object[]> ConnectionStrings()
+		{
+			yield return new object[]
+			{
+				"server=127.0.0.1;database=Bananas;User Id=sa;Password=password;Connect Timeout=205;",
+				GetConnectionDetails("server", "database", "127.0.0.1", "Bananas", 5)
+			};
+			yield return new object[]
+			{
+				"Server=192.168.11.65;Database=Whoop;User Id=sa;Password=password;Connect Timeout=1;",
+				GetConnectionDetails("Server", "Database", "192.168.11.65", "Whoop", 5)
+			};
+			yield return new object[]
+			{
+				"SERVER=(localDb);DATABASE=PoohBear;User Id=sa;Password=password;Connect Timeout=30;",
+				GetConnectionDetails("SERVER", "DATABASE", "(localDb)", "PoohBear", 5)
+			};
+		}
+
+		private static ConnectionDetails GetConnectionDetails(string serverParameter, string databaseParameter, string serverName, string databaseName, int timeout)
+		{
+			var connectionString = $"{serverParameter}={serverName};{databaseParameter}={databaseName};User Id=sa;Password=password;Connect Timeout={timeout};";
+			return new ConnectionDetails(connectionString, BackupPath);
+		}
+
+		private static string RemoveLastSecondFromLocation(string location)
+		{
+			return location[..^5];
+		}
+	}
+}
