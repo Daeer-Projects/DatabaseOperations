@@ -7,7 +7,7 @@ namespace DatabaseOperations.Extensions
 	{
         public static ValidationResult CheckValidation<T>(this T component, AbstractValidator<T> validator) where T : class
         {
-            ValidationResult result = validator.Validate(component);
+            var result = validator.Validate(component);
             return result;
         }
 	}

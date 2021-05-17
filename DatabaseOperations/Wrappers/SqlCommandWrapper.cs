@@ -28,6 +28,11 @@ namespace DatabaseOperations.Wrappers
             return _sqlCommand.ExecuteNonQuery();
         }
 
+        public void SetCommandTimeout(int timeout)
+        {
+            _sqlCommand.CommandTimeout = timeout;
+        }
+
         public void Dispose()
         {
             _sqlCommand.Dispose();
