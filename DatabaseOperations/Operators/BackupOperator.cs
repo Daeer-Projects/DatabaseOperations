@@ -35,6 +35,7 @@ WITH
                     using (var command = _sqlCreator.CreateCommand(SqlScriptTemplate, connection))
                     {
                         command.AddParameters(details.Parameters());
+                        command.SetCommandTimeout(details.CommandTimeout);
                         connection.Open();
                         command.ExecuteNonQuery();
                     }

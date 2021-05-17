@@ -8,9 +8,9 @@ namespace DatabaseOperations.DataTransferObjects
 {
     public class ConnectionDetails
 	{
-        public ConnectionDetails(string connectionString, string backupPath)
+        public ConnectionDetails(string connectionString, string backupPath, int timeout = 0)
         {
-            InitialiseProperties(connectionString, backupPath);
+            InitialiseProperties(connectionString, backupPath, timeout);
         }
 
         private SqlParameter[] _parameters;
@@ -19,13 +19,14 @@ namespace DatabaseOperations.DataTransferObjects
         public string ConnectionString { get; private set; }
         public string BackupLocation { get; private set; }
         public string Description { get; private set; }
+        public int CommandTimeout { get; private set; }
 
         public SqlParameter[] Parameters()
         {
             return _parameters;
         }
 
-        private void InitialiseProperties(string connectionString, string backupPath)
+        private void InitialiseProperties(string connectionString, string backupPath, int timeout)
         {
             var itemArray = connectionString.Split(';');
 
@@ -38,7 +39,13 @@ namespace DatabaseOperations.DataTransferObjects
             ConnectionString = updatedConnectionString;
             BackupLocation = location;
             Description = description;
+            CommandTimeout = SetDefaultOrTimeout(timeout);
             _parameters = GetParameters(database, location, description, backupPath);
+        }
+
+        private static int SetDefaultOrTimeout(int timeout)
+        {
+            return timeout == 0 ? 60 * 60 : timeout;
         }
 
         private static SqlParameter[] GetParameters(string database, string location, string description, string backupPath)

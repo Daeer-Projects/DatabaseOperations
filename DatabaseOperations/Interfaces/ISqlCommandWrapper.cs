@@ -7,6 +7,7 @@ namespace DatabaseOperations.Interfaces
     {
         SqlCommand Get();
         void AddParameters(SqlParameter[] parameters);
+        void SetCommandTimeout(int timeout);
         int ExecuteNonQuery();
     }
 }

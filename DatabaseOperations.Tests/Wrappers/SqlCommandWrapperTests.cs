@@ -25,6 +25,21 @@ namespace DatabaseOperations.Tests.Wrappers
         }
 
         [Fact]
+        public void TestSetCommandTimeoutReturnsSetsTimeout()
+        {
+            // Arrange.
+            var sqlConnection = Substitute.For<ISqlConnectionWrapper>();
+            var sqlCommand = new SqlCommandWrapper("SELECT '0';", sqlConnection);
+            sqlCommand.SetCommandTimeout(27);
+
+            // Act.
+            var actualCommand = sqlCommand.Get();
+
+            // Assert.
+            actualCommand.CommandTimeout.Should().Be(27);
+        }
+
+        [Fact]
         public void TestAddParametersAddsExpected()
         {
             // Arrange.
