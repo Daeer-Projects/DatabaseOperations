@@ -30,7 +30,7 @@ namespace DatabaseOperations.Tests.Operators
         public void TestBackupWithValidDetailsReturnsTrue()
         {
             // Arrange.
-            var details = GetConnectionDetails("server", "database", "127.0.0.1", "Thing");
+            var details = GetConnectionOptions("server", "database", "127.0.0.1", "Thing");
 
             // Act.
             var result = _backupOperator.BackupDatabase(details);
@@ -43,7 +43,7 @@ namespace DatabaseOperations.Tests.Operators
         public void TestBackupWithConnectionErrorReturnsFalse()
         {
             // Arrange.
-            var details = GetConnectionDetails("server", "database", "oops", "Thing");
+            var details = GetConnectionOptions("server", "database", "oops", "Thing");
             _connection
                 .When(c => c.Open())
                 .Do(c => throw  new DbTestException("Server is not correct!"));
@@ -59,7 +59,7 @@ namespace DatabaseOperations.Tests.Operators
         public void TestBackupWithCommandParameterErrorReturnsFalse()
         {
             // Arrange.
-            var details = GetConnectionDetails("server", "database", "oops", "Thing");
+            var details = GetConnectionOptions("server", "database", "oops", "Thing");
             _command
                 .When(c => c.AddParameters(Arg.Any<SqlParameter[]>()))
                 .Do(c => throw new DbTestException("Command is not working!"));
@@ -75,7 +75,7 @@ namespace DatabaseOperations.Tests.Operators
         public void TestBackupWithCommandExecuteErrorReturnsFalse()
         {
             // Arrange.
-            var details = GetConnectionDetails("server", "database", "oops", "Thing");
+            var details = GetConnectionOptions("server", "database", "oops", "Thing");
             _command
                 .When(c => c.ExecuteNonQuery())
                 .Do(c => throw new DbTestException("Execute is not working!"));
@@ -87,10 +87,10 @@ namespace DatabaseOperations.Tests.Operators
             result.Should().BeFalse();
         }
 
-        private static ConnectionDetails GetConnectionDetails(string serverParameter, string databaseParameter, string serverName, string databaseName)
+        private static ConnectionOptions GetConnectionOptions(string serverParameter, string databaseParameter, string serverName, string databaseName)
         {
             string connectionString = $"{serverParameter}={serverName};{databaseParameter}={databaseName};User Id=sa;Password=password;Connect Timeout=10;";
-            return new ConnectionDetails(connectionString, BackupPath);
+            return new ConnectionOptions(connectionString, BackupPath);
         }
 	}
 }

@@ -6,18 +6,18 @@ using Xunit;
 namespace DatabaseOperations.Tests.DataTransferObjects
 {
 
-	public class ConnectionDetailsTests
+	public class ConnectionOptionsTests
 	{
         private const string BackupPath = @"C:\Database Backups\";
 
 		[Theory]
 		[MemberData(nameof(ConnectionStrings))]
 		internal void TestConstructorWithConnectionStringReturnsExpectedDatabaseName(string connectionString, int commandTimeout,
-			ConnectionDetails expected)
+			ConnectionOptions expected)
 		{
 			// Arrange.
 			// Act.
-			var actual = new ConnectionDetails(connectionString, BackupPath, commandTimeout);
+			var actual = new ConnectionOptions(connectionString, BackupPath, commandTimeout);
 
 			// Assert.
 			actual.DatabaseName.Should().Be(expected.DatabaseName);
@@ -26,11 +26,11 @@ namespace DatabaseOperations.Tests.DataTransferObjects
 		[Theory]
 		[MemberData(nameof(ConnectionStrings))]
 		internal void TestConstructorWithConnectionStringReturnsExpectedConnectionString(string connectionString, int commandTimeout,
-			ConnectionDetails expected)
+			ConnectionOptions expected)
 		{
 			// Arrange.
 			// Act.
-            var actual = new ConnectionDetails(connectionString, BackupPath, commandTimeout);
+            var actual = new ConnectionOptions(connectionString, BackupPath, commandTimeout);
 
 			// Assert.
 			actual.ConnectionString.Should().Be(expected.ConnectionString);
@@ -39,11 +39,11 @@ namespace DatabaseOperations.Tests.DataTransferObjects
 		[Theory]
 		[MemberData(nameof(ConnectionStrings))]
 		internal void TestConstructorWithConnectionStringReturnsExpectedBackupLocation(string connectionString, int commandTimeout,
-			ConnectionDetails expected)
+			ConnectionOptions expected)
 		{
 			// Arrange.
 			// Act.
-            var actual = new ConnectionDetails(connectionString, BackupPath, commandTimeout);
+            var actual = new ConnectionOptions(connectionString, BackupPath, commandTimeout);
 			var actualLocation = RemoveLastSecondFromLocation(actual.BackupLocation);
 			var expectedLocation = RemoveLastSecondFromLocation(expected.BackupLocation);
 
@@ -54,11 +54,11 @@ namespace DatabaseOperations.Tests.DataTransferObjects
 		[Theory]
 		[MemberData(nameof(ConnectionStrings))]
 		internal void TestConstructorWithConnectionStringReturnsExpectedDescription(string connectionString, int commandTimeout,
-			ConnectionDetails expected)
+			ConnectionOptions expected)
 		{
 			// Arrange.
 			// Act.
-            var actual = new ConnectionDetails(connectionString, BackupPath, commandTimeout);
+            var actual = new ConnectionOptions(connectionString, BackupPath, commandTimeout);
 
 			// Assert.
 			actual.Description.Should().Be(expected.Description);
@@ -67,11 +67,11 @@ namespace DatabaseOperations.Tests.DataTransferObjects
         [Theory]
         [MemberData(nameof(ConnectionStrings))]
         internal void TestConstructorWithConnectionStringReturnsExpectedCommandTimeout(string connectionString, int commandTimeout,
-            ConnectionDetails expected)
+            ConnectionOptions expected)
         {
             // Arrange.
             // Act.
-            var actual = new ConnectionDetails(connectionString, BackupPath, commandTimeout);
+            var actual = new ConnectionOptions(connectionString, BackupPath, commandTimeout);
 
             // Assert.
             actual.CommandTimeout.Should().Be(expected.CommandTimeout);
@@ -80,13 +80,13 @@ namespace DatabaseOperations.Tests.DataTransferObjects
 		[Theory]
 		[MemberData(nameof(ConnectionStrings))]
 		internal void TestConstructorWithConnectionStringReturnsExpectedParameters(string connectionString, int commandTimeout,
-			ConnectionDetails expected)
+			ConnectionOptions expected)
 		{
 			// Arrange.
             var expectedParameters = expected.Parameters();
 
 			// Act.
-            var actual = new ConnectionDetails(connectionString, BackupPath, commandTimeout);
+            var actual = new ConnectionOptions(connectionString, BackupPath, commandTimeout);
             var actualParameters = actual.Parameters();
 
 			// Assert.
@@ -111,26 +111,26 @@ namespace DatabaseOperations.Tests.DataTransferObjects
 			{
 				"server=127.0.0.1;database=Bananas;User Id=sa;Password=password;Connect Timeout=205;",
                 30,
-				GetConnectionDetails("server", "database", "127.0.0.1", "Bananas", 5, 30)
+				GetConnectionOptions("server", "database", "127.0.0.1", "Bananas", 5, 30)
 			};
 			yield return new object[]
 			{
 				"Server=192.168.11.65;Database=Whoop;User Id=sa;Password=password;Connect Timeout=1;",
                 10,
-				GetConnectionDetails("Server", "Database", "192.168.11.65", "Whoop", 5, 10)
+				GetConnectionOptions("Server", "Database", "192.168.11.65", "Whoop", 5, 10)
 			};
 			yield return new object[]
 			{
 				"SERVER=(localDb);DATABASE=PoohBear;User Id=sa;Password=password;Connect Timeout=30;",
                 0,
-				GetConnectionDetails("SERVER", "DATABASE", "(localDb)", "PoohBear", 5, 60 * 60)
+				GetConnectionOptions("SERVER", "DATABASE", "(localDb)", "PoohBear", 5, 60 * 60)
 			};
 		}
 
-		private static ConnectionDetails GetConnectionDetails(string serverParameter, string databaseParameter, string serverName, string databaseName, int timeout, int commandTimeout)
+		private static ConnectionOptions GetConnectionOptions(string serverParameter, string databaseParameter, string serverName, string databaseName, int timeout, int commandTimeout)
 		{
 			var connectionString = $"{serverParameter}={serverName};{databaseParameter}={databaseName};User Id=sa;Password=password;Connect Timeout={timeout};";
-			return new ConnectionDetails(connectionString, BackupPath, commandTimeout);
+			return new ConnectionOptions(connectionString, BackupPath, commandTimeout);
 		}
 
 		private static string RemoveLastSecondFromLocation(string location)

@@ -6,9 +6,9 @@ using Useful.Extensions;
 
 namespace DatabaseOperations.DataTransferObjects
 {
-    public class ConnectionDetails
+    public class ConnectionOptions
 	{
-        public ConnectionDetails(string connectionString, string backupPath, int timeout = 0)
+        public ConnectionOptions(string connectionString, string backupPath, int timeout = 0)
         {
             InitialiseProperties(connectionString, backupPath, timeout);
         }

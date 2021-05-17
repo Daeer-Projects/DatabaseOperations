@@ -25,17 +25,17 @@ WITH
 
         private readonly ISqlServerConnectionFactory _sqlCreator;
 
-        public bool BackupDatabase(ConnectionDetails details)
+        public bool BackupDatabase(ConnectionOptions options)
         {
             var result = false;
             try
             {
-                using (var connection = _sqlCreator.CreateConnection(details.ConnectionString))
+                using (var connection = _sqlCreator.CreateConnection(options.ConnectionString))
                 {
                     using (var command = _sqlCreator.CreateCommand(SqlScriptTemplate, connection))
                     {
-                        command.AddParameters(details.Parameters());
-                        command.SetCommandTimeout(details.CommandTimeout);
+                        command.AddParameters(options.Parameters());
+                        command.SetCommandTimeout(options.CommandTimeout);
                         connection.Open();
                         command.ExecuteNonQuery();
                     }
