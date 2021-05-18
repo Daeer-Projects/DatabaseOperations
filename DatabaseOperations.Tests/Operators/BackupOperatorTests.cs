@@ -89,7 +89,7 @@ namespace DatabaseOperations.Tests.Operators
 
         private static ConnectionOptions GetConnectionOptions(string serverParameter, string databaseParameter, string serverName, string databaseName)
         {
-            string connectionString = $"{serverParameter}={serverName};{databaseParameter}={databaseName};User Id=sa;Password=password;Connect Timeout=10;";
+            var connectionString = $"{serverParameter}={serverName};{databaseParameter}={databaseName};User Id=sa;Password=password;Connect Timeout=10;";
             return new ConnectionOptions(connectionString, BackupPath);
         }
 	}
