@@ -1,4 +1,6 @@
-﻿using DatabaseOperations.DataTransferObjects;
+﻿using System.Collections.Generic;
+using System.Linq;
+using DatabaseOperations.DataTransferObjects;
 using DatabaseOperations.Interfaces;
 using DatabaseOperations.Operators;
 using FluentAssertions;
@@ -36,7 +38,7 @@ namespace DatabaseOperations.Tests.Operators
             var result = _backupOperator.BackupDatabase(details);
 
             // Assert.
-            result.Should().BeTrue();
+            result.Result.Should().BeTrue();
         }
 
         [Fact]
@@ -52,7 +54,7 @@ namespace DatabaseOperations.Tests.Operators
             var result = _backupOperator.BackupDatabase(details);
 
             // Assert.
-            result.Should().BeFalse();
+            result.Result.Should().BeFalse();
         }
 
         [Fact]
@@ -68,7 +70,7 @@ namespace DatabaseOperations.Tests.Operators
             var result = _backupOperator.BackupDatabase(details);
 
             // Assert.
-            result.Should().BeFalse();
+            result.Result.Should().BeFalse();
         }
 
         [Fact]
@@ -80,16 +82,25 @@ namespace DatabaseOperations.Tests.Operators
                 .When(c => c.ExecuteNonQuery())
                 .Do(c => throw new DbTestException("Execute is not working!"));
 
+            var expectedMessage = new List<string>()
+            {
+                "Backing up the database failed due to an exception."
+            };
+
             // Act.
             var result = _backupOperator.BackupDatabase(details);
 
             // Assert.
-            result.Should().BeFalse();
+            result.Result.Should().BeFalse();
+            result.Messages.Should().HaveSameCount(expectedMessage);
+            
+            // ToDo: Can we make this better?  Particularly when we have other messages added to the result.
+            result.Messages.Should().ContainMatch($"{expectedMessage.First()} *");
         }
 
         private static ConnectionOptions GetConnectionOptions(string serverParameter, string databaseParameter, string serverName, string databaseName)
         {
-            string connectionString = $"{serverParameter}={serverName};{databaseParameter}={databaseName};User Id=sa;Password=password;Connect Timeout=10;";
+            var connectionString = $"{serverParameter}={serverName};{databaseParameter}={databaseName};User Id=sa;Password=password;Connect Timeout=10;";
             return new ConnectionOptions(connectionString, BackupPath);
         }
 	}

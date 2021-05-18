@@ -2,10 +2,9 @@
 
 namespace DatabaseOperations.DataTransferObjects
 {
-    public class OperationResult<T> where T : class 
+    public class OperationResult<T>
     {
         public T Result { get; set; }
-        public IEnumerable<string> Errors { get; set; }
-        public bool IsValid { get; set; }
+        public IList<string> Messages { get; set; } = new List<string>();
     }
 }
