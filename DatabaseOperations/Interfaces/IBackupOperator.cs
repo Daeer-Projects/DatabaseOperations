@@ -4,6 +4,6 @@ namespace DatabaseOperations.Interfaces
 {
     public interface IBackupOperator
 	{
-        bool BackupDatabase(ConnectionOptions options);
+        OperationResult<bool> BackupDatabase(ConnectionOptions options);
 	}
 }

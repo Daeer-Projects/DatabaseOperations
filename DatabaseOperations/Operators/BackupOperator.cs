@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data.Common;
+﻿using System.Data.Common;
 using DatabaseOperations.DataTransferObjects;
 using DatabaseOperations.Interfaces;
 
@@ -25,9 +24,10 @@ WITH
 
         private readonly ISqlServerConnectionFactory _sqlCreator;
 
-        public bool BackupDatabase(ConnectionOptions options)
+        public OperationResult<bool> BackupDatabase(ConnectionOptions options)
         {
-            var result = false;
+            var result = new OperationResult<bool>();
+            
             try
             {
                 using (var connection = _sqlCreator.CreateConnection(options.ConnectionString))
@@ -41,11 +41,11 @@ WITH
                     }
                 }
 
-                result = true;
+                result.Result = true;
             }
             catch (DbException exception)
             {
-                Console.WriteLine($"Backing up the database failed due to an exception.  Exception: {exception.Message}");
+                result.Messages.Add($"Backing up the database failed due to an exception.  Exception: {exception.Message}");
             }
 
             return result;
