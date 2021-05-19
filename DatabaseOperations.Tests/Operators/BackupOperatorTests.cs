@@ -82,7 +82,23 @@ namespace DatabaseOperations.Tests.Operators
                 .When(c => c.ExecuteNonQuery())
                 .Do(c => throw new DbTestException("Execute is not working!"));
 
-            var expectedMessage = new List<string>()
+            // Act.
+            var result = _backupOperator.BackupDatabase(details);
+
+            // Assert.
+            result.Result.Should().BeFalse();
+        }
+
+        [Fact]
+        public void TestBackupWithCommandExecuteErrorReturnsExpectedMessages()
+        {
+            // Arrange.
+            var details = GetConnectionOptions("server", "database", "oops", "Thing");
+            _command
+                .When(c => c.ExecuteNonQuery())
+                .Do(c => throw new DbTestException("Execute is not working!"));
+
+            var expectedMessages = new List<string>()
             {
                 "Backing up the database failed due to an exception."
             };
@@ -91,11 +107,8 @@ namespace DatabaseOperations.Tests.Operators
             var result = _backupOperator.BackupDatabase(details);
 
             // Assert.
-            result.Result.Should().BeFalse();
-            result.Messages.Should().HaveSameCount(expectedMessage);
-            
-            // ToDo: Can we make this better?  Particularly when we have other messages added to the result.
-            result.Messages.Should().ContainMatch($"{expectedMessage.First()} *");
+            result.Messages.Should().HaveSameCount(expectedMessages);
+            result.Messages.Should().Equal(expectedMessages, (actualMessage, expectedMessage) => actualMessage.Contains(expectedMessage));
         }
 
         private static ConnectionOptions GetConnectionOptions(string serverParameter, string databaseParameter, string serverName, string databaseName)
