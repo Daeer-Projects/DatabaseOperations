@@ -15,7 +15,7 @@ namespace DatabaseOperations.Tests.Validators
 			var connectionArray = new[] { "server=127.0.0.1", "database=Bananas", "User Id=sa", "Password=password", "Connect Timeout=10" };
 
 			// Act.
-			var results = connectionArray.CheckValidation<string[]>(new ConnectionArrayValidator());
+			var results = connectionArray.CheckValidation(new ConnectionArrayValidator());
 
 			// Assert.
 			results.IsValid.Should().BeTrue();
@@ -28,7 +28,7 @@ namespace DatabaseOperations.Tests.Validators
 			var connectionArray = Array.Empty<string>();
 
 			// Act.
-			var results = connectionArray.CheckValidation<string[]>(new ConnectionArrayValidator());
+			var results = connectionArray.CheckValidation(new ConnectionArrayValidator());
 
 			// Assert.
 			results.IsValid.Should().BeFalse();
@@ -41,7 +41,7 @@ namespace DatabaseOperations.Tests.Validators
 			string[] connectionArray = { "server=127.0.0.1", "database=Bananas" };
 
 			// Act.
-			var results = connectionArray.CheckValidation<string[]>(new ConnectionArrayValidator());
+			var results = connectionArray.CheckValidation(new ConnectionArrayValidator());
 
 			// Assert.
 			results.IsValid.Should().BeFalse();
@@ -59,7 +59,7 @@ namespace DatabaseOperations.Tests.Validators
 			var connectionArray = new[] { serverItem, "database=Bananas", "User Id=sa", "Password=password", "Connect Timeout=10" };
 
 			// Act.
-			var results = connectionArray.CheckValidation<string[]>(new ConnectionArrayValidator());
+			var results = connectionArray.CheckValidation(new ConnectionArrayValidator());
 
 			// Assert.
 			results.IsValid.Should().BeFalse();
@@ -77,33 +77,7 @@ namespace DatabaseOperations.Tests.Validators
 			var connectionArray = new[] { "server=127.0.0.1", databaseItem, "User Id=sa", "Password=password", "Connect Timeout=10" };
 
 			// Act.
-			var results = connectionArray.CheckValidation<string[]>(new ConnectionArrayValidator());
-
-			// Assert.
-			results.IsValid.Should().BeFalse();
-		}
-
-		[Fact]
-		public void TestConnectionValidatorWithNullServerItemReturnsFalse()
-		{
-			// Arrange.
-			var connectionArray = new[] { null, "Bananas", "User Id=sa", "Password=password", "Connect Timeout=10" };
-
-			// Act.
-			var results = connectionArray.CheckValidation<string[]>(new ConnectionArrayValidator());
-
-			// Assert.
-			results.IsValid.Should().BeFalse();
-		}
-
-		[Fact]
-		public void TestConnectionValidatorWithNullDatabaseItemReturnsFalse()
-		{
-			// Arrange.
-			var connectionArray = new[] { "server=127.0.0.1", null, "User Id=sa", "Password=password", "Connect Timeout=10" };
-
-			// Act.
-			var results = connectionArray.CheckValidation<string[]>(new ConnectionArrayValidator());
+			var results = connectionArray.CheckValidation(new ConnectionArrayValidator());
 
 			// Assert.
 			results.IsValid.Should().BeFalse();
