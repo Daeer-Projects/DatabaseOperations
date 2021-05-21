@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text.RegularExpressions;
 using DatabaseOperations.ConnectionRules;
+using DatabaseOperations.Extensions;
 using DatabaseOperations.Interfaces;
+using DatabaseOperations.Validators;
 using Microsoft.Data.SqlClient;
 
 namespace DatabaseOperations.DataTransferObjects
@@ -18,6 +20,7 @@ namespace DatabaseOperations.DataTransferObjects
         private SqlParameter[] _parameters = Array.Empty<SqlParameter>();
 
         private readonly char[] _splitArray = {';'};
+        private bool _isValid;
 
         private readonly IList<IConnectionRule> _connectionRules = new List<IConnectionRule>
         {
@@ -50,6 +53,7 @@ namespace DatabaseOperations.DataTransferObjects
         public string ConnectionString { get; internal set; } = string.Empty;
         public string Description { get; private set; } = string.Empty;
         public int CommandTimeout { get; private set; }
+        public IList<string> Messages { get; private set; } = new List<string>();
 
         public SqlParameter[] Parameters()
         {
@@ -58,20 +62,34 @@ namespace DatabaseOperations.DataTransferObjects
 
         public bool IsValid()
         {
-            // ToDo: Create a new validator for this class and return the result of that.
-            return true;
+            // ReSharper disable once InvertIf
+            if (_isValid)
+            {
+                var validationResults = this.CheckValidation(new ConnectionOptionsValidator());
+                _isValid = validationResults.IsValid;
+                foreach (var validationResultsError in validationResults.Errors)
+                {
+                    Messages.Add(validationResultsError.ErrorMessage);
+                }
+            }
+            
+            return _isValid;
         }
 
         private void InitialiseProperties(string connectionString, string backupPath, int timeout)
         {
+            _isValid = !string.IsNullOrWhiteSpace(connectionString);
+            if (!_isValid) return;
+            
             string[] itemArray = connectionString.Split(_splitArray, StringSplitOptions.RemoveEmptyEntries);
 
             ProcessItemArray(itemArray);
 
             var location = $"{backupPath}{DatabaseName}_Full_{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.bak";
             var description = $"Full backup of the `{DatabaseName}` database.";
-            
-            ConnectionString = UpdateConnectionString(connectionString);;
+
+            ConnectionString = UpdateConnectionString(connectionString);
+            ;
             BackupLocation = location;
             Description = description;
             CommandTimeout = SetDefaultOrTimeout(timeout);

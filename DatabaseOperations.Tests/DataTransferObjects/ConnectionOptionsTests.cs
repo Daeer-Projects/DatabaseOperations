@@ -9,6 +9,28 @@ namespace DatabaseOperations.Tests.DataTransferObjects
 	{
         private const string BackupPath = @"C:\Database Backups\";
 
+        [Fact]
+        public void TestConstructorWithEmptyConnectionStringReturnsValidationFailed()
+        {
+	        // Arrange.
+	        // Act.
+	        var actual = new ConnectionOptions(string.Empty, BackupPath);
+
+	        // Assert.
+	        actual.IsValid().Should().BeFalse();
+        }
+
+        [Fact]
+        public void TestConstructorWithNullConnectionStringReturnsValidationFailed()
+        {
+	        // Arrange.
+	        // Act.
+	        var actual = new ConnectionOptions(null!, BackupPath);
+
+	        // Assert.
+	        actual.IsValid().Should().BeFalse();
+        }
+        
         [Theory]
         [MemberData(nameof(ConnectionStrings))]
         internal void TestConstructorWithConnectionStringReturnsExpectedApplicationName(string connectionString, int commandTimeout,
@@ -258,15 +280,27 @@ namespace DatabaseOperations.Tests.DataTransferObjects
 			};
 			yield return new object[]
 			{
-				"Server=127.0.0.1;Something weird here;Address=127.0.0.1;Database=Banana;Um=42;Integrated Security=true;;Trusted_Connection=true;    ;Connect Timeout=5;Um=42;Connection Timeout=5;Application Name=TestingStuff;",
+				"Server=127.0.0.1;Something weird here;Address=127.0.0.1;Database=Banana;Um=42;Integrated Security=false;;Trusted_Connection=true;    ;Connect Timeout=5;Um=42;Connection Timeout=5;Application Name=TestingStuff;",
 				15,
 				new ConnectionOptions("database=Banana;", BackupPath, 15)
 					.ApplyServer("127.0.0.1")
 					.ApplyDatabaseName("Banana")
 					.ApplyConnectTimeOut("5")
-					.ApplyIntegratedSecurity("true")
+					.ApplyIntegratedSecurity("false")
 					.ApplyApplicationName("TestingStuff")
-					.OverrideConnectionString("Server=127.0.0.1;Something weird here;Address=127.0.0.1;Database=Banana;Um=42;Integrated Security=true;;Trusted_Connection=true;    ;Connect Timeout=5;Um=42;Connection Timeout=5;Application Name=TestingStuff;")
+					.OverrideConnectionString("Server=127.0.0.1;Something weird here;Address=127.0.0.1;Database=Banana;Um=42;Integrated Security=false;;Trusted_Connection=true;    ;Connect Timeout=5;Um=42;Connection Timeout=5;Application Name=TestingStuff;")
+			};
+			yield return new object[]
+			{
+				"Server=127.0.0.1;Something weird here;Address=127.0.0.1;Database=Banana;Um=42;Integrated Security=SSPI;;Trusted_Connection=true;    ;Connect Timeout=5;Um=42;Connection Timeout=5;Application Name=TestingStuff;",
+				15,
+				new ConnectionOptions("database=Banana;", BackupPath, 15)
+					.ApplyServer("127.0.0.1")
+					.ApplyDatabaseName("Banana")
+					.ApplyConnectTimeOut("5")
+					.ApplyIntegratedSecurity("SSPI")
+					.ApplyApplicationName("TestingStuff")
+					.OverrideConnectionString("Server=127.0.0.1;Something weird here;Address=127.0.0.1;Database=Banana;Um=42;Integrated Security=SSPI;;Trusted_Connection=true;    ;Connect Timeout=5;Um=42;Connection Timeout=5;Application Name=TestingStuff;")
 			};
 			yield return new object[]
 			{
@@ -284,7 +318,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
 			{
 				"; ;    ;;  ;Yep;Um not really;Pooh woz ere;",
 				25,
-				new ConnectionOptions(string.Empty, BackupPath, 25)
+				new ConnectionOptions("Something", BackupPath, 25)
 					.OverrideConnectionString("; ;    ;;  ;Yep;Um not really;Pooh woz ere;")
 			};
 		}

@@ -30,6 +30,12 @@ WITH
         public OperationResult<bool> BackupDatabase(ConnectionOptions options)
         {
             var result = new OperationResult<bool>();
+
+            if (!options.IsValid())
+            {
+                result.Messages = options.Messages;
+                return result;
+            }
             
             try
             {
@@ -43,7 +49,7 @@ WITH
                         command.ExecuteNonQuery();
                     }
                 }
-
+                
                 result.Result = true;
             }
             catch (DbException exception)
