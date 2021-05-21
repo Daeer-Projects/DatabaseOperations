@@ -12,7 +12,10 @@ namespace DatabaseOperations.Operators
         }
 
         private const string SqlScriptTemplate = @"
-EXEC master.dbo.xp_create_subdir @BackupPath;
+IF (@BackupPath IS NOT NULL AND @BackupPath <> '')
+BEGIN
+    EXEC master.dbo.xp_create_subdir @BackupPath;
+END
 
 BACKUP DATABASE @DatabaseName
 TO DISK = @BackupLocation
