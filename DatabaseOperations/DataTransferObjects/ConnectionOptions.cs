@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Text.RegularExpressions;
+using DatabaseOperations.ConnectionRules;
+using DatabaseOperations.Interfaces;
 using Microsoft.Data.SqlClient;
-using Useful.Extensions;
 
 namespace DatabaseOperations.DataTransferObjects
 {
@@ -13,12 +15,40 @@ namespace DatabaseOperations.DataTransferObjects
             InitialiseProperties(connectionString, backupPath, timeout);
         }
 
-        private SqlParameter[] _parameters;
+        private SqlParameter[] _parameters = Array.Empty<SqlParameter>();
 
-        public string DatabaseName { get; private set; }
-        public string ConnectionString { get; private set; }
-        public string BackupLocation { get; private set; }
-        public string Description { get; private set; }
+        private readonly char[] _splitArray = {';'};
+
+        private readonly IList<IConnectionRule> _connectionRules = new List<IConnectionRule>
+        {
+            new ApplicationConnectionRule(),
+            new ConnectTimeoutConnectionRule(),
+            new ConnectionTimeoutConnectionRule(),
+            new DataSourceConnectionRule(),
+            new ServerConnectionRule(),
+            new AddressConnectionRule(),
+            new AbbreviatedAddressConnectionRule(),
+            new NetworkAddressConnectionRule(),
+            new CatalogConnectionRule(),
+            new DatabaseConnectionRule(),
+            new SecurityConnectionRule(),
+            new TrustedConnectionRule(),
+            new PasswordConnectionRule(),
+            new AbbreviatedPasswordConnectionRule(),
+            new UserConnectionRule()
+        };
+
+        public string ApplicationName { get; internal set; } = string.Empty;
+        public string DatabaseName { get; internal set; } = string.Empty;
+        public string ConnectTimeout { get; internal set; } = string.Empty;
+        public string IntegratedSecurity { get; internal set; } = string.Empty;
+        public string Password { get; internal set; } = string.Empty;
+        public string Server { get; internal set; } = string.Empty;
+        public string UserId { get; internal set; } = string.Empty;
+
+        public string BackupLocation { get; private set; } = string.Empty;
+        public string ConnectionString { get; internal set; } = string.Empty;
+        public string Description { get; private set; } = string.Empty;
         public int CommandTimeout { get; private set; }
 
         public SqlParameter[] Parameters()
@@ -26,21 +56,49 @@ namespace DatabaseOperations.DataTransferObjects
             return _parameters;
         }
 
+        public bool IsValid()
+        {
+            // ToDo: Create a new validator for this class and return the result of that.
+            return true;
+        }
+
         private void InitialiseProperties(string connectionString, string backupPath, int timeout)
         {
-            var itemArray = connectionString.Split(';');
+            string[] itemArray = connectionString.Split(_splitArray, StringSplitOptions.RemoveEmptyEntries);
 
-            var database = itemArray[1].SubstringAfterValue("Database=");
-            var location = $"{backupPath}{database}_Full_{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.bak";
-            var description = $"Full backup of the `{database}` database.";
-            var updatedConnectionString = Regex.Replace(connectionString, "Connect Timeout=[0-9]{1,3}", "Connect Timeout=5");
+            ProcessItemArray(itemArray);
 
-            DatabaseName = database;
-            ConnectionString = updatedConnectionString;
+            var location = $"{backupPath}{DatabaseName}_Full_{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.bak";
+            var description = $"Full backup of the `{DatabaseName}` database.";
+            
+            ConnectionString = UpdateConnectionString(connectionString);;
             BackupLocation = location;
             Description = description;
             CommandTimeout = SetDefaultOrTimeout(timeout);
-            _parameters = GetParameters(database, location, description, backupPath);
+            _parameters = GetParameters(DatabaseName, location, description, backupPath);
+        }
+
+        private void ProcessItemArray(IEnumerable<string> itemArray)
+        {
+            foreach (string item in itemArray)
+            {
+                ApplyConnectionRules(item);
+            }
+        }
+
+        private void ApplyConnectionRules(string item)
+        {
+            foreach (var connectionRule in _connectionRules)
+            {
+                if (connectionRule.Check(item)) connectionRule.ApplyChange(this, item);
+            }
+        }
+
+        private string UpdateConnectionString(string connectionString)
+        {
+            return !string.IsNullOrWhiteSpace(ConnectTimeout)
+                ? Regex.Replace(connectionString, "Connect Timeout=[0-9]{1,3}", "Connect Timeout=5")
+                : connectionString;
         }
 
         private static int SetDefaultOrTimeout(int timeout)

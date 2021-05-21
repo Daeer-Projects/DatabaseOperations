@@ -4,6 +4,7 @@ using DatabaseOperations.Extensions;
 using DatabaseOperations.Tests.TestTypes;
 using FluentAssertions;
 using Xunit;
+using Type = DatabaseOperations.Tests.TestTypes.Type;
 
 namespace DatabaseOperations.Tests.Extensions
 {
@@ -11,7 +12,7 @@ namespace DatabaseOperations.Tests.Extensions
 	{
 		[Theory]
 		[MemberData(nameof(GetGoodTestType))]
-		public void TestCheckValidationWithValidTestTypeReturnsTrue(TestType testType)
+		public void TestCheckValidationWithValidTestTypeReturnsTrue(Type testType)
 		{
 			// Arrange.
 			// Act.
@@ -23,7 +24,7 @@ namespace DatabaseOperations.Tests.Extensions
 
 		[Theory]
 		[MemberData(nameof(GetBadTestType))]
-		public void TestCheckValidationWithInvalidTestTypeReturnsFalse(TestType testType)
+		public void TestCheckValidationWithInvalidTestTypeReturnsFalse(Type testType)
 		{
 			// Arrange.
 			// Act.
@@ -41,29 +42,29 @@ namespace DatabaseOperations.Tests.Extensions
 			{
 				yield return new object[]
 				{
-					new TestType
+					new Type
 					{
-						TestIdentity = 1,
-						TestName = "TestOne",
-						TestDateTime = new DateTime(2019, 01, 01)
+						Identity = 1,
+						Name = "TestOne",
+						DateTime = new DateTime(2019, 01, 01)
 					}
 				};
 				yield return new object[]
 				{
-					new TestType
+					new Type
 					{
-						TestIdentity = 2,
-						TestName = "TestTwo",
-						TestDateTime = new DateTime(2019, 01, 02)
+						Identity = 2,
+						Name = "TestTwo",
+						DateTime = new DateTime(2019, 01, 02)
 					}
 				};
 				yield return new object[]
 				{
-					new TestType
+					new Type
 					{
-						TestIdentity = 2,
-						TestName = "TestThree",
-						TestDateTime = new DateTime(2019, 01, 03)
+						Identity = 2,
+						Name = "TestThree",
+						DateTime = new DateTime(2019, 01, 03)
 					}
 				};
 			}
@@ -75,74 +76,74 @@ namespace DatabaseOperations.Tests.Extensions
 			{
 				yield return new object[]
 				{
-					new TestType
+					new Type
 					{
-						TestIdentity = -100,
-						TestName = "TestOne",
-						TestDateTime = new DateTime(2019, 01, 01)
+						Identity = -100,
+						Name = "TestOne",
+						DateTime = new DateTime(2019, 01, 01)
 					}
 				};
 				yield return new object[]
 				{
-					new TestType
+					new Type
 					{
-						TestIdentity = -1,
-						TestName = "TestOne",
-						TestDateTime = new DateTime(2019, 01, 01)
+						Identity = -1,
+						Name = "TestOne",
+						DateTime = new DateTime(2019, 01, 01)
 					}
 				};
 				yield return new object[]
 				{
-					new TestType
+					new Type
 					{
-						TestIdentity = 0,
-						TestName = "TestOne",
-						TestDateTime = new DateTime(2019, 01, 01)
+						Identity = 0,
+						Name = "TestOne",
+						DateTime = new DateTime(2019, 01, 01)
 					}
 				};
 				yield return new object[]
 				{
-					new TestType
+					new Type
 					{
-						TestIdentity = 1,
-						TestName = string.Empty,
-						TestDateTime = new DateTime(2019, 01, 02)
+						Identity = 1,
+						Name = string.Empty,
+						DateTime = new DateTime(2019, 01, 02)
 					}
 				};
 				yield return new object[]
 				{
-					new TestType
+					new Type
 					{
-						TestIdentity = 2,
-						TestName = null,
-						TestDateTime = new DateTime(2019, 01, 02)
+						Identity = 2,
+						Name = null!,
+						DateTime = new DateTime(2019, 01, 02)
 					}
 				};
 				yield return new object[]
 				{
-					new TestType
+					new Type
 					{
-						TestIdentity = 2,
-						TestName = "    ",
-						TestDateTime = new DateTime(2019, 01, 02)
+						Identity = 2,
+						Name = "    ",
+						DateTime = new DateTime(2019, 01, 02)
 					}
 				};
 				yield return new object[]
 				{
-					new TestType
+					new Type
 					{
-						TestIdentity = 3,
-						TestName = "TestThree",
-						TestDateTime = new DateTime(2009, 12, 31)
+						Identity = 3,
+						Name = "TestThree",
+						DateTime = new DateTime(2009, 12, 31)
 					}
 				};
 				yield return new object[]
 				{
-					new TestType
+					new Type
 					{
-						TestIdentity = 100,
-						TestName = "TestThree",
-						TestDateTime = new DateTime(2031, 01, 01)
+						Identity = 100,
+						Name = "TestThree",
+						DateTime = new DateTime(2031, 01, 01)
 					}
 				};
 			}

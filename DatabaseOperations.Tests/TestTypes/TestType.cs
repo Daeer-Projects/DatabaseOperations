@@ -2,10 +2,10 @@
 
 namespace DatabaseOperations.Tests.TestTypes
 {
-    public class TestType
+    public class Type
     {
-        public int TestIdentity { get; set; }
-        public string TestName { get; set; }
-        public DateTime TestDateTime { get; set; }
+        public int Identity { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public DateTime DateTime { get; set; } = DateTime.MinValue;
     }
 }
