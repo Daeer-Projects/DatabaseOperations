@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Text.RegularExpressions;
+using DatabaseOperations.ConnectionRules;
+using DatabaseOperations.Interfaces;
 using Microsoft.Data.SqlClient;
-using Useful.Extensions;
 
 namespace DatabaseOperations.DataTransferObjects
 {
@@ -15,24 +17,26 @@ namespace DatabaseOperations.DataTransferObjects
 
         private SqlParameter[] _parameters = Array.Empty<SqlParameter>();
 
-        private const string ApplicationNameLookUp = "application name";
-        private const string ConnectTimeoutLookUp = "connect timeout";
-        private const string ConnectionTimeoutLookUp = "connection timeout";
-        private const string DataSourceLookUp = "data source";
-        private const string ServerLookUp = "server";
-        private const string AddressLookUp = "address";
-        private const string AbbreviatedAddressLookUp = "addr";
-        private const string NetworkAddressLookUp = "network address";
-        private const string InitialCatalogLookUp = "initial catalog";
-        private const string DatabaseLookUp = "database";
-        private const string IntegratedSecurityLookUp = "integrated security";
-        private const string TrustedConnectionLookUp = "trusted_connection";
-        private const string PasswordLookUp = "password";
-        private const string AbbreviatedPasswordLookUp = "pwd";
-        private const string UserIdLookUp = "user id";
-        private const string EqualSymbol = "=";
-
         private readonly char[] _splitArray = {';'};
+
+        private readonly IList<IConnectionRule> _connectionRules = new List<IConnectionRule>
+        {
+            new ApplicationConnectionRule(),
+            new ConnectTimeoutConnectionRule(),
+            new ConnectionTimeoutConnectionRule(),
+            new DataSourceConnectionRule(),
+            new ServerConnectionRule(),
+            new AddressConnectionRule(),
+            new AbbreviatedAddressConnectionRule(),
+            new NetworkAddressConnectionRule(),
+            new CatalogConnectionRule(),
+            new DatabaseConnectionRule(),
+            new SecurityConnectionRule(),
+            new TrustedConnectionRule(),
+            new PasswordConnectionRule(),
+            new AbbreviatedPasswordConnectionRule(),
+            new UserConnectionRule()
+        };
 
         public string ApplicationName { get; internal set; } = string.Empty;
         public string DatabaseName { get; internal set; } = string.Empty;
@@ -60,112 +64,43 @@ namespace DatabaseOperations.DataTransferObjects
 
         private void InitialiseProperties(string connectionString, string backupPath, int timeout)
         {
-            var itemArray = connectionString.Split(_splitArray, StringSplitOptions.RemoveEmptyEntries);
+            string[] itemArray = connectionString.Split(_splitArray, StringSplitOptions.RemoveEmptyEntries);
 
-            // ToDo: This method needs refactoring, as it is too complex.
-            foreach (var item in itemArray)
-            {
-                switch (item)
-                {
-                    case { } itemValue when itemValue.ToLower().Contains(ApplicationNameLookUp):
-                    {
-                        ApplicationName = ToValue(ApplicationNameLookUp, itemValue);
-                        break;
-                    }
-                    case { } itemValue when itemValue.ToLower().Contains(ConnectTimeoutLookUp):
-                    {
-                        if (string.IsNullOrWhiteSpace(ConnectTimeout)) ConnectTimeout = ToValue(ConnectTimeoutLookUp, itemValue);
-                        break;
-                    }
-                    case { } itemValue when itemValue.ToLower().Contains(ConnectionTimeoutLookUp):
-                    {
-                        if (string.IsNullOrWhiteSpace(ConnectTimeout)) ConnectTimeout = ToValue(ConnectionTimeoutLookUp, itemValue);
-                        break;
-                    }
-                    case { } itemValue when itemValue.ToLower().Contains(DataSourceLookUp):
-                    {
-                        if (string.IsNullOrWhiteSpace(Server)) Server = ToValue(DataSourceLookUp, itemValue);
-                        break;
-                    }
-                    case { } itemValue when itemValue.ToLower().Contains(ServerLookUp):
-                    {
-                        if (string.IsNullOrWhiteSpace(Server)) Server = ToValue(ServerLookUp, itemValue);
-                        break;
-                    }
-                    case { } itemValue when itemValue.ToLower().Contains(AddressLookUp):
-                    {
-                        if (string.IsNullOrWhiteSpace(Server)) Server = ToValue(AddressLookUp, itemValue);
-                        break;
-                    }
-                    case { } itemValue when itemValue.ToLower().Contains(AbbreviatedAddressLookUp):
-                    {
-                        if (string.IsNullOrWhiteSpace(Server)) Server = ToValue(AbbreviatedAddressLookUp, itemValue);
-                        break;
-                    }
-                    case { } itemValue when itemValue.ToLower().Contains(NetworkAddressLookUp):
-                    {
-                        if (string.IsNullOrWhiteSpace(Server)) Server = ToValue(NetworkAddressLookUp, itemValue);
-                        break;
-                    }
-                    case { } itemValue when itemValue.ToLower().Contains(InitialCatalogLookUp):
-                    {
-                        if (string.IsNullOrWhiteSpace(DatabaseName)) DatabaseName = ToValue(InitialCatalogLookUp, itemValue);
-                        break;
-                    }
-                    case { } itemValue when itemValue.ToLower().Contains(DatabaseLookUp):
-                    {
-                        if (string.IsNullOrWhiteSpace(DatabaseName)) DatabaseName = ToValue(DatabaseLookUp, itemValue);
-                        break;
-                    }
-                    case { } itemValue when itemValue.ToLower().Contains(IntegratedSecurityLookUp):
-                    {
-                        if (string.IsNullOrWhiteSpace(IntegratedSecurity)) IntegratedSecurity = ToValue(IntegratedSecurityLookUp, itemValue);
-                        break;
-                    }
-                    case { } itemValue when itemValue.ToLower().Contains(TrustedConnectionLookUp):
-                    {
-                        if (string.IsNullOrWhiteSpace(IntegratedSecurity)) IntegratedSecurity = ToValue(TrustedConnectionLookUp, itemValue);
-                        break;
-                    }
-                    case { } itemValue when itemValue.ToLower().Contains(PasswordLookUp):
-                    {
-                        if (string.IsNullOrWhiteSpace(Password)) Password = ToValue(PasswordLookUp, itemValue);
-                        break;
-                    }
-                    case { } itemValue when itemValue.ToLower().Contains(AbbreviatedPasswordLookUp):
-                    {
-                        if (string.IsNullOrWhiteSpace(Password)) Password = ToValue(AbbreviatedPasswordLookUp, itemValue);
-                        break;
-                    }
-                    case { } itemValue when itemValue.ToLower().Contains(UserIdLookUp):
-                    {
-                        if (string.IsNullOrWhiteSpace(UserId)) UserId = ToValue(UserIdLookUp, itemValue);
-                        break;
-                    }
-                }
-            }
+            ProcessItemArray(itemArray);
 
             var location = $"{backupPath}{DatabaseName}_Full_{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.bak";
             var description = $"Full backup of the `{DatabaseName}` database.";
-
-            var updatedConnectionString = !string.IsNullOrWhiteSpace(ConnectTimeout)
-                ? Regex.Replace(connectionString, "Connect Timeout=[0-9]{1,3}", "Connect Timeout=5")
-                : connectionString;
             
-            ConnectionString = updatedConnectionString;
+            ConnectionString = UpdateConnectionString(connectionString);;
             BackupLocation = location;
             Description = description;
             CommandTimeout = SetDefaultOrTimeout(timeout);
             _parameters = GetParameters(DatabaseName, location, description, backupPath);
         }
 
-        private static string ToValue(string key, string value)
+        private void ProcessItemArray(IEnumerable<string> itemArray)
         {
-            var searchString = key + EqualSymbol;
-            var newValue = value.SubstringAfterValue(searchString);
-            return newValue;
+            foreach (string item in itemArray)
+            {
+                ApplyConnectionRules(item);
+            }
         }
-        
+
+        private void ApplyConnectionRules(string item)
+        {
+            foreach (var connectionRule in _connectionRules)
+            {
+                if (connectionRule.Check(item)) connectionRule.ApplyChange(this, item);
+            }
+        }
+
+        private string UpdateConnectionString(string connectionString)
+        {
+            return !string.IsNullOrWhiteSpace(ConnectTimeout)
+                ? Regex.Replace(connectionString, "Connect Timeout=[0-9]{1,3}", "Connect Timeout=5")
+                : connectionString;
+        }
+
         private static int SetDefaultOrTimeout(int timeout)
         {
             return timeout == 0 ? 60 * 60 : timeout;

@@ -246,7 +246,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
 			};
 			yield return new object[]
 			{
-				"Server=127.0.0.1;Um=42;Address=127.0.0.1;Database=Banana;Um=42;Integrated Security=true;;Trusted_Connection=true;Connect Timeout=5;Um=42;Connection Timeout=5;Application Name=TestingStuff;",
+				"Server=127.0.0.1;Um=42;Address=127.0.0.1;Database=Banana;Um=42;Integrated Security=true;;Trusted_Connection=true;Connect Timeout=5;Um=42;Connection Timeout=6;Application Name=TestingStuff;",
 				8,
 				new ConnectionOptions("database=Banana;", BackupPath, 8)
 					.ApplyServer("127.0.0.1")
@@ -254,7 +254,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
 					.ApplyConnectTimeOut("5")
 					.ApplyIntegratedSecurity("true")
 					.ApplyApplicationName("TestingStuff")
-					.OverrideConnectionString("Server=127.0.0.1;Um=42;Address=127.0.0.1;Database=Banana;Um=42;Integrated Security=true;;Trusted_Connection=true;Connect Timeout=5;Um=42;Connection Timeout=5;Application Name=TestingStuff;")
+					.OverrideConnectionString("Server=127.0.0.1;Um=42;Address=127.0.0.1;Database=Banana;Um=42;Integrated Security=true;;Trusted_Connection=true;Connect Timeout=5;Um=42;Connection Timeout=6;Application Name=TestingStuff;")
 			};
 			yield return new object[]
 			{
