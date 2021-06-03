@@ -3,7 +3,7 @@ using DatabaseOperations.Wrappers;
 
 namespace DatabaseOperations.Factories
 {
-    public class SqlServerConnectionFactory : ISqlServerConnectionFactory
+    internal class SqlServerConnectionFactory : ISqlServerConnectionFactory
 	{
         public ISqlConnectionWrapper CreateConnection(string connectionString)
         {

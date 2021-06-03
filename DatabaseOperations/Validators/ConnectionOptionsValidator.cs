@@ -5,7 +5,7 @@ namespace DatabaseOperations.Validators
 {
     internal class ConnectionOptionsValidator : AbstractValidator<ConnectionOptions>
     {
-        public ConnectionOptionsValidator()
+        internal ConnectionOptionsValidator()
         {
             RuleFor(options => options).NotNull();
             RuleFor(options => options.Server).NotNull().NotEmpty();

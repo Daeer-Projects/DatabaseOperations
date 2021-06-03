@@ -3,7 +3,7 @@ using Microsoft.Data.SqlClient;
 
 namespace DatabaseOperations.Interfaces
 {
-    public interface ISqlCommandWrapper : IDisposable
+    internal interface ISqlCommandWrapper : IDisposable
     {
         SqlCommand Get();
         void AddParameters(SqlParameter[] parameters);

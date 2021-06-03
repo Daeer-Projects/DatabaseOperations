@@ -89,7 +89,6 @@ namespace DatabaseOperations.DataTransferObjects
             var description = $"Full backup of the `{DatabaseName}` database.";
 
             ConnectionString = UpdateConnectionString(connectionString);
-            ;
             BackupLocation = location;
             Description = description;
             CommandTimeout = SetDefaultOrTimeout(timeout);
