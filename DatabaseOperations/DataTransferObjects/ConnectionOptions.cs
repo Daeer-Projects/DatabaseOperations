@@ -10,8 +10,24 @@ using Microsoft.Data.SqlClient;
 
 namespace DatabaseOperations.DataTransferObjects
 {
+    /// <summary>
+    /// The options used for connecting to the database.
+    /// </summary>
     public class ConnectionOptions
 	{
+        /// <summary>
+        /// Initialises a new instance of the ConnectionOptions.
+        /// </summary>
+        /// <param name="connectionString">
+        /// The connection details for the database.
+        /// </param>
+        /// <param name="backupPath">
+        /// The location where the backup is going to be stored.
+        /// </param>
+        /// <param name="timeout">
+        /// The <paramref name="timeout"/> of the execution process, not the connection to the
+        /// database <paramref name="timeout"/>.
+        /// </param>
         public ConnectionOptions(string connectionString, string backupPath, int timeout = 0)
         {
             InitialiseProperties(connectionString, backupPath, timeout);
@@ -41,26 +57,26 @@ namespace DatabaseOperations.DataTransferObjects
             new UserConnectionRule()
         };
 
-        public string ApplicationName { get; internal set; } = string.Empty;
-        public string DatabaseName { get; internal set; } = string.Empty;
-        public string ConnectTimeout { get; internal set; } = string.Empty;
-        public string IntegratedSecurity { get; internal set; } = string.Empty;
-        public string Password { get; internal set; } = string.Empty;
-        public string Server { get; internal set; } = string.Empty;
-        public string UserId { get; internal set; } = string.Empty;
+        internal string ApplicationName { get; set; } = string.Empty;
+        internal string DatabaseName { get; set; } = string.Empty;
+        internal string ConnectTimeout { get; set; } = string.Empty;
+        internal string IntegratedSecurity { get; set; } = string.Empty;
+        internal string Password { get; set; } = string.Empty;
+        internal string Server { get; set; } = string.Empty;
+        internal string UserId { get; set; } = string.Empty;
 
-        public string BackupLocation { get; private set; } = string.Empty;
-        public string ConnectionString { get; internal set; } = string.Empty;
-        public string Description { get; private set; } = string.Empty;
-        public int CommandTimeout { get; private set; }
-        public IList<string> Messages { get; private set; } = new List<string>();
+        internal string BackupLocation { get; private set; } = string.Empty;
+        internal string ConnectionString { get; set; } = string.Empty;
+        internal string Description { get; private set; } = string.Empty;
+        internal int CommandTimeout { get; private set; }
+        internal IList<string> Messages { get; } = new List<string>();
 
-        public SqlParameter[] Parameters()
+        internal SqlParameter[] Parameters()
         {
             return _parameters;
         }
 
-        public bool IsValid()
+        internal bool IsValid()
         {
             // ReSharper disable once InvertIf
             if (_isValid)
