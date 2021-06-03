@@ -3,9 +3,9 @@ using Microsoft.Data.SqlClient;
 
 namespace DatabaseOperations.Wrappers
 {
-    public sealed class SqlConnectionWrapper : ISqlConnectionWrapper
+    internal sealed class SqlConnectionWrapper : ISqlConnectionWrapper
 	{
-        public SqlConnectionWrapper(string connectionString)
+        internal SqlConnectionWrapper(string connectionString)
         {
             _sqlConnection = new SqlConnection(connectionString);
         }

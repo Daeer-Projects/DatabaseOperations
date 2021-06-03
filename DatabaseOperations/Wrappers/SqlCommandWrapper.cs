@@ -4,9 +4,9 @@ using Microsoft.Data.SqlClient;
 
 namespace DatabaseOperations.Wrappers
 {
-    public sealed class SqlCommandWrapper : ISqlCommandWrapper
+    internal sealed class SqlCommandWrapper : ISqlCommandWrapper
     {
-        public SqlCommandWrapper(string commandText, ISqlConnectionWrapper sqlConnection)
+        internal SqlCommandWrapper(string commandText, ISqlConnectionWrapper sqlConnection)
         {
             _sqlCommand = new SqlCommand(commandText, sqlConnection.Get()) { CommandType = CommandType.Text };
         }

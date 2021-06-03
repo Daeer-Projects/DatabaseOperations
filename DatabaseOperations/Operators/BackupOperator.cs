@@ -1,14 +1,20 @@
 ﻿using System.Data.Common;
 using DatabaseOperations.DataTransferObjects;
+using DatabaseOperations.Factories;
 using DatabaseOperations.Interfaces;
 
 namespace DatabaseOperations.Operators
 {
     public class BackupOperator : IBackupOperator
     {
-        public BackupOperator(ISqlServerConnectionFactory creator)
+        internal BackupOperator(ISqlServerConnectionFactory creator)
         {
             _sqlCreator = creator;
+        }
+
+        public BackupOperator()
+        {
+            _sqlCreator = new SqlServerConnectionFactory();
         }
 
         private const string SqlScriptTemplate = @"

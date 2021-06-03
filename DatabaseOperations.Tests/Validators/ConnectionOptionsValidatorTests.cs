@@ -233,7 +233,7 @@ namespace DatabaseOperations.Tests.Validators
                 new ConnectionOptions("something", BackupPath, 5)
                     .ApplyServer("(localDb)")
                     .ApplyDatabaseName("Banana")
-                    .ApplyIntegratedSecurity("True")
+                    .ApplyIntegratedSecurity("False")
                     .ApplyConnectTimeOut("-1000")
             };
         }
