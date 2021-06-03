@@ -47,7 +47,7 @@ namespace DatabaseOperations.Tests.Operators
             var details = GetConnectionOptions("server", "database", "oops", "Thing");
             _connection
                 .When(c => c.Open())
-                .Do(c => throw  new DbTestException("Server is not correct!"));
+                .Do(_ => throw  new DbTestException("Server is not correct!"));
 
             // Act.
             var result = _backupOperator.BackupDatabase(details);
@@ -63,7 +63,7 @@ namespace DatabaseOperations.Tests.Operators
             var details = GetConnectionOptions("server", "database", "oops", "Thing");
             _command
                 .When(c => c.AddParameters(Arg.Any<SqlParameter[]>()))
-                .Do(c => throw new DbTestException("Command is not working!"));
+                .Do(_ => throw new DbTestException("Command is not working!"));
 
             // Act.
             var result = _backupOperator.BackupDatabase(details);
@@ -79,7 +79,7 @@ namespace DatabaseOperations.Tests.Operators
             var details = GetConnectionOptions("server", "database", "oops", "Thing");
             _command
                 .When(c => c.ExecuteNonQuery())
-                .Do(c => throw new DbTestException("Execute is not working!"));
+                .Do(_ => throw new DbTestException("Execute is not working!"));
 
             // Act.
             var result = _backupOperator.BackupDatabase(details);
@@ -95,9 +95,9 @@ namespace DatabaseOperations.Tests.Operators
             var details = GetConnectionOptions("server", "database", "oops", "Thing");
             _command
                 .When(c => c.ExecuteNonQuery())
-                .Do(c => throw new DbTestException("Execute is not working!"));
+                .Do(_ => throw new DbTestException("Execute is not working!"));
 
-            var expectedMessages = new List<string>()
+            var expectedMessages = new List<string>
             {
                 "Backing up the database failed due to an exception."
             };

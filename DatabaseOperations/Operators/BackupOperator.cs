@@ -1,17 +1,28 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Data.Common;
 using DatabaseOperations.DataTransferObjects;
 using DatabaseOperations.Factories;
 using DatabaseOperations.Interfaces;
 
 namespace DatabaseOperations.Operators
 {
+    /// <summary>
+    /// This is the 'backup' class of operators.
+    /// </summary>
     public class BackupOperator : IBackupOperator
     {
+        /// <summary>
+        /// The <see langword="internal"/> constructor used for unit tests.
+        /// </summary>
+        /// <param name="creator"> The connection factory that will allow the creation of the SQL classes. </param>
         internal BackupOperator(ISqlServerConnectionFactory creator)
         {
             _sqlCreator = creator;
         }
 
+        /// <summary>
+        /// Initialises a new instance of the BackupOperator. 
+        /// </summary>
         public BackupOperator()
         {
             _sqlCreator = new SqlServerConnectionFactory();
@@ -33,6 +44,19 @@ WITH
 
         private readonly ISqlServerConnectionFactory _sqlCreator;
 
+        /// <summary>
+        /// Uses the <paramref name="options" /> defined by the user to start
+        /// the backup process.
+        /// </summary>
+        /// <param name="options">
+        /// The connection options defined by the consumer of the method.
+        /// </param>
+        /// <exception cref="NotSupportedException">
+        /// The database exception was not added to the 'Message' list.
+        /// </exception>
+        /// <returns>
+        /// The result of the backup operation.
+        /// </returns>
         public OperationResult<bool> BackupDatabase(ConnectionOptions options)
         {
             var result = new OperationResult<bool>();

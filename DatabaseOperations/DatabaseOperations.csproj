@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="9.5.3" />
-    <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="161.46041.41" />
-    <PackageReference Include="System.IO.Abstractions" Version="13.2.28" />
+    <PackageReference Include="FluentValidation" Version="10.2.3" />
+    <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="161.46367.54" />
+    <PackageReference Include="System.IO.Abstractions" Version="13.2.33" />
     <PackageReference Include="Useful.Extensions" Version="3.0.1" />
   </ItemGroup>
 
