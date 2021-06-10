@@ -28,7 +28,7 @@ namespace DatabaseOperations.DataTransferObjects
         /// The <paramref name="timeout"/> of the execution process, not the connection to the
         /// database <paramref name="timeout"/>.
         /// </param>
-        public ConnectionOptions(string connectionString, string backupPath, int timeout = 0)
+        public ConnectionOptions(string connectionString, string backupPath = "", int timeout = 0)
         {
             InitialiseProperties(connectionString, backupPath, timeout);
         }
