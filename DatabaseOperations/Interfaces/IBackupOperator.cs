@@ -21,6 +21,6 @@ namespace DatabaseOperations.Interfaces
 		/// <returns>
 		/// The result of the backup operation.
 		/// </returns>
-        OperationResult<bool> BackupDatabase(ConnectionOptions options);
+        OperationResult BackupDatabase(ConnectionOptions options);
 	}
 }

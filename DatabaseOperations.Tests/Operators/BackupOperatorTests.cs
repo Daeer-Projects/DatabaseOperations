@@ -47,7 +47,7 @@ namespace DatabaseOperations.Tests.Operators
             var details = GetConnectionOptions("server", "database", "oops", "Thing");
             _connection
                 .When(c => c.Open())
-                .Do(_ => throw  new DbTestException("Server is not correct!"));
+                .Do(_ => throw new DbTestException("Server is not correct!"));
 
             // Act.
             var result = _backupOperator.BackupDatabase(details);
