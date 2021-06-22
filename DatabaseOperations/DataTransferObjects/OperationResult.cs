@@ -12,15 +12,12 @@ namespace DatabaseOperations.DataTransferObjects
     /// Messages could be errors or information about the process for logging.
     /// </para>
     /// </summary>
-    /// <typeparam name="T">
-    /// The type to be returned. Normally <see langword="bool" /> .
-    /// </typeparam>
-    public class OperationResult<T> where T : new()
+    public class OperationResult
     {
         /// <summary>
         /// The actual result from the operation.
         /// </summary>
-        public T Result { get; set; } = new();
+        public bool Result { get; set; }
 
         /// <summary>
         /// The list of messages for the consuming class.

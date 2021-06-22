@@ -57,9 +57,9 @@ WITH
         /// <returns>
         /// The result of the backup operation.
         /// </returns>
-        public OperationResult<bool> BackupDatabase(ConnectionOptions options)
+        public OperationResult BackupDatabase(ConnectionOptions options)
         {
-            var result = new OperationResult<bool>();
+            var result = new OperationResult();
 
             if (!options.IsValid())
             {
