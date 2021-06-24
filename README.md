@@ -2,7 +2,7 @@
 
 The purpose of this library is to provide the consumer with tools to perform database operations.  The library has been designed for use in deployment/utilities to automate the tasks usually done manually.
 
-**NOTE**
+**NOTE**:<br />
 Microsoft SQL Server Databases only.
 
 ## Introduction
