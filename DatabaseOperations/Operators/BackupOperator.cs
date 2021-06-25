@@ -28,12 +28,15 @@ namespace DatabaseOperations.Operators
             _sqlCreator = new SqlServerConnectionFactory();
         }
 
-        private const string SqlScriptTemplate = @"
+        private const string SqlScriptCreateBackupPathTemplate = @"
 IF (@BackupPath IS NOT NULL AND @BackupPath <> '')
 BEGIN
     EXEC master.dbo.xp_create_subdir @BackupPath;
 END
-
+;
+";
+        
+        private const string SqlScriptBackupDatabaseTemplate = @"
 BACKUP DATABASE @DatabaseName
 TO DISK = @BackupLocation
 WITH
@@ -71,9 +74,20 @@ WITH
             {
                 using (var connection = _sqlCreator.CreateConnection(options.ConnectionString))
                 {
-                    using (var command = _sqlCreator.CreateCommand(SqlScriptTemplate, connection))
+                    using (var command = _sqlCreator.CreateCommand(SqlScriptCreateBackupPathTemplate, connection))
                     {
-                        command.AddParameters(options.Parameters());
+                        command.AddParameters(options.BackupParameters());
+                        command.SetCommandTimeout(options.CommandTimeout);
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                    }
+                }
+                
+                using (var connection = _sqlCreator.CreateConnection(options.ConnectionString))
+                {
+                    using (var command = _sqlCreator.CreateCommand(SqlScriptBackupDatabaseTemplate, connection))
+                    {
+                        command.AddParameters(options.ExecutionParameters());
                         command.SetCommandTimeout(options.CommandTimeout);
                         connection.Open();
                         command.ExecuteNonQuery();
