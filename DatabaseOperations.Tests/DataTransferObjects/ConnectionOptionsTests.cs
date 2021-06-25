@@ -190,29 +190,42 @@ namespace DatabaseOperations.Tests.DataTransferObjects
 
         [Theory]
         [MemberData(nameof(ConnectionStrings))]
-        internal void TestConstructorWithConnectionStringReturnsExpectedParameters(string connectionString, int commandTimeout, string backupPath,
+        internal void TestConstructorWithConnectionStringReturnsExpectedBackupParameters(string connectionString, int commandTimeout, string backupPath,
             ConnectionOptions expected)
         {
             // Arrange.
-            var expectedParameters = expected.Parameters();
+            var expectedParameters = expected.BackupParameters();
 
             // Act.
             var actual = new ConnectionOptions(connectionString, backupPath, commandTimeout);
-            var actualParameters = actual.Parameters();
+            var actualParameters = actual.BackupParameters();
 
             // Assert.
             for (var i = 0; i < actualParameters.Length; i++)
             {
-                if (actualParameters[i].ParameterName != Constants.Parameters.LocationParameter)
-                {
-                    actualParameters[i].Value.Should().BeEquivalentTo(expectedParameters[i].Value);
-                    continue;
-                }
-
                 var actualLocation = RemoveLastSecondFromLocation(actualParameters[i].Value.ToString()!);
                 var expectedLocation = RemoveLastSecondFromLocation(expectedParameters[i].Value.ToString()!);
 
                 actualLocation.Should().Be(expectedLocation);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(ConnectionStrings))]
+        internal void TestConstructorWithConnectionStringReturnsExpectedExecutionParameters(string connectionString, int commandTimeout, string backupPath,
+            ConnectionOptions expected)
+        {
+            // Arrange.
+            var expectedParameters = expected.ExecutionParameters();
+
+            // Act.
+            var actual = new ConnectionOptions(connectionString, backupPath, commandTimeout);
+            var actualParameters = actual.ExecutionParameters();
+
+            // Assert.
+            for (var i = 0; i < actualParameters.Length; i++)
+            {
+                actualParameters[i].Value.Should().BeEquivalentTo(expectedParameters[i].Value);
             }
         }
 
@@ -360,7 +373,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
 
         private static string RemoveLastSecondFromLocation(string location)
         {
-            return location[..^5];
+            return string.IsNullOrWhiteSpace(location) ? location : location[..^5];
         }
     }
 }

@@ -33,7 +33,8 @@ namespace DatabaseOperations.DataTransferObjects
             InitialiseProperties(connectionString, backupPath, timeout);
         }
 
-        private SqlParameter[] _parameters = Array.Empty<SqlParameter>();
+        private SqlParameter[] _executionParameters = Array.Empty<SqlParameter>();
+        private SqlParameter[] _backupParameters = Array.Empty<SqlParameter>();
 
         private readonly char[] _splitArray = {';'};
         private bool _isValid;
@@ -71,9 +72,14 @@ namespace DatabaseOperations.DataTransferObjects
         internal int CommandTimeout { get; private set; }
         internal IList<string> Messages { get; } = new List<string>();
 
-        internal SqlParameter[] Parameters()
+        internal SqlParameter[] ExecutionParameters()
         {
-            return _parameters;
+            return _executionParameters;
+        }
+
+        internal SqlParameter[] BackupParameters()
+        {
+            return _backupParameters;
         }
 
         internal bool IsValid()
@@ -108,7 +114,8 @@ namespace DatabaseOperations.DataTransferObjects
             BackupLocation = location;
             Description = description;
             CommandTimeout = SetDefaultOrTimeout(timeout);
-            _parameters = GetParameters(DatabaseName, location, description, backupPath);
+            _backupParameters = GetBackupParameters(backupPath);
+            _executionParameters = GetParameters(DatabaseName, location, description);
         }
 
         private void ProcessItemArray(IEnumerable<string> itemArray)
@@ -139,14 +146,20 @@ namespace DatabaseOperations.DataTransferObjects
             return timeout == 0 ? 60 * 60 : timeout;
         }
 
-        private static SqlParameter[] GetParameters(string database, string location, string description, string backupPath)
+        private static SqlParameter[] GetBackupParameters(string backupPath)
+        {
+            var pathParameter = new SqlParameter(Constants.Parameters.PathParameter, SqlDbType.VarChar) { Value = backupPath };
+            
+            return new[] { pathParameter };
+        }
+        
+        private static SqlParameter[] GetParameters(string database, string location, string description)
         {
             var nameParameter = new SqlParameter(Constants.Parameters.NameParameter, SqlDbType.VarChar) { Value = database };
             var locationParameter = new SqlParameter(Constants.Parameters.LocationParameter, SqlDbType.VarChar) { Value = location };
             var descriptionParameter = new SqlParameter(Constants.Parameters.DescriptionParameter, SqlDbType.VarChar) { Value = description };
-            var pathParameter = new SqlParameter(Constants.Parameters.PathParameter, SqlDbType.VarChar) { Value = backupPath };
 
-            return new[] { nameParameter, locationParameter, descriptionParameter, pathParameter };
+            return new[] { nameParameter, locationParameter, descriptionParameter };
         }
 	}
 }
