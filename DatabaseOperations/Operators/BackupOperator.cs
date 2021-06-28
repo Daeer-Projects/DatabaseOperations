@@ -55,11 +55,11 @@ namespace DatabaseOperations.Operators
 
             result = _sqlExecutor.ExecuteBackupPath(result, options);
 
-            // If result.Result is not true, we want to strip out the path, so we only have the backup name.
+            // If result of path execution is not true, we want to strip out the path, so we only have the backup name.
             if (!result.Result)
             {
                 result.Messages.Add("Unable to check the path, reverting to default save path.");
-                // Do something with the options to strip out the path.
+                options.RemovePathFromBackupLocation();
             }
 
             result = _sqlExecutor.ExecuteBackupDatabase(result, options);
