@@ -229,6 +229,42 @@ namespace DatabaseOperations.Tests.DataTransferObjects
             }
         }
 
+        [Fact]
+        internal void TestRemovePathReturnsPathIsNotTheSameAsBefore()
+        {
+            // Arrange.
+            var options =
+                new ConnectionOptions(
+                    "SERVER=(localDb);DATABASE=PoohBear;User Id=sa;Password=password;Connect Timeout=30;",
+                    @"H:\Backups\");
+            var currentBackupLocation = options.BackupLocation;
+
+
+            // Act.
+            options.RemovePathFromBackupLocation();
+
+            // Assert.
+            currentBackupLocation.Should().NotBe(options.BackupLocation);
+        }
+
+        [Fact]
+        internal void TestRemovePathReturnsPathIsContainedWithinOldPath()
+        {
+            // Arrange.
+            var options =
+                new ConnectionOptions(
+                    "SERVER=(localDb);DATABASE=PoohBear;User Id=sa;Password=password;Connect Timeout=30;",
+                    @"H:\Backups\");
+            var currentBackupLocation = options.BackupLocation;
+
+
+            // Act.
+            options.RemovePathFromBackupLocation();
+
+            // Assert.
+            currentBackupLocation.Should().Contain(options.BackupLocation);
+        }
+
         public static IEnumerable<object[]> ConnectionStrings()
         {
             yield return new object[]

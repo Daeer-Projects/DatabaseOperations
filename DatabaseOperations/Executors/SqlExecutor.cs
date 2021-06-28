@@ -6,7 +6,7 @@ namespace DatabaseOperations.Executors
 {
     internal class SqlExecutor : ISqlExecutor
     {
-        public SqlExecutor(ISqlServerConnectionFactory creator)
+        internal SqlExecutor(ISqlServerConnectionFactory creator)
         {
             _sqlCreator = creator;
         }

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Data.Common;
 using DatabaseOperations.DataTransferObjects;
+using DatabaseOperations.Executors;
 using DatabaseOperations.Factories;
 using DatabaseOperations.Interfaces;
 
@@ -14,10 +14,10 @@ namespace DatabaseOperations.Operators
         /// <summary>
         /// The <see langword="internal"/> constructor used for unit tests.
         /// </summary>
-        /// <param name="creator"> The connection factory that will allow the creation of the SQL classes. </param>
-        internal BackupOperator(ISqlServerConnectionFactory creator)
+        /// <param name="executor"> The sql executor that will execute the commands for the operations. </param>
+        internal BackupOperator(ISqlExecutor executor)
         {
-            _sqlCreator = creator;
+            _sqlExecutor = executor;
         }
 
         /// <summary>
@@ -25,27 +25,10 @@ namespace DatabaseOperations.Operators
         /// </summary>
         public BackupOperator()
         {
-            _sqlCreator = new SqlServerConnectionFactory();
+            _sqlExecutor = new SqlExecutor(new SqlServerConnectionFactory());
         }
 
-        private const string SqlScriptCreateBackupPathTemplate = @"
-IF (@BackupPath IS NOT NULL AND @BackupPath <> '')
-BEGIN
-    EXEC master.dbo.xp_create_subdir @BackupPath;
-END
-;
-";
-
-        private const string SqlScriptBackupDatabaseTemplate = @"
-BACKUP DATABASE @DatabaseName
-TO DISK = @BackupLocation
-WITH
-    NAME = @DatabaseName,
-    DESCRIPTION = @BackupDescription
-;
-";
-
-        private readonly ISqlServerConnectionFactory _sqlCreator;
+        private readonly ISqlExecutor _sqlExecutor;
 
         /// <summary>
         /// Uses the <paramref name="options" /> defined by the user to start
@@ -69,37 +52,17 @@ WITH
                 result.Messages = options.Messages;
                 return result;
             }
-            
-            try
+
+            result = _sqlExecutor.ExecuteBackupPath(result, options);
+
+            // If result of path execution is not true, we want to strip out the path, so we only have the backup name.
+            if (!result.Result)
             {
-                using (var connection = _sqlCreator.CreateConnection(options.ConnectionString))
-                {
-                    using (var command = _sqlCreator.CreateCommand(SqlScriptCreateBackupPathTemplate, connection))
-                    {
-                        command.AddParameters(options.BackupParameters());
-                        command.SetCommandTimeout(options.CommandTimeout);
-                        connection.Open();
-                        command.ExecuteNonQuery();
-                    }
-                }
-                
-                using (var connection = _sqlCreator.CreateConnection(options.ConnectionString))
-                {
-                    using (var command = _sqlCreator.CreateCommand(SqlScriptBackupDatabaseTemplate, connection))
-                    {
-                        command.AddParameters(options.ExecutionParameters());
-                        command.SetCommandTimeout(options.CommandTimeout);
-                        connection.Open();
-                        command.ExecuteNonQuery();
-                    }
-                }
-                
-                result.Result = true;
+                result.Messages.Add("Unable to check the path, reverting to default save path.");
+                options.RemovePathFromBackupLocation();
             }
-            catch (DbException exception)
-            {
-                result.Messages.Add($"Backing up the database failed due to an exception.  Exception: {exception.Message}");
-            }
+
+            result = _sqlExecutor.ExecuteBackupDatabase(result, options);
 
             return result;
         }

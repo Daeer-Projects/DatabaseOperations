@@ -7,6 +7,7 @@ using DatabaseOperations.Extensions;
 using DatabaseOperations.Interfaces;
 using DatabaseOperations.Validators;
 using Microsoft.Data.SqlClient;
+using Useful.Extensions;
 
 namespace DatabaseOperations.DataTransferObjects
 {
@@ -96,6 +97,14 @@ namespace DatabaseOperations.DataTransferObjects
             }
             
             return _isValid;
+        }
+
+        internal void RemovePathFromBackupLocation()
+        {
+            var startOfPath = BackupLocation.SubstringBeforeValue(DatabaseName);
+            var requiredLocation = BackupLocation.SubstringAfterValue(startOfPath);
+            BackupLocation = requiredLocation;
+            _executionParameters = GetParameters(DatabaseName, BackupLocation, Description);
         }
 
         private void InitialiseProperties(string connectionString, string backupPath, int timeout)
