@@ -1,12 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DatabaseOperations.DataTransferObjects;
+using DatabaseOperations.Interfaces;
 using FluentAssertions;
+using NSubstitute;
 using Xunit;
 
 namespace DatabaseOperations.Tests.DataTransferObjects
 {
     public class ConnectionOptionsTests
     {
+        public ConnectionOptionsTests()
+        {
+            DateTimeWrapper.Now.Returns(new DateTime(2021, 08, 11, 15, 52, 08));
+        }
+
+        private static readonly IDateTimeWrapper DateTimeWrapper = Substitute.For<IDateTimeWrapper>();
         private const string BackupPath = @"C:\Database Backups\";
 
         [Fact]
@@ -14,7 +23,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
         {
             // Arrange.
             // Act.
-            var actual = new ConnectionOptions(string.Empty, BackupPath);
+            var actual = new ConnectionOptions(string.Empty, DateTimeWrapper, BackupPath);
 
             // Assert.
             actual.IsValid().Should().BeFalse();
@@ -25,7 +34,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
         {
             // Arrange.
             // Act.
-            var actual = new ConnectionOptions(null!, BackupPath);
+            var actual = new ConnectionOptions(null!, DateTimeWrapper, BackupPath);
 
             // Assert.
             actual.IsValid().Should().BeFalse();
@@ -37,7 +46,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
             // Arrange.
             const string connectionString = "server=127.0.0.1;database=Bananas;User Id=sa;Password=password;Connect Timeout=205;";
             // Act.
-            var actual = new ConnectionOptions(connectionString);
+            var actual = new ConnectionOptions(connectionString, DateTimeWrapper);
 
             // Assert.
             actual.IsValid().Should().BeTrue();
@@ -50,7 +59,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
         {
             // Arrange.
             // Act.
-            var actual = new ConnectionOptions(connectionString, backupPath, commandTimeout);
+            var actual = new ConnectionOptions(connectionString, DateTimeWrapper, backupPath, commandTimeout);
 
             // Assert.
             actual.ApplicationName.Should().Be(expected.ApplicationName);
@@ -63,7 +72,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
         {
             // Arrange.
             // Act.
-            var actual = new ConnectionOptions(connectionString, backupPath, commandTimeout);
+            var actual = new ConnectionOptions(connectionString, DateTimeWrapper, backupPath, commandTimeout);
 
             // Assert.
             actual.ConnectTimeout.Should().Be(expected.ConnectTimeout);
@@ -76,7 +85,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
         {
             // Arrange.
             // Act.
-            var actual = new ConnectionOptions(connectionString, backupPath, commandTimeout);
+            var actual = new ConnectionOptions(connectionString, DateTimeWrapper, backupPath, commandTimeout);
 
             // Assert.
             actual.DatabaseName.Should().Be(expected.DatabaseName);
@@ -89,7 +98,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
         {
             // Arrange.
             // Act.
-            var actual = new ConnectionOptions(connectionString, backupPath, commandTimeout);
+            var actual = new ConnectionOptions(connectionString, DateTimeWrapper, backupPath, commandTimeout);
 
             // Assert.
             actual.ConnectionString.Should().Be(expected.ConnectionString);
@@ -102,12 +111,10 @@ namespace DatabaseOperations.Tests.DataTransferObjects
         {
             // Arrange.
             // Act.
-            var actual = new ConnectionOptions(connectionString, backupPath, commandTimeout);
-            var actualLocation = RemoveLastSecondFromLocation(actual.BackupLocation);
-            var expectedLocation = RemoveLastSecondFromLocation(expected.BackupLocation);
+            var actual = new ConnectionOptions(connectionString, DateTimeWrapper, backupPath, commandTimeout);
 
             // Assert.
-            actualLocation.Should().Be(expectedLocation);
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Theory]
@@ -117,7 +124,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
         {
             // Arrange.
             // Act.
-            var actual = new ConnectionOptions(connectionString, backupPath, commandTimeout);
+            var actual = new ConnectionOptions(connectionString, DateTimeWrapper, backupPath, commandTimeout);
 
             // Assert.
             actual.Description.Should().Be(expected.Description);
@@ -130,7 +137,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
         {
             // Arrange.
             // Act.
-            var actual = new ConnectionOptions(connectionString, backupPath, commandTimeout);
+            var actual = new ConnectionOptions(connectionString, DateTimeWrapper, backupPath, commandTimeout);
 
             // Assert.
             actual.CommandTimeout.Should().Be(expected.CommandTimeout);
@@ -143,7 +150,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
         {
             // Arrange.
             // Act.
-            var actual = new ConnectionOptions(connectionString, backupPath, commandTimeout);
+            var actual = new ConnectionOptions(connectionString, DateTimeWrapper, backupPath, commandTimeout);
 
             // Assert.
             actual.IntegratedSecurity.Should().Be(expected.IntegratedSecurity);
@@ -156,7 +163,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
         {
             // Arrange.
             // Act.
-            var actual = new ConnectionOptions(connectionString, backupPath, commandTimeout);
+            var actual = new ConnectionOptions(connectionString, DateTimeWrapper, backupPath, commandTimeout);
 
             // Assert.
             actual.Password.Should().Be(expected.Password);
@@ -169,7 +176,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
         {
             // Arrange.
             // Act.
-            var actual = new ConnectionOptions(connectionString, backupPath, commandTimeout);
+            var actual = new ConnectionOptions(connectionString, DateTimeWrapper, backupPath, commandTimeout);
 
             // Assert.
             actual.Server.Should().Be(expected.Server);
@@ -182,7 +189,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
         {
             // Arrange.
             // Act.
-            var actual = new ConnectionOptions(connectionString, backupPath, commandTimeout);
+            var actual = new ConnectionOptions(connectionString, DateTimeWrapper, backupPath, commandTimeout);
 
             // Assert.
             actual.UserId.Should().Be(expected.UserId);
@@ -197,14 +204,14 @@ namespace DatabaseOperations.Tests.DataTransferObjects
             var expectedParameters = expected.BackupParameters();
 
             // Act.
-            var actual = new ConnectionOptions(connectionString, backupPath, commandTimeout);
+            var actual = new ConnectionOptions(connectionString, DateTimeWrapper, backupPath, commandTimeout);
             var actualParameters = actual.BackupParameters();
 
             // Assert.
             for (var i = 0; i < actualParameters.Length; i++)
             {
-                var actualLocation = RemoveLastSecondFromLocation(actualParameters[i].Value.ToString()!);
-                var expectedLocation = RemoveLastSecondFromLocation(expectedParameters[i].Value.ToString()!);
+                var actualLocation = actualParameters[i].Value.ToString()!;
+                var expectedLocation = expectedParameters[i].Value.ToString()!;
 
                 actualLocation.Should().Be(expectedLocation);
             }
@@ -219,7 +226,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
             var expectedParameters = expected.ExecutionParameters();
 
             // Act.
-            var actual = new ConnectionOptions(connectionString, backupPath, commandTimeout);
+            var actual = new ConnectionOptions(connectionString, DateTimeWrapper, backupPath, commandTimeout);
             var actualParameters = actual.ExecutionParameters();
 
             // Assert.
@@ -235,7 +242,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
             // Arrange.
             var options =
                 new ConnectionOptions(
-                    "SERVER=(localDb);DATABASE=PoohBear;User Id=sa;Password=password;Connect Timeout=30;",
+                    "SERVER=(localDb);DATABASE=PoohBear;User Id=sa;Password=password;Connect Timeout=30;", DateTimeWrapper,
                     @"H:\Backups\");
             var currentBackupLocation = options.BackupLocation;
 
@@ -253,7 +260,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
             // Arrange.
             var options =
                 new ConnectionOptions(
-                    "SERVER=(localDb);DATABASE=PoohBear;User Id=sa;Password=password;Connect Timeout=30;",
+                    "SERVER=(localDb);DATABASE=PoohBear;User Id=sa;Password=password;Connect Timeout=30;", DateTimeWrapper,
                     @"H:\Backups\");
             var currentBackupLocation = options.BackupLocation;
 
@@ -272,7 +279,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
                 "server=127.0.0.1;database=Bananas;User Id=sa;Password=password;Connect Timeout=205;",
                 30,
                 "",
-                new ConnectionOptions("database=Bananas;", string.Empty, 30)
+                new ConnectionOptions("database=Bananas;", DateTimeWrapper, string.Empty, 30)
                     .ApplyServer("127.0.0.1")
                     .ApplyDatabaseName("Bananas")
                     .ApplyUserId("sa")
@@ -285,7 +292,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
                 "server=127.0.0.1;database=Bananas;User Id=sa;Password=password;Connect Timeout=205;",
                 30,
                 BackupPath,
-                new ConnectionOptions("database=Bananas;", BackupPath, 30)
+                new ConnectionOptions("database=Bananas;", DateTimeWrapper, BackupPath, 30)
                     .ApplyServer("127.0.0.1")
                     .ApplyDatabaseName("Bananas")
                     .ApplyUserId("sa")
@@ -298,7 +305,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
                 "Server=192.168.11.65;Database=Whoop;User Id=sa;Password=password;Connect Timeout=1;",
                 10,
                 BackupPath,
-                new ConnectionOptions("database=Whoop;", BackupPath, 10)
+                new ConnectionOptions("database=Whoop;", DateTimeWrapper, BackupPath, 10)
                     .ApplyServer("192.168.11.65")
                     .ApplyDatabaseName("Whoop")
                     .ApplyUserId("sa")
@@ -311,7 +318,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
                 "SERVER=(localDb);DATABASE=PoohBear;User Id=sa;Password=password;Connect Timeout=30;",
                 0,
                 BackupPath,
-                new ConnectionOptions("database=PoohBear;", BackupPath, 60 * 60)
+                new ConnectionOptions("database=PoohBear;", DateTimeWrapper, BackupPath, 60 * 60)
                     .ApplyServer("(localDb)")
                     .ApplyDatabaseName("PoohBear")
                     .ApplyUserId("sa")
@@ -324,7 +331,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
                 "Server=127.0.0.1;Address=127.0.0.1;Initial Catalog=Banana;User Id=Pooh;Password=password;Pwd=password;Application Name=TestingStuff;",
                 30,
                 BackupPath,
-                new ConnectionOptions("database=Banana;", BackupPath, 30)
+                new ConnectionOptions("database=Banana;", DateTimeWrapper, BackupPath, 30)
                     .ApplyServer("127.0.0.1")
                     .ApplyDatabaseName("Banana")
                     .ApplyUserId("Pooh")
@@ -337,7 +344,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
                 "Server=127.0.0.1;Address=127.0.0.1;Database=Banana;Integrated Security=true;Trusted_Connection=true;Connect Timeout=5;Connection Timeout=5;Application Name=TestingStuff;Um=42;",
                 4,
                 BackupPath,
-                new ConnectionOptions("database=Banana;", BackupPath, 4)
+                new ConnectionOptions("database=Banana;", DateTimeWrapper, BackupPath, 4)
                     .ApplyServer("127.0.0.1")
                     .ApplyDatabaseName("Banana")
                     .ApplyConnectTimeOut("5")
@@ -350,7 +357,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
                 "Server=127.0.0.1;Um=42;Address=127.0.0.1;Database=Banana;Um=42;Integrated Security=true;;Trusted_Connection=true;Connect Timeout=5;Um=42;Connection Timeout=6;Application Name=TestingStuff;",
                 8,
                 BackupPath,
-                new ConnectionOptions("database=Banana;", BackupPath, 8)
+                new ConnectionOptions("database=Banana;", DateTimeWrapper, BackupPath, 8)
                     .ApplyServer("127.0.0.1")
                     .ApplyDatabaseName("Banana")
                     .ApplyConnectTimeOut("5")
@@ -363,7 +370,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
                 "Server=127.0.0.1;Something weird here;Address=127.0.0.1;Database=Banana;Um=42;Integrated Security=false;;Trusted_Connection=true;    ;Connect Timeout=5;Um=42;Connection Timeout=5;Application Name=TestingStuff;",
                 15,
                 BackupPath,
-                new ConnectionOptions("database=Banana;", BackupPath, 15)
+                new ConnectionOptions("database=Banana;", DateTimeWrapper, BackupPath, 15)
                     .ApplyServer("127.0.0.1")
                     .ApplyDatabaseName("Banana")
                     .ApplyConnectTimeOut("5")
@@ -376,7 +383,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
                 "Server=127.0.0.1;Something weird here;Address=127.0.0.1;Database=Banana;Um=42;Integrated Security=SSPI;;Trusted_Connection=true;    ;Connect Timeout=5;Um=42;Connection Timeout=5;Application Name=TestingStuff;",
                 15,
                 BackupPath,
-                new ConnectionOptions("database=Banana;", BackupPath, 15)
+                new ConnectionOptions("database=Banana;", DateTimeWrapper, BackupPath, 15)
                     .ApplyServer("127.0.0.1")
                     .ApplyDatabaseName("Banana")
                     .ApplyConnectTimeOut("5")
@@ -389,7 +396,7 @@ namespace DatabaseOperations.Tests.DataTransferObjects
                 "Server=127.0.0.1;Data Source=127.0.0.1;addr=192.168.0.1;Initial Catalog=Banana;User Id=Pooh;Password=password;Pwd=nope;Application Name=TestingStuff;",
                 25,
                 BackupPath,
-                new ConnectionOptions("database=Banana;", BackupPath, 25)
+                new ConnectionOptions("database=Banana;", DateTimeWrapper, BackupPath, 25)
                     .ApplyServer("127.0.0.1")
                     .ApplyDatabaseName("Banana")
                     .ApplyUserId("Pooh")
@@ -402,14 +409,9 @@ namespace DatabaseOperations.Tests.DataTransferObjects
                 "; ;    ;;  ;Yep;Um not really;Pooh woz ere;",
                 25,
                 BackupPath,
-                new ConnectionOptions("Something", BackupPath, 25)
+                new ConnectionOptions("Something", DateTimeWrapper, BackupPath, 25)
                     .OverrideConnectionString("; ;    ;;  ;Yep;Um not really;Pooh woz ere;")
             };
-        }
-
-        private static string RemoveLastSecondFromLocation(string location)
-        {
-            return string.IsNullOrWhiteSpace(location) ? location : location[..^5];
         }
     }
 }

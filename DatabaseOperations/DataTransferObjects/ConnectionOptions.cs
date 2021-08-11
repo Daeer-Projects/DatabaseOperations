@@ -6,6 +6,7 @@ using DatabaseOperations.ConnectionRules;
 using DatabaseOperations.Extensions;
 using DatabaseOperations.Interfaces;
 using DatabaseOperations.Validators;
+using DatabaseOperations.Wrappers;
 using Microsoft.Data.SqlClient;
 using Useful.Extensions;
 
@@ -31,6 +32,13 @@ namespace DatabaseOperations.DataTransferObjects
         /// </param>
         public ConnectionOptions(string connectionString, string backupPath = "", int timeout = 0)
         {
+            _dateTimeWrapper = new DateTimeWrapper();
+            InitialiseProperties(connectionString, backupPath, timeout);
+        }
+
+        internal ConnectionOptions(string connectionString, IDateTimeWrapper dateWrapper, string backupPath = "", int timeout = 0)
+        {
+            _dateTimeWrapper = dateWrapper;
             InitialiseProperties(connectionString, backupPath, timeout);
         }
 
@@ -39,6 +47,7 @@ namespace DatabaseOperations.DataTransferObjects
 
         private readonly char[] _splitArray = {';'};
         private bool _isValid;
+        private readonly IDateTimeWrapper _dateTimeWrapper;
 
         private readonly IList<IConnectionRule> _connectionRules = new List<IConnectionRule>
         {
@@ -116,7 +125,7 @@ namespace DatabaseOperations.DataTransferObjects
 
             ProcessItemArray(itemArray);
 
-            var location = $"{backupPath}{DatabaseName}_Full_{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.bak";
+            var location = $"{backupPath}{DatabaseName}_Full_{_dateTimeWrapper.Now:yyyy-MM-dd-HH-mm-ss}.bak";
             var description = $"Full backup of the `{DatabaseName}` database.";
 
             ConnectionString = UpdateConnectionString(connectionString);
