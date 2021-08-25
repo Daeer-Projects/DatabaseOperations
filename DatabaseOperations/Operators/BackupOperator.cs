@@ -5,6 +5,7 @@ using DatabaseOperations.DataTransferObjects;
 using DatabaseOperations.Executors;
 using DatabaseOperations.Factories;
 using DatabaseOperations.Interfaces;
+using Microsoft.SqlServer.Management.Assessment.Checks;
 
 namespace DatabaseOperations.Operators
 {
@@ -95,20 +96,13 @@ namespace DatabaseOperations.Operators
                 return result;
             }
 
-            if (token.IsCancellationRequested)
-            {
-                result.Messages.Add(ExecutionCancelledMessage);
-                return result;
-            }
-
+            var (isCancelled, operationResult) = CheckForCancellation(result, token);
+            if (isCancelled) return operationResult;
+            
             result = await _sqlExecutor.ExecuteBackupPathAsync(result, options, token).ConfigureAwait(false);
 
-            if (token.IsCancellationRequested)
-            {
-                result.Result = false;
-                result.Messages.Add(ExecutionCancelledMessage);
-                return result;
-            }
+            (isCancelled, operationResult) = CheckForCancellation(result, token);
+            if (isCancelled) return operationResult;
 
             // If result of path execution is not true, we want to strip out the path, so we only have the backup name.
             if (!result.Result)
@@ -119,11 +113,17 @@ namespace DatabaseOperations.Operators
             
             result = await _sqlExecutor.ExecuteBackupDatabaseAsync(result, options, token).ConfigureAwait(false);
 
-            if (!token.IsCancellationRequested) return result;
+            (isCancelled, operationResult) = CheckForCancellation(result, token);
+            return isCancelled ? operationResult : result;
+        }
 
-            result.Result = false;
-            result.Messages.Add(ExecutionCancelledMessage);
-            return result;
+        private static (bool isCancelled, OperationResult result) CheckForCancellation(OperationResult currentResult, CancellationToken token)
+        {
+            if (!token.IsCancellationRequested) return (false, currentResult);
+
+            currentResult.Result = false;
+            currentResult.Messages.Add(ExecutionCancelledMessage);
+            return (true, currentResult);
         }
     }
 }
