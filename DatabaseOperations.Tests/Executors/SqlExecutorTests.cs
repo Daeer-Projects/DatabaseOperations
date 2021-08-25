@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DatabaseOperations.DataTransferObjects;
 using DatabaseOperations.Executors;
 using DatabaseOperations.Interfaces;
@@ -42,6 +44,20 @@ namespace DatabaseOperations.Tests.Executors
         }
 
         [Fact]
+        public async Task TestBackupPathAsyncWithValidDetailsReturnsTrue()
+        {
+            // Arrange.
+            var details = GetConnectionOptions("server", "database", "127.0.0.1", "Thing");
+            var result = new OperationResult();
+
+            // Act.
+            result = await _sqlExecutor.ExecuteBackupPathAsync(result, details, new CancellationToken());
+
+            // Assert.
+            result.Result.Should().BeTrue();
+        }
+
+        [Fact]
         public void TestBackupPathWithConnectionErrorReturnsFalse()
         {
             // Arrange.
@@ -53,6 +69,24 @@ namespace DatabaseOperations.Tests.Executors
 
             // Act.
             result = _sqlExecutor.ExecuteBackupPath(result, details);
+
+            // Assert.
+            result.Result.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task TestBackupPathAsyncWithConnectionErrorReturnsFalse()
+        {
+            // Arrange.
+            var token = new CancellationToken();
+            var details = GetConnectionOptions("server", "database", "oops", "Thing");
+            _connection
+                .When(c => c.OpenAsync(token))
+                .Do(_ => throw new DbTestException("Server is not correct!"));
+            var result = new OperationResult();
+
+            // Act.
+            result = await _sqlExecutor.ExecuteBackupPathAsync(result, details, token);
 
             // Assert.
             result.Result.Should().BeFalse();
@@ -76,6 +110,23 @@ namespace DatabaseOperations.Tests.Executors
         }
 
         [Fact]
+        public async Task TestBackupPathAsyncWithCommandParameterErrorReturnsFalse()
+        {
+            // Arrange.
+            var details = GetConnectionOptions("server", "database", "oops", "Thing");
+            _command
+                .When(c => c.AddParameters(Arg.Any<SqlParameter[]>()))
+                .Do(_ => throw new DbTestException("Command is not working!"));
+            var result = new OperationResult();
+
+            // Act.
+            result = await _sqlExecutor.ExecuteBackupPathAsync(result, details, new CancellationToken());
+
+            // Assert.
+            result.Result.Should().BeFalse();
+        }
+
+        [Fact]
         public void TestBackupPathWithCommandExecuteErrorReturnsFalse()
         {
             // Arrange.
@@ -87,6 +138,24 @@ namespace DatabaseOperations.Tests.Executors
 
             // Act.
             result = _sqlExecutor.ExecuteBackupPath(result, details);
+
+            // Assert.
+            result.Result.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task TestBackupPathAsyncWithCommandExecuteErrorReturnsFalse()
+        {
+            // Arrange.
+            var token = new CancellationToken();
+            var details = GetConnectionOptions("server", "database", "oops", "Thing");
+            _command
+                .When(c => c.ExecuteNonQueryAsync(token))
+                .Do(_ => throw new DbTestException("Execute is not working!"));
+            var result = new OperationResult();
+
+            // Act.
+            result = await _sqlExecutor.ExecuteBackupPathAsync(result, details, token);
 
             // Assert.
             result.Result.Should().BeFalse();
@@ -116,6 +185,30 @@ namespace DatabaseOperations.Tests.Executors
         }
 
         [Fact]
+        public async Task TestBackupPathAsyncWithCommandExecuteErrorReturnsExpectedMessages()
+        {
+            // Arrange.
+            var token = new CancellationToken();
+            var details = GetConnectionOptions("server", "database", "oops", "Thing");
+            _command
+                .When(c => c.ExecuteNonQueryAsync(token))
+                .Do(_ => throw new DbTestException("Execute is not working!"));
+            var result = new OperationResult();
+
+            var expectedMessages = new List<string>
+            {
+                "Backup path folder check/create failed due to an exception."
+            };
+
+            // Act.
+            result = await _sqlExecutor.ExecuteBackupPathAsync(result, details, token);
+
+            // Assert.
+            result.Messages.Should().HaveSameCount(expectedMessages);
+            result.Messages.Should().Equal(expectedMessages, (actualMessage, expectedMessage) => actualMessage.Contains(expectedMessage));
+        }
+
+        [Fact]
         public void TestBackupDatabaseWithValidDetailsReturnsTrue()
         {
             // Arrange.
@@ -124,6 +217,20 @@ namespace DatabaseOperations.Tests.Executors
 
             // Act.
             result = _sqlExecutor.ExecuteBackupDatabase(result, details);
+
+            // Assert.
+            result.Result.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task TestBackupDatabaseAsyncWithValidDetailsReturnsTrue()
+        {
+            // Arrange.
+            var details = GetConnectionOptions("server", "database", "127.0.0.1", "Thing");
+            var result = new OperationResult();
+
+            // Act.
+            result = await _sqlExecutor.ExecuteBackupDatabaseAsync(result, details, new CancellationToken());
 
             // Assert.
             result.Result.Should().BeTrue();
@@ -147,6 +254,24 @@ namespace DatabaseOperations.Tests.Executors
         }
 
         [Fact]
+        public async Task TestBackupDatabaseAsyncWithConnectionErrorReturnsFalse()
+        {
+            // Arrange.
+            var token = new CancellationToken();
+            var details = GetConnectionOptions("server", "database", "oops", "Thing");
+            _connection
+                .When(c => c.OpenAsync(token))
+                .Do(_ => throw new DbTestException("Server is not correct!"));
+            var result = new OperationResult();
+
+            // Act.
+            result = await _sqlExecutor.ExecuteBackupDatabaseAsync(result, details, token);
+
+            // Assert.
+            result.Result.Should().BeFalse();
+        }
+
+        [Fact]
         public void TestBackupDatabaseWithCommandParameterErrorReturnsFalse()
         {
             // Arrange.
@@ -158,6 +283,23 @@ namespace DatabaseOperations.Tests.Executors
 
             // Act.
             result = _sqlExecutor.ExecuteBackupDatabase(result, details);
+
+            // Assert.
+            result.Result.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task TestBackupDatabaseAsyncWithCommandParameterErrorReturnsFalse()
+        {
+            // Arrange.
+            var details = GetConnectionOptions("server", "database", "oops", "Thing");
+            _command
+                .When(c => c.AddParameters(Arg.Any<SqlParameter[]>()))
+                .Do(_ => throw new DbTestException("Command is not working!"));
+            var result = new OperationResult();
+
+            // Act.
+            result = await _sqlExecutor.ExecuteBackupDatabaseAsync(result, details, new CancellationToken());
 
             // Assert.
             result.Result.Should().BeFalse();
@@ -181,6 +323,24 @@ namespace DatabaseOperations.Tests.Executors
         }
 
         [Fact]
+        public async Task TestBackupDatabaseAsyncWithCommandExecuteErrorReturnsFalse()
+        {
+            // Arrange.
+            var token = new CancellationToken();
+            var details = GetConnectionOptions("server", "database", "oops", "Thing");
+            _command
+                .When(c => c.ExecuteNonQueryAsync(token))
+                .Do(_ => throw new DbTestException("Execute is not working!"));
+            var result = new OperationResult();
+
+            // Act.
+            result = await _sqlExecutor.ExecuteBackupDatabaseAsync(result, details, token);
+
+            // Assert.
+            result.Result.Should().BeFalse();
+        }
+
+        [Fact]
         public void TestBackupDatabaseWithCommandExecuteErrorReturnsExpectedMessages()
         {
             // Arrange.
@@ -197,6 +357,30 @@ namespace DatabaseOperations.Tests.Executors
 
             // Act.
             result = _sqlExecutor.ExecuteBackupDatabase(result, details);
+
+            // Assert.
+            result.Messages.Should().HaveSameCount(expectedMessages);
+            result.Messages.Should().Equal(expectedMessages, (actualMessage, expectedMessage) => actualMessage.Contains(expectedMessage));
+        }
+
+        [Fact]
+        public async Task TestBackupDatabaseAsyncWithCommandExecuteErrorReturnsExpectedMessages()
+        {
+            // Arrange.
+            var token = new CancellationToken();
+            var details = GetConnectionOptions("server", "database", "oops", "Thing");
+            _command
+                .When(c => c.ExecuteNonQueryAsync(token))
+                .Do(_ => throw new DbTestException("Execute is not working!"));
+            var result = new OperationResult();
+
+            var expectedMessages = new List<string>
+            {
+                "Backing up the database failed due to an exception."
+            };
+
+            // Act.
+            result = await _sqlExecutor.ExecuteBackupDatabaseAsync(result, details, token);
 
             // Assert.
             result.Messages.Should().HaveSameCount(expectedMessages);
