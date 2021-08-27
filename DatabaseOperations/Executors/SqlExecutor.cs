@@ -46,11 +46,10 @@ WITH
                         command.ExecuteNonQuery();
                     }
                 }
-
-                result.Result = true;
             }
             catch (DbException exception)
             {
+                result.Result = false;
                 result.Messages.Add($"Backup path folder check/create failed due to an exception.  Exception: {exception.Message}");
             }
 
@@ -71,11 +70,10 @@ WITH
                         await command.ExecuteNonQueryAsync(token).ConfigureAwait(false);
                     }
                 }
-
-                result.Result = true;
             }
             catch (DbException exception)
             {
+                result.Result = false;
                 result.Messages.Add($"Backup path folder check/create failed due to an exception.  Exception: {exception.Message}");
             }
 
@@ -96,11 +94,10 @@ WITH
                         command.ExecuteNonQuery();
                     }
                 }
-
-                result.Result = true;
             }
             catch (DbException exception)
             {
+                result.Result = false;
                 result.Messages.Add($"Backing up the database failed due to an exception.  Exception: {exception.Message}");
             }
 
@@ -121,11 +118,10 @@ WITH
                         await command.ExecuteNonQueryAsync(token).ConfigureAwait(false);
                     }
                 }
-
-                result.Result = true;
             }
             catch (DbException exception)
             {
+                result.Result = false;
                 result.Messages.Add($"Backing up the database failed due to an exception.  Exception: {exception.Message}");
             }
 

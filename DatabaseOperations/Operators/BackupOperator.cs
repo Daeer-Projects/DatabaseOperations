@@ -3,9 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using DatabaseOperations.DataTransferObjects;
 using DatabaseOperations.Executors;
+using DatabaseOperations.Extensions;
 using DatabaseOperations.Factories;
 using DatabaseOperations.Interfaces;
-using Microsoft.SqlServer.Management.Assessment.Checks;
 
 namespace DatabaseOperations.Operators
 {
@@ -32,7 +32,6 @@ namespace DatabaseOperations.Operators
         }
 
         private readonly ISqlExecutor _sqlExecutor;
-        private const string ExecutionCancelledMessage = "Cancel called on the token.";
 
         /// <summary>
         /// Uses the <paramref name="options" /> defined by the user to start
@@ -49,25 +48,12 @@ namespace DatabaseOperations.Operators
         /// </returns>
         public OperationResult BackupDatabase(ConnectionOptions options)
         {
-            var result = new OperationResult();
-
-            if (!options.IsValid())
-            {
-                result.Messages = options.Messages;
-                return result;
-            }
-
-            result = _sqlExecutor.ExecuteBackupPath(result, options);
-
-            // If result of path execution is not true, we want to strip out the path, so we only have the backup name.
-            if (!result.Result)
-            {
-                result.Messages.Add("Unable to check the path, reverting to default save path.");
-                options.RemovePathFromBackupLocation();
-            }
-
-            result = _sqlExecutor.ExecuteBackupDatabase(result, options);
-
+            var result = new OperationResult()
+                .ValidateConnectionOptions(options)
+                .ExecuteBackupPath(options, _sqlExecutor)
+                .CheckBackupPathExecution(options)
+                .ExecuteBackup(options, _sqlExecutor);
+            
             return result;
         }
 
@@ -88,42 +74,18 @@ namespace DatabaseOperations.Operators
         /// </returns>
         public async Task<OperationResult> BackupDatabaseAsync(ConnectionOptions options, CancellationToken token = default)
         {
-            var result = new OperationResult();
+            var result = await new OperationResult()
+                .ValidateConnectionOptionsAsync(options)
+                .CheckForCancellation(token)
+                .ExecuteBackupPathAsync(options, token, _sqlExecutor)
+                .CheckForCancellation(token)
+                .CheckBackupPathExecutionAsync(options, token)
+                .CheckForCancellation(token)
+                .ExecuteBackupAsync(options, token, _sqlExecutor)
+                .CheckForCancellation(token)
+                .ConfigureAwait(false);
 
-            if (!options.IsValid())
-            {
-                result.Messages = options.Messages;
-                return result;
-            }
-
-            var (isCancelled, operationResult) = CheckForCancellation(result, token);
-            if (isCancelled) return operationResult;
-            
-            result = await _sqlExecutor.ExecuteBackupPathAsync(result, options, token).ConfigureAwait(false);
-
-            (isCancelled, operationResult) = CheckForCancellation(result, token);
-            if (isCancelled) return operationResult;
-
-            // If result of path execution is not true, we want to strip out the path, so we only have the backup name.
-            if (!result.Result)
-            {
-                result.Messages.Add("Unable to check the path, reverting to default save path.");
-                options.RemovePathFromBackupLocation();
-            }
-            
-            result = await _sqlExecutor.ExecuteBackupDatabaseAsync(result, options, token).ConfigureAwait(false);
-
-            (isCancelled, operationResult) = CheckForCancellation(result, token);
-            return isCancelled ? operationResult : result;
-        }
-
-        private static (bool isCancelled, OperationResult result) CheckForCancellation(OperationResult currentResult, CancellationToken token)
-        {
-            if (!token.IsCancellationRequested) return (false, currentResult);
-
-            currentResult.Result = false;
-            currentResult.Messages.Add(ExecutionCancelledMessage);
-            return (true, currentResult);
+            return result;
         }
     }
 }

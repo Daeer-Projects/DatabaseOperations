@@ -17,7 +17,7 @@ namespace DatabaseOperations.DataTransferObjects
         /// <summary>
         /// The actual result from the operation.
         /// </summary>
-        public bool Result { get; set; }
+        public bool Result { get; set; } = true;
 
         /// <summary>
         /// The list of messages for the consuming class.

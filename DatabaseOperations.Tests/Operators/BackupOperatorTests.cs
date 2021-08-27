@@ -27,7 +27,7 @@ namespace DatabaseOperations.Tests.Operators
         public void TestBackupWithValidDetailsReturnsTrue()
         {
             // Arrange.
-            var defaultResult = new OperationResult { Result = true };
+            var defaultResult = new OperationResult();
             _sqlExecutor.ExecuteBackupPath(Arg.Any<OperationResult>(), Arg.Any<ConnectionOptions>())
                 .Returns(defaultResult);
             _sqlExecutor.ExecuteBackupDatabase(Arg.Any<OperationResult>(), Arg.Any<ConnectionOptions>())
@@ -45,7 +45,7 @@ namespace DatabaseOperations.Tests.Operators
         public async Task TestBackupAsyncWithValidDetailsReturnsTrue()
         {
             // Arrange.
-            var defaultResult = new OperationResult { Result = true };
+            var defaultResult = new OperationResult();
             _sqlExecutor.ExecuteBackupPathAsync(Arg.Any<OperationResult>(), Arg.Any<ConnectionOptions>(), Arg.Any<CancellationToken>())
                 .Returns(defaultResult);
             _sqlExecutor.ExecuteBackupDatabaseAsync(Arg.Any<OperationResult>(), Arg.Any<ConnectionOptions>(), Arg.Any<CancellationToken>())
@@ -147,7 +147,7 @@ namespace DatabaseOperations.Tests.Operators
         public void TestBackupWithDatabaseErrorReturnsFalse()
         {
             // Arrange.
-            var defaultResult = new OperationResult { Result = true };
+            var defaultResult = new OperationResult();
             _sqlExecutor.ExecuteBackupPath(Arg.Any<OperationResult>(), Arg.Any<ConnectionOptions>())
                 .Returns(defaultResult);
             var details = GetConnectionOptions("server", "database", "oops", "Thing");
@@ -165,7 +165,7 @@ namespace DatabaseOperations.Tests.Operators
         public async Task TestBackupAsyncWithDatabaseErrorReturnsFalse()
         {
             // Arrange.
-            var defaultResult = new OperationResult { Result = true };
+            var defaultResult = new OperationResult();
             _sqlExecutor.ExecuteBackupPathAsync(Arg.Any<OperationResult>(), Arg.Any<ConnectionOptions>(), Arg.Any<CancellationToken>())
                 .Returns(defaultResult);
             var details = GetConnectionOptions("server", "database", "oops", "Thing");
@@ -188,7 +188,7 @@ namespace DatabaseOperations.Tests.Operators
                 "Backing up the database failed due to an exception."
             };
 
-            var defaultResult = new OperationResult { Result = true };
+            var defaultResult = new OperationResult();
             _sqlExecutor.ExecuteBackupPath(Arg.Any<OperationResult>(), Arg.Any<ConnectionOptions>())
                 .Returns(defaultResult);
             var details = GetConnectionOptions("server", "database", "oops", "Thing");
@@ -212,7 +212,7 @@ namespace DatabaseOperations.Tests.Operators
                 "Backing up the database failed due to an exception."
             };
 
-            var defaultResult = new OperationResult { Result = true };
+            var defaultResult = new OperationResult();
             _sqlExecutor.ExecuteBackupPathAsync(Arg.Any<OperationResult>(), Arg.Any<ConnectionOptions>(), Arg.Any<CancellationToken>())
                 .Returns(defaultResult);
             var details = GetConnectionOptions("server", "database", "oops", "Thing");
@@ -235,7 +235,7 @@ namespace DatabaseOperations.Tests.Operators
             var token = source.Token;
             token.ThrowIfCancellationRequested();
 
-            var defaultResult = new OperationResult { Result = true };
+            var defaultResult = new OperationResult();
             _sqlExecutor.ExecuteBackupPathAsync(Arg.Any<OperationResult>(), Arg.Any<ConnectionOptions>(), Arg.Any<CancellationToken>())
                 .Returns(defaultResult);
             _sqlExecutor
@@ -263,7 +263,7 @@ namespace DatabaseOperations.Tests.Operators
             var token = source.Token;
             token.ThrowIfCancellationRequested();
 
-            var defaultResult = new OperationResult { Result = true };
+            var defaultResult = new OperationResult();
             _sqlExecutor.ExecuteBackupPathAsync(Arg.Any<OperationResult>(), Arg.Any<ConnectionOptions>(), Arg.Any<CancellationToken>())
                 .Returns(defaultResult);
             _sqlExecutor
@@ -288,7 +288,7 @@ namespace DatabaseOperations.Tests.Operators
             var token = source.Token;
             token.ThrowIfCancellationRequested();
 
-            var defaultResult = new OperationResult { Result = true };
+            var defaultResult = new OperationResult();
             _sqlExecutor.ExecuteBackupPathAsync(Arg.Any<OperationResult>(), Arg.Any<ConnectionOptions>(), Arg.Any<CancellationToken>())
                 .Returns(defaultResult);
 
@@ -318,7 +318,7 @@ namespace DatabaseOperations.Tests.Operators
             var token = source.Token;
             token.ThrowIfCancellationRequested();
 
-            var defaultResult = new OperationResult { Result = true };
+            var defaultResult = new OperationResult();
             _sqlExecutor.ExecuteBackupPathAsync(Arg.Any<OperationResult>(), Arg.Any<ConnectionOptions>(), Arg.Any<CancellationToken>())
                 .Returns(defaultResult);
 
