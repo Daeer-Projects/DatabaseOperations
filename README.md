@@ -37,9 +37,9 @@ var result = backupOperator.BackupDatabase(new ConnectionOptions(connectionStrin
 To perform the backup asynchronously (for many backup operations):
 
 ```csharp
-const string connectionStringOne = @"server=MADDY\SQLDEV;database=DatabaseOne;Integrated Security=SSPI;Connect Timeout=5;";
-const string connectionStringTwo = @"server=MADDY\SQLDEV;database=DatabaseTwo;Integrated Security=SSPI;Connect Timeout=5;";
-const string connectionStringThree = @"server=MADDY\SQLDEV;database=DatabaseTwo;Integrated Security=SSPI;Connect Timeout=5;";
+const string connectionStringOne = @"server=MyComputer\SQLDEV;database=DatabaseOne;Integrated Security=SSPI;Connect Timeout=5;";
+const string connectionStringTwo = @"server=MyComputer\SQLDEV;database=DatabaseTwo;Integrated Security=SSPI;Connect Timeout=5;";
+const string connectionStringThree = @"server=MyComputer\SQLDEV;database=DatabaseTwo;Integrated Security=SSPI;Connect Timeout=5;";
 const string backupPath = @"E:\Database\Backups\";
 var cancellationSource = new CancellationTokenSource();
 var token = cancellationSource.Token;
