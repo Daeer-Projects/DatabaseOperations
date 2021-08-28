@@ -2,7 +2,7 @@
 
 The purpose of this library is to provide the consumer with tools to perform database operations.  The library has been designed for use in deployment/utilities to automate the tasks usually done manually.
 
-[![Build status](https://dev.azure.com/DaeerProjects/DatabaseOperations/_apis/build/status/DatabaseOperations)](https://dev.azure.com/DaeerProjects/DatabaseOperations/_build/latest?definitionId=-1)
+[![Build status](https://dev.azure.com/DaeerProjects/DatabaseOperations/_apis/build/status/DatabaseOperations)](https://dev.azure.com/DaeerProjects/DatabaseOperations/_build/latest?definitionId=10)
 
 **NOTE**:<br />
 Microsoft SQL Server Databases only.
