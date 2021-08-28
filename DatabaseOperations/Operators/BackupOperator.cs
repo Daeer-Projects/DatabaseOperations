@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using DatabaseOperations.DataTransferObjects;
 using DatabaseOperations.Executors;
+using DatabaseOperations.Extensions;
 using DatabaseOperations.Factories;
 using DatabaseOperations.Interfaces;
 
@@ -45,26 +48,44 @@ namespace DatabaseOperations.Operators
         /// </returns>
         public OperationResult BackupDatabase(ConnectionOptions options)
         {
-            var result = new OperationResult();
+            var result = new OperationResult()
+                .ValidateConnectionOptions(options)
+                .ExecuteBackupPath(options, _sqlExecutor)
+                .CheckBackupPathExecution(options)
+                .ExecuteBackup(options, _sqlExecutor);
+            
+            return result;
+        }
 
-            if (!options.IsValid())
-            {
-                result.Messages = options.Messages;
-                return result;
-            }
-
-            result = _sqlExecutor.ExecuteBackupPath(result, options);
-
-            // If result of path execution is not true, we want to strip out the path, so we only have the backup name.
-            if (!result.Result)
-            {
-                result.Messages.Add("Unable to check the path, reverting to default save path.");
-                options.RemovePathFromBackupLocation();
-            }
-
-            result = _sqlExecutor.ExecuteBackupDatabase(result, options);
+        /// <summary>
+        /// Uses the <paramref name="options" /> defined by the user to start
+        /// the backup process.
+        /// This is the async version.
+        /// </summary>
+        /// <param name="options">
+        /// The connection options defined by the consumer of the method.
+        /// </param>
+        /// <param name="token"> The cancellation token supplied by the calling application. </param>
+        /// <exception cref="NotSupportedException">
+        /// The database exception was not added to the 'Message' list.
+        /// </exception>
+        /// <returns>
+        /// The result of the backup operation.
+        /// </returns>
+        public async Task<OperationResult> BackupDatabaseAsync(ConnectionOptions options, CancellationToken token = default)
+        {
+            var result = await new OperationResult()
+                .ValidateConnectionOptionsAsync(options)
+                .CheckForCancellation(token)
+                .ExecuteBackupPathAsync(options, token, _sqlExecutor)
+                .CheckForCancellation(token)
+                .CheckBackupPathExecutionAsync(options, token)
+                .CheckForCancellation(token)
+                .ExecuteBackupAsync(options, token, _sqlExecutor)
+                .CheckForCancellation(token)
+                .ConfigureAwait(false);
 
             return result;
         }
-	}
+    }
 }

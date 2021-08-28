@@ -1,4 +1,6 @@
 ﻿using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 using DatabaseOperations.Interfaces;
 using Microsoft.Data.SqlClient;
 
@@ -26,6 +28,11 @@ namespace DatabaseOperations.Wrappers
         public int ExecuteNonQuery()
         {
             return _sqlCommand.ExecuteNonQuery();
+        }
+
+        public async Task<int> ExecuteNonQueryAsync(CancellationToken token)
+        {
+            return await _sqlCommand.ExecuteNonQueryAsync(token).ConfigureAwait(false);
         }
 
         public void SetCommandTimeout(int timeout)

@@ -1,4 +1,6 @@
-﻿using DatabaseOperations.Interfaces;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using DatabaseOperations.Interfaces;
 using Microsoft.Data.SqlClient;
 
 namespace DatabaseOperations.Wrappers
@@ -20,6 +22,11 @@ namespace DatabaseOperations.Wrappers
         public void Open()
         {
             _sqlConnection.Open();
+        }
+
+        public async Task OpenAsync(CancellationToken token)
+        {
+            await _sqlConnection.OpenAsync(token).ConfigureAwait(false);
         }
 
         public void Dispose()

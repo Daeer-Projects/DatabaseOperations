@@ -25,7 +25,7 @@ To create a new instance of the `BackupOperator`:
 var backupOperator = new BackupOperator();
 ```
 
-To perform the backup operation:
+To perform the backup operation synchronously:
 
 ```csharp
 const string connectionString = @"server=MyComputer\SQLDEV;database=TestDatabase;Integrated Security=SSPI;Connect Timeout=5;";
@@ -33,6 +33,35 @@ const string backupPath = @"E:\Database\Backups\";
 
 var result = backupOperator.BackupDatabase(new ConnectionOptions(connectionString, backupPath));
 ```
+
+To perform the backup asynchronously (for many backup operations):
+
+```csharp
+const string connectionStringOne = @"server=MyComputer\SQLDEV;database=DatabaseOne;Integrated Security=SSPI;Connect Timeout=5;";
+const string connectionStringTwo = @"server=MyComputer\SQLDEV;database=DatabaseTwo;Integrated Security=SSPI;Connect Timeout=5;";
+const string connectionStringThree = @"server=MyComputer\SQLDEV;database=DatabaseTwo;Integrated Security=SSPI;Connect Timeout=5;";
+const string backupPath = @"E:\Database\Backups\";
+var cancellationSource = new CancellationTokenSource();
+var token = cancellationSource.Token;
+
+var resultOne = backupOperator.BackupDatabaseAsync(new ConnectionOptions(connectionStringOne, backupPath), token);
+var resultTwo = backupOperator.BackupDatabaseAsync(new ConnectionOptions(connectionStringTwo, backupPath), token);
+var resultThree = backupOperator.BackupDatabaseAsync(new ConnectionOptions(connectionStringThree, backupPath), token);
+
+await Task.WhenAll(resultOne, resultTwo, resultThree).ConfigureAwait(false);
+
+var taskOne = await resultOne.ConfigureAwait(false);
+var taskTwo = await resultTwo.ConfigureAwait(false);
+var taskThree = await resultThree.ConfigureAwait(false);
+```
+
+### Cancellation of the operation
+
+The `CancellationTokenSource` object can be created with a timeout in milliseconds, or a `TimeSpan`.
+
+The token source can be cancelled from any event, or when the timeout is reached.
+
+If no token is supplied to the call, it will create one, but the calling application will not be able to raise the cancellation of the task.
 
 ## Milestones
 
