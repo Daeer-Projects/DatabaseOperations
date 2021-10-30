@@ -65,6 +65,3 @@ The token source can be cancelled from any event, or when the timeout is reached
 
 If no token is supplied to the call, it will create one, but the calling application will not be able to raise the cancellation of the task.
 
-## Milestones
-
-The first milestone is going to be the initial release as a NuGet package.
