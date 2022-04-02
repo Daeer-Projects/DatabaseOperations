@@ -6,7 +6,7 @@ using Microsoft.Data.SqlClient;
 namespace DatabaseOperations.Wrappers
 {
     internal sealed class SqlConnectionWrapper : ISqlConnectionWrapper
-	{
+    {
         internal SqlConnectionWrapper(string connectionString)
         {
             _sqlConnection = new SqlConnection(connectionString);
@@ -33,5 +33,5 @@ namespace DatabaseOperations.Wrappers
         {
             _sqlConnection.Dispose();
         }
-	}
+    }
 }

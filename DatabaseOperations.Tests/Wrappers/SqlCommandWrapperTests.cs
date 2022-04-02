@@ -69,5 +69,5 @@ namespace DatabaseOperations.Tests.Wrappers
                 actual.Parameters[i].Value.Should().BeEquivalentTo(parameters[i].Value);
             }
         }
-	}
+    }
 }

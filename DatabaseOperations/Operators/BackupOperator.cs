@@ -24,7 +24,7 @@ namespace DatabaseOperations.Operators
         }
 
         /// <summary>
-        /// Initialises a new instance of the BackupOperator. 
+        /// Initialises a new instance of the BackupOperator.
         /// </summary>
         public BackupOperator()
         {
@@ -53,7 +53,7 @@ namespace DatabaseOperations.Operators
                 .ExecuteBackupPath(options, _sqlExecutor)
                 .CheckBackupPathExecution(options)
                 .ExecuteBackup(options, _sqlExecutor);
-            
+
             return result;
         }
 
