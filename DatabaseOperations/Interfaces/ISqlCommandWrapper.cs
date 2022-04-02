@@ -7,7 +7,7 @@ namespace DatabaseOperations.Interfaces
 {
     internal interface ISqlCommandWrapper : IDisposable
     {
-	    void AddParameters(SqlParameter[] parameters);
+        void AddParameters(SqlParameter[] parameters);
         void SetCommandTimeout(int timeout);
         int ExecuteNonQuery();
         Task<int> ExecuteNonQueryAsync(CancellationToken token);

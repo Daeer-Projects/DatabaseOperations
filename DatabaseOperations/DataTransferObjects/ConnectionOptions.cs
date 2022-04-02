@@ -16,7 +16,7 @@ namespace DatabaseOperations.DataTransferObjects
     /// The options used for connecting to the database.
     /// </summary>
     public class ConnectionOptions
-	{
+    {
         /// <summary>
         /// Initialises a new instance of the ConnectionOptions.
         /// </summary>
@@ -104,7 +104,7 @@ namespace DatabaseOperations.DataTransferObjects
                     Messages.Add(validationResultsError.ErrorMessage);
                 }
             }
-            
+
             return _isValid;
         }
 
@@ -120,7 +120,7 @@ namespace DatabaseOperations.DataTransferObjects
         {
             _isValid = !string.IsNullOrWhiteSpace(connectionString);
             if (!_isValid) return;
-            
+
             string[] itemArray = connectionString.Split(_splitArray, StringSplitOptions.RemoveEmptyEntries);
 
             ProcessItemArray(itemArray);
@@ -167,10 +167,10 @@ namespace DatabaseOperations.DataTransferObjects
         private static SqlParameter[] GetBackupParameters(string backupPath)
         {
             var pathParameter = new SqlParameter(Constants.Parameters.PathParameter, SqlDbType.VarChar) { Value = backupPath };
-            
+
             return new[] { pathParameter };
         }
-        
+
         private static SqlParameter[] GetParameters(string database, string location, string description)
         {
             var nameParameter = new SqlParameter(Constants.Parameters.NameParameter, SqlDbType.VarChar) { Value = database };
@@ -179,5 +179,5 @@ namespace DatabaseOperations.DataTransferObjects
 
             return new[] { nameParameter, locationParameter, descriptionParameter };
         }
-	}
+    }
 }

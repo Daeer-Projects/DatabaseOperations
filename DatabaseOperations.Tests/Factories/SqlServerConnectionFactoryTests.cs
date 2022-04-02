@@ -7,8 +7,8 @@ using Xunit;
 namespace DatabaseOperations.Tests.Factories
 {
     public class SqlServerConnectionFactoryTests
-	{
-		private readonly ISqlServerConnectionFactory _connectionFactory = new SqlServerConnectionFactory();
+    {
+        private readonly ISqlServerConnectionFactory _connectionFactory = new SqlServerConnectionFactory();
 
         [Fact]
         public void TestCreateConnectionReturnsExpected()
@@ -33,5 +33,5 @@ namespace DatabaseOperations.Tests.Factories
             command.Should().NotBeNull();
             command.Should().BeOfType<SqlCommandWrapper>();
         }
-	}
+    }
 }

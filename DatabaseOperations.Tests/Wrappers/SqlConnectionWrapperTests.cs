@@ -6,7 +6,7 @@ using Xunit;
 namespace DatabaseOperations.Tests.Wrappers
 {
     public class SqlConnectionWrapperTests
-	{
+    {
         [Fact]
         public void TestGetConnectionReturnsNonNullObject()
         {
@@ -21,5 +21,5 @@ namespace DatabaseOperations.Tests.Wrappers
             // Assert.
             connection.Should().NotBeNull();
         }
-	}
+    }
 }

@@ -4,7 +4,7 @@ using DatabaseOperations.Wrappers;
 namespace DatabaseOperations.Factories
 {
     internal class SqlServerConnectionFactory : ISqlServerConnectionFactory
-	{
+    {
         public ISqlConnectionWrapper CreateConnection(string connectionString)
         {
             return new SqlConnectionWrapper(connectionString);
@@ -14,5 +14,5 @@ namespace DatabaseOperations.Factories
         {
             return new SqlCommandWrapper(commandText, connection);
         }
-	}
+    }
 }

@@ -17,5 +17,5 @@ namespace DatabaseOperations.Tests.TestTypes
         {
             return !string.IsNullOrWhiteSpace(testName);
         }
-	}
+    }
 }

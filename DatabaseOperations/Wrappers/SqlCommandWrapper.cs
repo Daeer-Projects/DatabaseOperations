@@ -44,5 +44,5 @@ namespace DatabaseOperations.Wrappers
         {
             _sqlCommand.Dispose();
         }
-	}
+    }
 }

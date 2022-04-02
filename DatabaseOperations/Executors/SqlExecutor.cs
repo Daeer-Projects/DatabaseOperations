@@ -36,16 +36,12 @@ WITH
         {
             try
             {
-                using (var connection = _sqlCreator.CreateConnection(options.ConnectionString))
-                {
-                    using (var command = _sqlCreator.CreateCommand(SqlScriptCreateBackupPathTemplate, connection))
-                    {
-                        command.AddParameters(options.BackupParameters());
-                        command.SetCommandTimeout(options.CommandTimeout);
-                        connection.Open();
-                        command.ExecuteNonQuery();
-                    }
-                }
+                using var connection = _sqlCreator.CreateConnection(options.ConnectionString);
+                using var command = _sqlCreator.CreateCommand(SqlScriptCreateBackupPathTemplate, connection);
+                command.AddParameters(options.BackupParameters());
+                command.SetCommandTimeout(options.CommandTimeout);
+                connection.Open();
+                command.ExecuteNonQuery();
             }
             catch (DbException exception)
             {
@@ -60,16 +56,12 @@ WITH
         {
             try
             {
-                using (var connection = _sqlCreator.CreateConnection(options.ConnectionString))
-                {
-                    using (var command = _sqlCreator.CreateCommand(SqlScriptCreateBackupPathTemplate, connection))
-                    {
-                        command.AddParameters(options.BackupParameters());
-                        command.SetCommandTimeout(options.CommandTimeout);
-                        await connection.OpenAsync(token).ConfigureAwait(false);
-                        await command.ExecuteNonQueryAsync(token).ConfigureAwait(false);
-                    }
-                }
+                using var connection = _sqlCreator.CreateConnection(options.ConnectionString);
+                using var command = _sqlCreator.CreateCommand(SqlScriptCreateBackupPathTemplate, connection);
+                command.AddParameters(options.BackupParameters());
+                command.SetCommandTimeout(options.CommandTimeout);
+                await connection.OpenAsync(token).ConfigureAwait(false);
+                await command.ExecuteNonQueryAsync(token).ConfigureAwait(false);
             }
             catch (DbException exception)
             {
@@ -84,16 +76,12 @@ WITH
         {
             try
             {
-                using (var connection = _sqlCreator.CreateConnection(options.ConnectionString))
-                {
-                    using (var command = _sqlCreator.CreateCommand(SqlScriptBackupDatabaseTemplate, connection))
-                    {
-                        command.AddParameters(options.ExecutionParameters());
-                        command.SetCommandTimeout(options.CommandTimeout);
-                        connection.Open();
-                        command.ExecuteNonQuery();
-                    }
-                }
+                using var connection = _sqlCreator.CreateConnection(options.ConnectionString);
+                using var command = _sqlCreator.CreateCommand(SqlScriptBackupDatabaseTemplate, connection);
+                command.AddParameters(options.ExecutionParameters());
+                command.SetCommandTimeout(options.CommandTimeout);
+                connection.Open();
+                command.ExecuteNonQuery();
             }
             catch (DbException exception)
             {
@@ -108,16 +96,12 @@ WITH
         {
             try
             {
-                using (var connection = _sqlCreator.CreateConnection(options.ConnectionString))
-                {
-                    using (var command = _sqlCreator.CreateCommand(SqlScriptBackupDatabaseTemplate, connection))
-                    {
-                        command.AddParameters(options.ExecutionParameters());
-                        command.SetCommandTimeout(options.CommandTimeout);
-                        await connection.OpenAsync(token).ConfigureAwait(false);
-                        await command.ExecuteNonQueryAsync(token).ConfigureAwait(false);
-                    }
-                }
+                using var connection = _sqlCreator.CreateConnection(options.ConnectionString);
+                using var command = _sqlCreator.CreateCommand(SqlScriptBackupDatabaseTemplate, connection);
+                command.AddParameters(options.ExecutionParameters());
+                command.SetCommandTimeout(options.CommandTimeout);
+                await connection.OpenAsync(token).ConfigureAwait(false);
+                await command.ExecuteNonQueryAsync(token).ConfigureAwait(false);
             }
             catch (DbException exception)
             {
