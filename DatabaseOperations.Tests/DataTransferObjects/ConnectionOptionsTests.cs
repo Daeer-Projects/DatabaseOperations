@@ -32,7 +32,7 @@
         {
             // Arrange.
             // Act.
-            ConnectionOptions actual = new ConnectionOptions(string.Empty, SetupAndReturnWrapper(), BackupPath);
+            ConnectionOptions actual = new(string.Empty, SetupAndReturnWrapper(), BackupPath);
 
             // Assert.
             actual.IsValid()
@@ -45,7 +45,7 @@
         {
             // Arrange.
             // Act.
-            ConnectionOptions actual = new ConnectionOptions(null!, SetupAndReturnWrapper(), BackupPath);
+            ConnectionOptions actual = new(null!, SetupAndReturnWrapper(), BackupPath);
 
             // Assert.
             actual.IsValid()
@@ -59,7 +59,7 @@
             // Arrange.
             const string connectionString = "server=127.0.0.1;database=Bananas;User Id=sa;Password=password;Connect Timeout=205;";
             // Act.
-            ConnectionOptions actual = new ConnectionOptions(connectionString, SetupAndReturnWrapper());
+            ConnectionOptions actual = new(connectionString, SetupAndReturnWrapper());
 
             // Assert.
             actual.IsValid()
@@ -77,7 +77,7 @@
         {
             // Arrange.
             // Act.
-            ConnectionOptions actual = new ConnectionOptions(
+            ConnectionOptions actual = new(
                 connectionString,
                 SetupAndReturnWrapper(),
                 backupPath,
@@ -98,7 +98,7 @@
         {
             // Arrange.
             // Act.
-            ConnectionOptions actual = new ConnectionOptions(
+            ConnectionOptions actual = new(
                 connectionString,
                 SetupAndReturnWrapper(),
                 backupPath,
@@ -119,7 +119,7 @@
         {
             // Arrange.
             // Act.
-            ConnectionOptions actual = new ConnectionOptions(
+            ConnectionOptions actual = new(
                 connectionString,
                 SetupAndReturnWrapper(),
                 backupPath,
@@ -140,7 +140,7 @@
         {
             // Arrange.
             // Act.
-            ConnectionOptions actual = new ConnectionOptions(
+            ConnectionOptions actual = new(
                 connectionString,
                 SetupAndReturnWrapper(),
                 backupPath,
@@ -161,7 +161,7 @@
         {
             // Arrange.
             // Act.
-            ConnectionOptions actual = new ConnectionOptions(
+            ConnectionOptions actual = new(
                 connectionString,
                 SetupAndReturnWrapper(),
                 backupPath,
@@ -182,7 +182,7 @@
         {
             // Arrange.
             // Act.
-            ConnectionOptions actual = new ConnectionOptions(
+            ConnectionOptions actual = new(
                 connectionString,
                 SetupAndReturnWrapper(),
                 backupPath,
@@ -203,7 +203,7 @@
         {
             // Arrange.
             // Act.
-            ConnectionOptions actual = new ConnectionOptions(
+            ConnectionOptions actual = new(
                 connectionString,
                 SetupAndReturnWrapper(),
                 backupPath,
@@ -224,7 +224,7 @@
         {
             // Arrange.
             // Act.
-            ConnectionOptions actual = new ConnectionOptions(
+            ConnectionOptions actual = new(
                 connectionString,
                 SetupAndReturnWrapper(),
                 backupPath,
@@ -245,7 +245,7 @@
         {
             // Arrange.
             // Act.
-            ConnectionOptions actual = new ConnectionOptions(
+            ConnectionOptions actual = new(
                 connectionString,
                 SetupAndReturnWrapper(),
                 backupPath,
@@ -266,7 +266,7 @@
         {
             // Arrange.
             // Act.
-            ConnectionOptions actual = new ConnectionOptions(
+            ConnectionOptions actual = new(
                 connectionString,
                 SetupAndReturnWrapper(),
                 backupPath,
@@ -287,7 +287,7 @@
         {
             // Arrange.
             // Act.
-            ConnectionOptions actual = new ConnectionOptions(
+            ConnectionOptions actual = new(
                 connectionString,
                 SetupAndReturnWrapper(),
                 backupPath,
@@ -310,7 +310,7 @@
             SqlParameter[] expectedParameters = expected.BackupParameters();
 
             // Act.
-            ConnectionOptions actual = new ConnectionOptions(
+            ConnectionOptions actual = new(
                 connectionString,
                 SetupAndReturnWrapper(),
                 backupPath,
@@ -342,7 +342,7 @@
             SqlParameter[] expectedParameters = expected.ExecutionParameters();
 
             // Act.
-            ConnectionOptions actual = new ConnectionOptions(
+            ConnectionOptions actual = new(
                 connectionString,
                 SetupAndReturnWrapper(),
                 backupPath,
@@ -363,7 +363,7 @@
         {
             // Arrange.
             ConnectionOptions options =
-                new ConnectionOptions(
+                new(
                     "SERVER=(localDb);DATABASE=PoohBear;User Id=sa;Password=password;Connect Timeout=30;",
                     SetupAndReturnWrapper(),
                     @"H:\Backups\");
@@ -382,7 +382,7 @@
         {
             // Arrange.
             ConnectionOptions options =
-                new ConnectionOptions(
+                new(
                     "SERVER=(localDb);DATABASE=PoohBear;User Id=sa;Password=password;Connect Timeout=30;",
                     SetupAndReturnWrapper(),
                     @"H:\Backups\");

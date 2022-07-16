@@ -20,7 +20,7 @@
         /// <param name="executor"> The sql executor that will execute the commands for the operations. </param>
         internal BackupOperator(ISqlExecutor executor)
         {
-            _sqlExecutor = executor;
+            sqlExecutor = executor;
         }
 
         /// <summary>
@@ -28,10 +28,10 @@
         /// </summary>
         public BackupOperator()
         {
-            _sqlExecutor = new SqlExecutor(new SqlServerConnectionFactory());
+            sqlExecutor = new SqlExecutor(new SqlServerConnectionFactory());
         }
 
-        private readonly ISqlExecutor _sqlExecutor;
+        private readonly ISqlExecutor sqlExecutor;
 
         /// <summary>
         ///     Uses the <paramref name="options" /> defined by the user to start
@@ -50,9 +50,9 @@
         {
             OperationResult result = new OperationResult()
                 .ValidateConnectionOptions(options)
-                .ExecuteBackupPath(options, _sqlExecutor)
+                .ExecuteBackupPath(options, sqlExecutor)
                 .CheckBackupPathExecution(options)
-                .ExecuteBackup(options, _sqlExecutor);
+                .ExecuteBackup(options, sqlExecutor);
 
             return result;
         }
@@ -79,11 +79,11 @@
             OperationResult result = await new OperationResult()
                 .ValidateConnectionOptionsAsync(options)
                 .CheckForCancellation(token)
-                .ExecuteBackupPathAsync(options, token, _sqlExecutor)
+                .ExecuteBackupPathAsync(options, token, sqlExecutor)
                 .CheckForCancellation(token)
                 .CheckBackupPathExecutionAsync(options, token)
                 .CheckForCancellation(token)
-                .ExecuteBackupAsync(options, token, _sqlExecutor)
+                .ExecuteBackupAsync(options, token, sqlExecutor)
                 .CheckForCancellation(token)
                 .ConfigureAwait(false);
 

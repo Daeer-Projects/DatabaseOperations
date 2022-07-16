@@ -8,14 +8,14 @@
 
     public class SqlServerConnectionFactoryTests
     {
-        private readonly ISqlServerConnectionFactory _connectionFactory = new SqlServerConnectionFactory();
+        private readonly ISqlServerConnectionFactory connectionFactory = new SqlServerConnectionFactory();
 
         [Fact]
         public void TestCreateConnectionReturnsExpected()
         {
             // Arrange.
             // Act.
-            ISqlConnectionWrapper connection = _connectionFactory.CreateConnection("server=127.0.0.1;database=Thing;");
+            ISqlConnectionWrapper connection = connectionFactory.CreateConnection("server=127.0.0.1;database=Thing;");
 
             // Assert.
             connection.Should()
@@ -29,7 +29,7 @@
         {
             // Arrange.
             // Act.
-            ISqlCommandWrapper command = _connectionFactory.CreateCommand(
+            ISqlCommandWrapper command = connectionFactory.CreateCommand(
                 "SELECT '0';",
                 new SqlConnectionWrapper("server=127.0.0.1;database=Thing;"));
 

@@ -16,20 +16,20 @@
         public SqlExecutorTests()
         {
             ISqlServerConnectionFactory? creator = Substitute.For<ISqlServerConnectionFactory>();
-            _connection = Substitute.For<ISqlConnectionWrapper>();
-            _command = Substitute.For<ISqlCommandWrapper>();
+            connection = Substitute.For<ISqlConnectionWrapper>();
+            command = Substitute.For<ISqlCommandWrapper>();
 
             creator.CreateConnection(Arg.Any<string>())
-                .Returns(_connection);
-            creator.CreateCommand(Arg.Any<string>(), _connection)
-                .Returns(_command);
-            _sqlExecutor = new SqlExecutor(creator);
+                .Returns(connection);
+            creator.CreateCommand(Arg.Any<string>(), connection)
+                .Returns(command);
+            sqlExecutor = new SqlExecutor(creator);
         }
 
         private const string BackupPath = @"C:\Database Backups\";
-        private readonly ISqlCommandWrapper _command;
-        private readonly ISqlConnectionWrapper _connection;
-        private readonly ISqlExecutor _sqlExecutor;
+        private readonly ISqlCommandWrapper command;
+        private readonly ISqlConnectionWrapper connection;
+        private readonly ISqlExecutor sqlExecutor;
 
         [Fact]
         public void TestBackupPathWithValidDetailsReturnsTrue()
@@ -40,10 +40,10 @@
                 "database",
                 "127.0.0.1",
                 "Thing");
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
 
             // Act.
-            result = _sqlExecutor.ExecuteBackupPath(result, details);
+            result = sqlExecutor.ExecuteBackupPath(result, details);
 
             // Assert.
             result.Result.Should()
@@ -59,10 +59,10 @@
                 "database",
                 "127.0.0.1",
                 "Thing");
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
 
             // Act.
-            result = await _sqlExecutor.ExecuteBackupPathAsync(result, details, new CancellationToken());
+            result = await sqlExecutor.ExecuteBackupPathAsync(result, details, new CancellationToken());
 
             // Assert.
             result.Result.Should()
@@ -78,13 +78,13 @@
                 "database",
                 "oops",
                 "Thing");
-            _connection
+            connection
                 .When(c => c.Open())
                 .Do(_ => throw new DbTestException("Server is not correct!"));
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
 
             // Act.
-            result = _sqlExecutor.ExecuteBackupPath(result, details);
+            result = sqlExecutor.ExecuteBackupPath(result, details);
 
             // Assert.
             result.Result.Should()
@@ -95,19 +95,19 @@
         public async Task TestBackupPathAsyncWithConnectionErrorReturnsFalse()
         {
             // Arrange.
-            CancellationToken token = new CancellationToken();
+            CancellationToken token = new();
             ConnectionOptions details = GetConnectionOptions(
                 "server",
                 "database",
                 "oops",
                 "Thing");
-            _connection
+            connection
                 .When(c => c.OpenAsync(token))
                 .Do(_ => throw new DbTestException("Server is not correct!"));
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
 
             // Act.
-            result = await _sqlExecutor.ExecuteBackupPathAsync(result, details, token);
+            result = await sqlExecutor.ExecuteBackupPathAsync(result, details, token);
 
             // Assert.
             result.Result.Should()
@@ -123,13 +123,13 @@
                 "database",
                 "oops",
                 "Thing");
-            _command
+            command
                 .When(c => c.AddParameters(Arg.Any<SqlParameter[]>()))
                 .Do(_ => throw new DbTestException("Command is not working!"));
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
 
             // Act.
-            result = _sqlExecutor.ExecuteBackupPath(result, details);
+            result = sqlExecutor.ExecuteBackupPath(result, details);
 
             // Assert.
             result.Result.Should()
@@ -145,13 +145,13 @@
                 "database",
                 "oops",
                 "Thing");
-            _command
+            command
                 .When(c => c.AddParameters(Arg.Any<SqlParameter[]>()))
                 .Do(_ => throw new DbTestException("Command is not working!"));
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
 
             // Act.
-            result = await _sqlExecutor.ExecuteBackupPathAsync(result, details, new CancellationToken());
+            result = await sqlExecutor.ExecuteBackupPathAsync(result, details, new CancellationToken());
 
             // Assert.
             result.Result.Should()
@@ -167,13 +167,13 @@
                 "database",
                 "oops",
                 "Thing");
-            _command
+            command
                 .When(c => c.ExecuteNonQuery())
                 .Do(_ => throw new DbTestException("Execute is not working!"));
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
 
             // Act.
-            result = _sqlExecutor.ExecuteBackupPath(result, details);
+            result = sqlExecutor.ExecuteBackupPath(result, details);
 
             // Assert.
             result.Result.Should()
@@ -184,19 +184,19 @@
         public async Task TestBackupPathAsyncWithCommandExecuteErrorReturnsFalse()
         {
             // Arrange.
-            CancellationToken token = new CancellationToken();
+            CancellationToken token = new();
             ConnectionOptions details = GetConnectionOptions(
                 "server",
                 "database",
                 "oops",
                 "Thing");
-            _command
+            command
                 .When(c => c.ExecuteNonQueryAsync(token))
                 .Do(_ => throw new DbTestException("Execute is not working!"));
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
 
             // Act.
-            result = await _sqlExecutor.ExecuteBackupPathAsync(result, details, token);
+            result = await sqlExecutor.ExecuteBackupPathAsync(result, details, token);
 
             // Assert.
             result.Result.Should()
@@ -212,18 +212,18 @@
                 "database",
                 "oops",
                 "Thing");
-            _command
+            command
                 .When(c => c.ExecuteNonQuery())
                 .Do(_ => throw new DbTestException("Execute is not working!"));
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
 
-            List<string> expectedMessages = new List<string>
+            List<string> expectedMessages = new()
             {
                 "Backup path folder check/create failed due to an exception."
             };
 
             // Act.
-            result = _sqlExecutor.ExecuteBackupPath(result, details);
+            result = sqlExecutor.ExecuteBackupPath(result, details);
 
             // Assert.
             result.Messages.Should()
@@ -240,24 +240,24 @@
         public async Task TestBackupPathAsyncWithCommandExecuteErrorReturnsExpectedMessages()
         {
             // Arrange.
-            CancellationToken token = new CancellationToken();
+            CancellationToken token = new();
             ConnectionOptions details = GetConnectionOptions(
                 "server",
                 "database",
                 "oops",
                 "Thing");
-            _command
+            command
                 .When(c => c.ExecuteNonQueryAsync(token))
                 .Do(_ => throw new DbTestException("Execute is not working!"));
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
 
-            List<string> expectedMessages = new List<string>
+            List<string> expectedMessages = new()
             {
                 "Backup path folder check/create failed due to an exception."
             };
 
             // Act.
-            result = await _sqlExecutor.ExecuteBackupPathAsync(result, details, token);
+            result = await sqlExecutor.ExecuteBackupPathAsync(result, details, token);
 
             // Assert.
             result.Messages.Should()
@@ -279,10 +279,10 @@
                 "database",
                 "127.0.0.1",
                 "Thing");
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
 
             // Act.
-            result = _sqlExecutor.ExecuteBackupDatabase(result, details);
+            result = sqlExecutor.ExecuteBackupDatabase(result, details);
 
             // Assert.
             result.Result.Should()
@@ -298,10 +298,10 @@
                 "database",
                 "127.0.0.1",
                 "Thing");
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
 
             // Act.
-            result = await _sqlExecutor.ExecuteBackupDatabaseAsync(result, details, new CancellationToken());
+            result = await sqlExecutor.ExecuteBackupDatabaseAsync(result, details, new CancellationToken());
 
             // Assert.
             result.Result.Should()
@@ -317,13 +317,13 @@
                 "database",
                 "oops",
                 "Thing");
-            _connection
+            connection
                 .When(c => c.Open())
                 .Do(_ => throw new DbTestException("Server is not correct!"));
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
 
             // Act.
-            result = _sqlExecutor.ExecuteBackupDatabase(result, details);
+            result = sqlExecutor.ExecuteBackupDatabase(result, details);
 
             // Assert.
             result.Result.Should()
@@ -334,19 +334,19 @@
         public async Task TestBackupDatabaseAsyncWithConnectionErrorReturnsFalse()
         {
             // Arrange.
-            CancellationToken token = new CancellationToken();
+            CancellationToken token = new();
             ConnectionOptions details = GetConnectionOptions(
                 "server",
                 "database",
                 "oops",
                 "Thing");
-            _connection
+            connection
                 .When(c => c.OpenAsync(token))
                 .Do(_ => throw new DbTestException("Server is not correct!"));
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
 
             // Act.
-            result = await _sqlExecutor.ExecuteBackupDatabaseAsync(result, details, token);
+            result = await sqlExecutor.ExecuteBackupDatabaseAsync(result, details, token);
 
             // Assert.
             result.Result.Should()
@@ -362,13 +362,13 @@
                 "database",
                 "oops",
                 "Thing");
-            _command
+            command
                 .When(c => c.AddParameters(Arg.Any<SqlParameter[]>()))
                 .Do(_ => throw new DbTestException("Command is not working!"));
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
 
             // Act.
-            result = _sqlExecutor.ExecuteBackupDatabase(result, details);
+            result = sqlExecutor.ExecuteBackupDatabase(result, details);
 
             // Assert.
             result.Result.Should()
@@ -384,13 +384,13 @@
                 "database",
                 "oops",
                 "Thing");
-            _command
+            command
                 .When(c => c.AddParameters(Arg.Any<SqlParameter[]>()))
                 .Do(_ => throw new DbTestException("Command is not working!"));
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
 
             // Act.
-            result = await _sqlExecutor.ExecuteBackupDatabaseAsync(result, details, new CancellationToken());
+            result = await sqlExecutor.ExecuteBackupDatabaseAsync(result, details, new CancellationToken());
 
             // Assert.
             result.Result.Should()
@@ -406,13 +406,13 @@
                 "database",
                 "oops",
                 "Thing");
-            _command
+            command
                 .When(c => c.ExecuteNonQuery())
                 .Do(_ => throw new DbTestException("Execute is not working!"));
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
 
             // Act.
-            result = _sqlExecutor.ExecuteBackupDatabase(result, details);
+            result = sqlExecutor.ExecuteBackupDatabase(result, details);
 
             // Assert.
             result.Result.Should()
@@ -423,19 +423,19 @@
         public async Task TestBackupDatabaseAsyncWithCommandExecuteErrorReturnsFalse()
         {
             // Arrange.
-            CancellationToken token = new CancellationToken();
+            CancellationToken token = new();
             ConnectionOptions details = GetConnectionOptions(
                 "server",
                 "database",
                 "oops",
                 "Thing");
-            _command
+            command
                 .When(c => c.ExecuteNonQueryAsync(token))
                 .Do(_ => throw new DbTestException("Execute is not working!"));
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
 
             // Act.
-            result = await _sqlExecutor.ExecuteBackupDatabaseAsync(result, details, token);
+            result = await sqlExecutor.ExecuteBackupDatabaseAsync(result, details, token);
 
             // Assert.
             result.Result.Should()
@@ -451,18 +451,18 @@
                 "database",
                 "oops",
                 "Thing");
-            _command
+            command
                 .When(c => c.ExecuteNonQuery())
                 .Do(_ => throw new DbTestException("Execute is not working!"));
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
 
-            List<string> expectedMessages = new List<string>
+            List<string> expectedMessages = new()
             {
                 "Backing up the database failed due to an exception."
             };
 
             // Act.
-            result = _sqlExecutor.ExecuteBackupDatabase(result, details);
+            result = sqlExecutor.ExecuteBackupDatabase(result, details);
 
             // Assert.
             result.Messages.Should()
@@ -479,24 +479,24 @@
         public async Task TestBackupDatabaseAsyncWithCommandExecuteErrorReturnsExpectedMessages()
         {
             // Arrange.
-            CancellationToken token = new CancellationToken();
+            CancellationToken token = new();
             ConnectionOptions details = GetConnectionOptions(
                 "server",
                 "database",
                 "oops",
                 "Thing");
-            _command
+            command
                 .When(c => c.ExecuteNonQueryAsync(token))
                 .Do(_ => throw new DbTestException("Execute is not working!"));
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
 
-            List<string> expectedMessages = new List<string>
+            List<string> expectedMessages = new()
             {
                 "Backing up the database failed due to an exception."
             };
 
             // Act.
-            result = await _sqlExecutor.ExecuteBackupDatabaseAsync(result, details, token);
+            result = await sqlExecutor.ExecuteBackupDatabaseAsync(result, details, token);
 
             // Assert.
             result.Messages.Should()

@@ -15,7 +15,7 @@
         {
             // Arrange.
             ISqlConnectionWrapper? sqlConnection = Substitute.For<ISqlConnectionWrapper>();
-            SqlCommandWrapper sqlCommand = new SqlCommandWrapper("SELECT '0';", sqlConnection);
+            SqlCommandWrapper sqlCommand = new("SELECT '0';", sqlConnection);
 
             // Act.
             SqlCommand actualCommand = sqlCommand.Get();
@@ -30,7 +30,7 @@
         {
             // Arrange.
             ISqlConnectionWrapper? sqlConnection = Substitute.For<ISqlConnectionWrapper>();
-            SqlCommandWrapper sqlCommand = new SqlCommandWrapper("SELECT '0';", sqlConnection);
+            SqlCommandWrapper sqlCommand = new("SELECT '0';", sqlConnection);
             sqlCommand.SetCommandTimeout(27);
 
             // Act.
@@ -46,7 +46,7 @@
         {
             // Arrange.
             ISqlConnectionWrapper? sqlConnection = Substitute.For<ISqlConnectionWrapper>();
-            SqlCommandWrapper sqlCommand = new SqlCommandWrapper("SELECT '0';", sqlConnection);
+            SqlCommandWrapper sqlCommand = new("SELECT '0';", sqlConnection);
             SqlParameter[] parameters =
             {
                 new("@First", SqlDbType.VarChar)

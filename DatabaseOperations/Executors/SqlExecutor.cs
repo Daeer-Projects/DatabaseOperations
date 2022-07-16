@@ -10,7 +10,7 @@
     {
         internal SqlExecutor(ISqlServerConnectionFactory creator)
         {
-            _sqlCreator = creator;
+            sqlCreator = creator;
         }
 
         private const string SqlScriptCreateBackupPathTemplate = @"
@@ -30,7 +30,7 @@ WITH
 ;
 ";
 
-        private readonly ISqlServerConnectionFactory _sqlCreator;
+        private readonly ISqlServerConnectionFactory sqlCreator;
 
         public OperationResult ExecuteBackupPath(
             OperationResult result,
@@ -38,8 +38,8 @@ WITH
         {
             try
             {
-                using ISqlConnectionWrapper connection = _sqlCreator.CreateConnection(options.ConnectionString);
-                using ISqlCommandWrapper command = _sqlCreator.CreateCommand(SqlScriptCreateBackupPathTemplate, connection);
+                using ISqlConnectionWrapper connection = sqlCreator.CreateConnection(options.ConnectionString);
+                using ISqlCommandWrapper command = sqlCreator.CreateCommand(SqlScriptCreateBackupPathTemplate, connection);
                 command.AddParameters(options.BackupParameters());
                 command.SetCommandTimeout(options.CommandTimeout);
                 connection.Open();
@@ -62,8 +62,8 @@ WITH
         {
             try
             {
-                using ISqlConnectionWrapper connection = _sqlCreator.CreateConnection(options.ConnectionString);
-                using ISqlCommandWrapper command = _sqlCreator.CreateCommand(SqlScriptCreateBackupPathTemplate, connection);
+                using ISqlConnectionWrapper connection = sqlCreator.CreateConnection(options.ConnectionString);
+                using ISqlCommandWrapper command = sqlCreator.CreateCommand(SqlScriptCreateBackupPathTemplate, connection);
                 command.AddParameters(options.BackupParameters());
                 command.SetCommandTimeout(options.CommandTimeout);
                 await connection.OpenAsync(token)
@@ -87,8 +87,8 @@ WITH
         {
             try
             {
-                using ISqlConnectionWrapper connection = _sqlCreator.CreateConnection(options.ConnectionString);
-                using ISqlCommandWrapper command = _sqlCreator.CreateCommand(SqlScriptBackupDatabaseTemplate, connection);
+                using ISqlConnectionWrapper connection = sqlCreator.CreateConnection(options.ConnectionString);
+                using ISqlCommandWrapper command = sqlCreator.CreateCommand(SqlScriptBackupDatabaseTemplate, connection);
                 command.AddParameters(options.ExecutionParameters());
                 command.SetCommandTimeout(options.CommandTimeout);
                 connection.Open();
@@ -110,8 +110,8 @@ WITH
         {
             try
             {
-                using ISqlConnectionWrapper connection = _sqlCreator.CreateConnection(options.ConnectionString);
-                using ISqlCommandWrapper command = _sqlCreator.CreateCommand(SqlScriptBackupDatabaseTemplate, connection);
+                using ISqlConnectionWrapper connection = sqlCreator.CreateConnection(options.ConnectionString);
+                using ISqlCommandWrapper command = sqlCreator.CreateCommand(SqlScriptBackupDatabaseTemplate, connection);
                 command.AddParameters(options.ExecutionParameters());
                 command.SetCommandTimeout(options.CommandTimeout);
                 await connection.OpenAsync(token)
