@@ -1,10 +1,10 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using DatabaseOperations.Interfaces;
-using Microsoft.Data.SqlClient;
-
-namespace DatabaseOperations.Wrappers
+﻿namespace DatabaseOperations.Wrappers
 {
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Interfaces;
+    using Microsoft.Data.SqlClient;
+
     internal sealed class SqlConnectionWrapper : ISqlConnectionWrapper
     {
         internal SqlConnectionWrapper(string connectionString)
@@ -26,7 +26,8 @@ namespace DatabaseOperations.Wrappers
 
         public async Task OpenAsync(CancellationToken token)
         {
-            await _sqlConnection.OpenAsync(token).ConfigureAwait(false);
+            await _sqlConnection.OpenAsync(token)
+                .ConfigureAwait(false);
         }
 
         public void Dispose()

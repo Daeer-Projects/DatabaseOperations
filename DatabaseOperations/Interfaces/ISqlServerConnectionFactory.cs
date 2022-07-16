@@ -3,6 +3,9 @@
     internal interface ISqlServerConnectionFactory
     {
         ISqlConnectionWrapper CreateConnection(string connectionString);
-        ISqlCommandWrapper CreateCommand(string commandText, ISqlConnectionWrapper connection);
+
+        ISqlCommandWrapper CreateCommand(
+            string commandText,
+            ISqlConnectionWrapper connection);
     }
 }

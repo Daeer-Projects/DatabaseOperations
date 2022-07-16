@@ -1,8 +1,8 @@
-﻿using System;
-using DatabaseOperations.Interfaces;
-
-namespace DatabaseOperations.Wrappers
+﻿namespace DatabaseOperations.Wrappers
 {
+    using System;
+    using Interfaces;
+
     internal class DateTimeWrapper : IDateTimeWrapper
     {
         internal DateTimeWrapper()

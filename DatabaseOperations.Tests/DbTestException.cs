@@ -1,7 +1,7 @@
-﻿using System.Data.Common;
-
-namespace DatabaseOperations.Tests
+﻿namespace DatabaseOperations.Tests
 {
+    using System.Data.Common;
+
     public class DbTestException : DbException
     {
         public DbTestException(string errorMessage)

@@ -1,21 +1,21 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using DatabaseOperations.DataTransferObjects;
-using DatabaseOperations.Executors;
-using DatabaseOperations.Extensions;
-using DatabaseOperations.Factories;
-using DatabaseOperations.Interfaces;
-
-namespace DatabaseOperations.Operators
+﻿namespace DatabaseOperations.Operators
 {
+    using System;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using DataTransferObjects;
+    using Executors;
+    using Extensions;
+    using Factories;
+    using Interfaces;
+
     /// <summary>
-    /// This is the 'backup' class of operators.
+    ///     This is the 'backup' class of operators.
     /// </summary>
     public class BackupOperator : IBackupOperator
     {
         /// <summary>
-        /// The <see langword="internal"/> constructor used for unit tests.
+        ///     The <see langword="internal" /> constructor used for unit tests.
         /// </summary>
         /// <param name="executor"> The sql executor that will execute the commands for the operations. </param>
         internal BackupOperator(ISqlExecutor executor)
@@ -24,7 +24,7 @@ namespace DatabaseOperations.Operators
         }
 
         /// <summary>
-        /// Initialises a new instance of the BackupOperator.
+        ///     Initialises a new instance of the BackupOperator.
         /// </summary>
         public BackupOperator()
         {
@@ -34,21 +34,21 @@ namespace DatabaseOperations.Operators
         private readonly ISqlExecutor _sqlExecutor;
 
         /// <summary>
-        /// Uses the <paramref name="options" /> defined by the user to start
-        /// the backup process.
+        ///     Uses the <paramref name="options" /> defined by the user to start
+        ///     the backup process.
         /// </summary>
         /// <param name="options">
-        /// The connection options defined by the consumer of the method.
+        ///     The connection options defined by the consumer of the method.
         /// </param>
         /// <exception cref="NotSupportedException">
-        /// The database exception was not added to the 'Message' list.
+        ///     The database exception was not added to the 'Message' list.
         /// </exception>
         /// <returns>
-        /// The result of the backup operation.
+        ///     The result of the backup operation.
         /// </returns>
         public OperationResult BackupDatabase(ConnectionOptions options)
         {
-            var result = new OperationResult()
+            OperationResult result = new OperationResult()
                 .ValidateConnectionOptions(options)
                 .ExecuteBackupPath(options, _sqlExecutor)
                 .CheckBackupPathExecution(options)
@@ -58,23 +58,25 @@ namespace DatabaseOperations.Operators
         }
 
         /// <summary>
-        /// Uses the <paramref name="options" /> defined by the user to start
-        /// the backup process.
-        /// This is the async version.
+        ///     Uses the <paramref name="options" /> defined by the user to start
+        ///     the backup process.
+        ///     This is the async version.
         /// </summary>
         /// <param name="options">
-        /// The connection options defined by the consumer of the method.
+        ///     The connection options defined by the consumer of the method.
         /// </param>
         /// <param name="token"> The cancellation token supplied by the calling application. </param>
         /// <exception cref="NotSupportedException">
-        /// The database exception was not added to the 'Message' list.
+        ///     The database exception was not added to the 'Message' list.
         /// </exception>
         /// <returns>
-        /// The result of the backup operation.
+        ///     The result of the backup operation.
         /// </returns>
-        public async Task<OperationResult> BackupDatabaseAsync(ConnectionOptions options, CancellationToken token = default)
+        public async Task<OperationResult> BackupDatabaseAsync(
+            ConnectionOptions options,
+            CancellationToken token = default)
         {
-            var result = await new OperationResult()
+            OperationResult result = await new OperationResult()
                 .ValidateConnectionOptionsAsync(options)
                 .CheckForCancellation(token)
                 .ExecuteBackupPathAsync(options, token, _sqlExecutor)

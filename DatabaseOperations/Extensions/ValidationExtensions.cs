@@ -1,13 +1,15 @@
-﻿using FluentValidation;
-using FluentValidation.Results;
-
-namespace DatabaseOperations.Extensions
+﻿namespace DatabaseOperations.Extensions
 {
+    using FluentValidation;
+    using FluentValidation.Results;
+
     internal static class ValidationExtensions
     {
-        internal static ValidationResult CheckValidation<T>(this T component, AbstractValidator<T> validator) where T : class
+        internal static ValidationResult CheckValidation<T>(
+            this T component,
+            AbstractValidator<T> validator) where T : class
         {
-            var result = validator.Validate(component);
+            ValidationResult? result = validator.Validate(component);
             return result;
         }
     }

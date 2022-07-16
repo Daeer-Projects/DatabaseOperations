@@ -1,11 +1,11 @@
-﻿using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using DatabaseOperations.DataTransferObjects;
-using DatabaseOperations.Interfaces;
-
-namespace DatabaseOperations.Extensions
+﻿namespace DatabaseOperations.Extensions
 {
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using DataTransferObjects;
+    using Interfaces;
+
     internal static class OperationResultExtensions
     {
         private const string ExecutionCancelledMessage = "Cancel called on the token.";
@@ -55,11 +55,14 @@ namespace DatabaseOperations.Extensions
             this OperationResult operationResult,
             ConnectionOptions options)
         {
-            if (options.IsValid()) return await Task.FromResult(operationResult).ConfigureAwait(false);
+            if (options.IsValid())
+                return await Task.FromResult(operationResult)
+                    .ConfigureAwait(false);
 
             operationResult.Result = false;
             operationResult.Messages = options.Messages;
-            return await Task.FromResult(operationResult).ConfigureAwait(false);
+            return await Task.FromResult(operationResult)
+                .ConfigureAwait(false);
         }
 
         internal static async Task<OperationResult> CheckForCancellation(
@@ -68,10 +71,11 @@ namespace DatabaseOperations.Extensions
         {
             if (!token.IsCancellationRequested) return await operationResult.ConfigureAwait(false);
 
-            var result = await operationResult.ConfigureAwait(false);
+            OperationResult result = await operationResult.ConfigureAwait(false);
             result.Result = false;
             if (!result.Messages.Contains(ExecutionCancelledMessage)) result.Messages.Add(ExecutionCancelledMessage);
-            return await Task.FromResult(result).ConfigureAwait(false);
+            return await Task.FromResult(result)
+                .ConfigureAwait(false);
         }
 
         internal static async Task<OperationResult> ExecuteBackupPathAsync(
@@ -80,10 +84,12 @@ namespace DatabaseOperations.Extensions
             CancellationToken token,
             ISqlExecutor sqlExecutor)
         {
-            var result = await operationResult.ConfigureAwait(false);
+            OperationResult result = await operationResult.ConfigureAwait(false);
             return !result.Result
-                ? await Task.FromResult(result).ConfigureAwait(false)
-                : await sqlExecutor.ExecuteBackupPathAsync(result, options, token).ConfigureAwait(false);
+                ? await Task.FromResult(result)
+                    .ConfigureAwait(false)
+                : await sqlExecutor.ExecuteBackupPathAsync(result, options, token)
+                    .ConfigureAwait(false);
         }
 
         internal static async Task<OperationResult> CheckBackupPathExecutionAsync(
@@ -91,14 +97,17 @@ namespace DatabaseOperations.Extensions
             ConnectionOptions options,
             CancellationToken token)
         {
-            var result = await operationResult.ConfigureAwait(false);
-            if (!result.Messages.Any() || token.IsCancellationRequested) return await Task.FromResult(result).ConfigureAwait(false);
+            OperationResult result = await operationResult.ConfigureAwait(false);
+            if (!result.Messages.Any() || token.IsCancellationRequested)
+                return await Task.FromResult(result)
+                    .ConfigureAwait(false);
 
             result.Result = true;
             result.Messages.Add(BackupPathCheckFailureMessage);
             options.RemovePathFromBackupLocation();
 
-            return await Task.FromResult(result).ConfigureAwait(false);
+            return await Task.FromResult(result)
+                .ConfigureAwait(false);
         }
 
         internal static async Task<OperationResult> ExecuteBackupAsync(
@@ -107,11 +116,13 @@ namespace DatabaseOperations.Extensions
             CancellationToken token,
             ISqlExecutor sqlExecutor)
         {
-            var result = await operationResult.ConfigureAwait(false);
+            OperationResult result = await operationResult.ConfigureAwait(false);
 
             return !result.Result
-                ? await Task.FromResult(result).ConfigureAwait(false)
-                : await sqlExecutor.ExecuteBackupDatabaseAsync(result, options, token).ConfigureAwait(false);
+                ? await Task.FromResult(result)
+                    .ConfigureAwait(false)
+                : await sqlExecutor.ExecuteBackupDatabaseAsync(result, options, token)
+                    .ConfigureAwait(false);
         }
     }
 }
