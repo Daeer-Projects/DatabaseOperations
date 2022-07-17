@@ -1,25 +1,27 @@
-﻿using DatabaseOperations.Factories;
-using DatabaseOperations.Interfaces;
-using DatabaseOperations.Wrappers;
-using FluentAssertions;
-using Xunit;
-
-namespace DatabaseOperations.Tests.Factories
+﻿namespace DatabaseOperations.Tests.Factories
 {
+    using DatabaseOperations.Factories;
+    using DatabaseOperations.Wrappers;
+    using FluentAssertions;
+    using Interfaces;
+    using Xunit;
+
     public class SqlServerConnectionFactoryTests
     {
-        private readonly ISqlServerConnectionFactory _connectionFactory = new SqlServerConnectionFactory();
+        private readonly ISqlServerConnectionFactory connectionFactory = new SqlServerConnectionFactory();
 
         [Fact]
         public void TestCreateConnectionReturnsExpected()
         {
             // Arrange.
             // Act.
-            var connection = _connectionFactory.CreateConnection("server=127.0.0.1;database=Thing;");
+            ISqlConnectionWrapper connection = connectionFactory.CreateConnection("server=127.0.0.1;database=Thing;");
 
             // Assert.
-            connection.Should().NotBeNull();
-            connection.Should().BeOfType<SqlConnectionWrapper>();
+            connection.Should()
+                .NotBeNull();
+            connection.Should()
+                .BeOfType<SqlConnectionWrapper>();
         }
 
         [Fact]
@@ -27,11 +29,15 @@ namespace DatabaseOperations.Tests.Factories
         {
             // Arrange.
             // Act.
-            var command = _connectionFactory.CreateCommand("SELECT '0';", new SqlConnectionWrapper("server=127.0.0.1;database=Thing;"));
+            ISqlCommandWrapper command = connectionFactory.CreateCommand(
+                "SELECT '0';",
+                new SqlConnectionWrapper("server=127.0.0.1;database=Thing;"));
 
             // Assert.
-            command.Should().NotBeNull();
-            command.Should().BeOfType<SqlCommandWrapper>();
+            command.Should()
+                .NotBeNull();
+            command.Should()
+                .BeOfType<SqlCommandWrapper>();
         }
     }
 }

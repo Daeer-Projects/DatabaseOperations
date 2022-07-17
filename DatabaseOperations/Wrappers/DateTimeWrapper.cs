@@ -1,17 +1,17 @@
-﻿using System;
-using DatabaseOperations.Interfaces;
-
-namespace DatabaseOperations.Wrappers
+﻿namespace DatabaseOperations.Wrappers
 {
+    using System;
+    using Interfaces;
+
     internal class DateTimeWrapper : IDateTimeWrapper
     {
         internal DateTimeWrapper()
         {
-            _dateTime = null;
+            dateTime = null;
         }
 
-        private readonly DateTime? _dateTime;
+        private readonly DateTime? dateTime;
 
-        public DateTime Now => _dateTime ?? DateTime.Now;
+        public DateTime Now => dateTime ?? DateTime.Now;
     }
 }

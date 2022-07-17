@@ -1,21 +1,24 @@
-﻿using DatabaseOperations.DataTransferObjects;
-using DatabaseOperations.Extensions;
-using DatabaseOperations.Interfaces;
-
-namespace DatabaseOperations.ConnectionRules
+﻿namespace DatabaseOperations.ConnectionRules
 {
+    using DataTransferObjects;
+    using Extensions;
+    using Interfaces;
+
     internal class DatabaseConnectionRule : IConnectionRule
     {
         private const string DatabaseLookUp = "database";
 
         public bool Check(string item)
         {
-            return item.ToLower().Contains(DatabaseLookUp);
+            return item.ToLower()
+                .Contains(DatabaseLookUp);
         }
 
-        public ConnectionOptions ApplyChange(ConnectionOptions options, string item)
+        public ConnectionOptions ApplyChange(
+            ConnectionOptions options,
+            string item)
         {
-            if(string.IsNullOrWhiteSpace(options.DatabaseName)) options.DatabaseName = DatabaseLookUp.ToValue(item);
+            if (string.IsNullOrWhiteSpace(options.DatabaseName)) options.DatabaseName = DatabaseLookUp.ToValue(item);
             return options;
         }
     }

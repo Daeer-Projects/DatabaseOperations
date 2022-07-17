@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using DatabaseOperations.DataTransferObjects;
-using FluentAssertions;
-using Xunit;
-
-namespace DatabaseOperations.Tests.Validators
+﻿namespace DatabaseOperations.Tests.Validators
 {
+    using System.Collections.Generic;
+    using DatabaseOperations.DataTransferObjects;
+    using FluentAssertions;
+    using Xunit;
+
     public class ConnectionOptionsValidatorTests
     {
         private const string BackupPath = @"C:\Database Backups\";
@@ -13,7 +13,7 @@ namespace DatabaseOperations.Tests.Validators
         public void TestIsValidWithValidOptionsReturnsTrue()
         {
             // Arrange.
-            var connection = new ConnectionOptions("something", BackupPath, 5)
+            ConnectionOptions connection = new ConnectionOptions("something", BackupPath, 5)
                 .ApplyServer("127.0.0.1")
                 .ApplyDatabaseName("Bananas")
                 .ApplyUserId("sa")
@@ -21,77 +21,82 @@ namespace DatabaseOperations.Tests.Validators
                 .ApplyConnectTimeOut("205");
 
             // Act.
-            var result = connection.IsValid();
+            bool result = connection.IsValid();
 
             // Assert.
-            result.Should().BeTrue();
+            result.Should()
+                .BeTrue();
         }
 
         [Fact]
         public void TestIsValidWithSecuritySetAndMissingUserReturnsTrue()
         {
             // Arrange.
-            var connection = new ConnectionOptions("something", BackupPath, 5)
+            ConnectionOptions connection = new ConnectionOptions("something", BackupPath, 5)
                 .ApplyServer("127.0.0.1")
                 .ApplyDatabaseName("Bananas")
                 .ApplyIntegratedSecurity("SSPI")
                 .ApplyConnectTimeOut("205");
 
             // Act.
-            var result = connection.IsValid();
+            bool result = connection.IsValid();
 
             // Assert.
-            result.Should().BeTrue();
+            result.Should()
+                .BeTrue();
         }
 
         [Fact]
         public void TestIsValidWithMissingServerReturnsFalse()
         {
             // Arrange.
-            var connection = new ConnectionOptions("something", BackupPath, 5)
+            ConnectionOptions connection = new ConnectionOptions("something", BackupPath, 5)
                 .ApplyDatabaseName("Bananas")
                 .ApplyUserId("sa")
                 .ApplyPassword("password")
                 .ApplyConnectTimeOut("205");
 
             // Act.
-            var result = connection.IsValid();
+            bool result = connection.IsValid();
 
             // Assert.
-            result.Should().BeFalse();
+            result.Should()
+                .BeFalse();
         }
 
         [Fact]
         public void TestIsValidWithMissingDatabaseReturnsFalse()
         {
             // Arrange.
-            var connection = new ConnectionOptions("something", BackupPath, 5)
+            ConnectionOptions connection = new ConnectionOptions("something", BackupPath, 5)
                 .ApplyServer("127.0.0.1")
                 .ApplyUserId("sa")
                 .ApplyPassword("password")
                 .ApplyConnectTimeOut("205");
 
             // Act.
-            var result = connection.IsValid();
+            bool result = connection.IsValid();
 
             // Assert.
-            result.Should().BeFalse();
+            result.Should()
+                .BeFalse();
         }
 
         [Fact]
         public void TestIsValidWithMissingUserAndSecurityReturnsFalse()
         {
             // Arrange.
-            var connection = new ConnectionOptions("something", BackupPath, 5)
+            ConnectionOptions connection = new ConnectionOptions("something", BackupPath, 5)
                 .ApplyServer("127.0.0.1")
                 .ApplyDatabaseName("Bananas")
                 .ApplyConnectTimeOut("205");
 
             // Act.
-            var result = connection.IsValid();
+            bool result = connection.IsValid();
 
             // Assert.
-            result.Should().BeFalse();
+            result.Should()
+                .BeFalse();
         }
 
         [Theory]
@@ -100,10 +105,11 @@ namespace DatabaseOperations.Tests.Validators
         {
             // Arrange.
             // Act.
-            var result = options.IsValid();
+            bool result = options.IsValid();
 
             // Assert.
-            result.Should().BeFalse();
+            result.Should()
+                .BeFalse();
         }
 
         public static IEnumerable<object[]> ConnectionOptions()

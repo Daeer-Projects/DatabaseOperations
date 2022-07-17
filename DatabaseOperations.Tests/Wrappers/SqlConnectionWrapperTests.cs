@@ -1,10 +1,11 @@
-﻿using DatabaseOperations.Interfaces;
-using DatabaseOperations.Wrappers;
-using FluentAssertions;
-using Xunit;
-
-namespace DatabaseOperations.Tests.Wrappers
+﻿namespace DatabaseOperations.Tests.Wrappers
 {
+    using DatabaseOperations.Wrappers;
+    using FluentAssertions;
+    using Interfaces;
+    using Microsoft.Data.SqlClient;
+    using Xunit;
+
     public class SqlConnectionWrapperTests
     {
         [Fact]
@@ -16,10 +17,11 @@ namespace DatabaseOperations.Tests.Wrappers
                     "server=127.0.0.1;database=Bananas;User Id=sa;Password=password;Connect Timeout=10;");
 
             // Act.
-            var connection = wrapper.Get();
+            SqlConnection connection = wrapper.Get();
 
             // Assert.
-            connection.Should().NotBeNull();
+            connection.Should()
+                .NotBeNull();
         }
     }
 }

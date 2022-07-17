@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace DatabaseOperations.Tests.TestTypes
+﻿namespace DatabaseOperations.Tests.TestTypes
 {
+    using System;
+
     public class Type
     {
         public int Identity { get; set; }

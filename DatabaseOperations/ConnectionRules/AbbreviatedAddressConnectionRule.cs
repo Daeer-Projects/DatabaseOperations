@@ -1,21 +1,24 @@
-﻿using DatabaseOperations.DataTransferObjects;
-using DatabaseOperations.Extensions;
-using DatabaseOperations.Interfaces;
-
-namespace DatabaseOperations.ConnectionRules
+﻿namespace DatabaseOperations.ConnectionRules
 {
+    using DataTransferObjects;
+    using Extensions;
+    using Interfaces;
+
     internal class AbbreviatedAddressConnectionRule : IConnectionRule
     {
         private const string AbbreviatedAddressLookUp = "addr";
 
         public bool Check(string item)
         {
-            return item.ToLower().Contains(AbbreviatedAddressLookUp);
+            return item.ToLower()
+                .Contains(AbbreviatedAddressLookUp);
         }
 
-        public ConnectionOptions ApplyChange(ConnectionOptions options, string item)
+        public ConnectionOptions ApplyChange(
+            ConnectionOptions options,
+            string item)
         {
-            if(string.IsNullOrWhiteSpace(options.Server)) options.Server = AbbreviatedAddressLookUp.ToValue(item);
+            if (string.IsNullOrWhiteSpace(options.Server)) options.Server = AbbreviatedAddressLookUp.ToValue(item);
             return options;
         }
     }

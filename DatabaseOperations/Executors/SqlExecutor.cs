@@ -1,16 +1,16 @@
-﻿using System.Data.Common;
-using System.Threading;
-using System.Threading.Tasks;
-using DatabaseOperations.DataTransferObjects;
-using DatabaseOperations.Interfaces;
-
-namespace DatabaseOperations.Executors
+﻿namespace DatabaseOperations.Executors
 {
+    using System.Data.Common;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using DataTransferObjects;
+    using Interfaces;
+
     internal class SqlExecutor : ISqlExecutor
     {
         internal SqlExecutor(ISqlServerConnectionFactory creator)
         {
-            _sqlCreator = creator;
+            sqlCreator = creator;
         }
 
         private const string SqlScriptCreateBackupPathTemplate = @"
@@ -30,14 +30,16 @@ WITH
 ;
 ";
 
-        private readonly ISqlServerConnectionFactory _sqlCreator;
+        private readonly ISqlServerConnectionFactory sqlCreator;
 
-        public OperationResult ExecuteBackupPath(OperationResult result, ConnectionOptions options)
+        public OperationResult ExecuteBackupPath(
+            OperationResult result,
+            ConnectionOptions options)
         {
             try
             {
-                using var connection = _sqlCreator.CreateConnection(options.ConnectionString);
-                using var command = _sqlCreator.CreateCommand(SqlScriptCreateBackupPathTemplate, connection);
+                using ISqlConnectionWrapper connection = sqlCreator.CreateConnection(options.ConnectionString);
+                using ISqlCommandWrapper command = sqlCreator.CreateCommand(SqlScriptCreateBackupPathTemplate, connection);
                 command.AddParameters(options.BackupParameters());
                 command.SetCommandTimeout(options.CommandTimeout);
                 connection.Open();
@@ -46,38 +48,47 @@ WITH
             catch (DbException exception)
             {
                 result.Result = false;
-                result.Messages.Add($"Backup path folder check/create failed due to an exception.  Exception: {exception.Message}");
+                result.Messages.Add(
+                    $"Backup path folder check/create failed due to an exception.  Exception: {exception.Message}");
             }
 
             return result;
         }
 
-        public async Task<OperationResult> ExecuteBackupPathAsync(OperationResult result, ConnectionOptions options, CancellationToken token)
+        public async Task<OperationResult> ExecuteBackupPathAsync(
+            OperationResult result,
+            ConnectionOptions options,
+            CancellationToken token)
         {
             try
             {
-                using var connection = _sqlCreator.CreateConnection(options.ConnectionString);
-                using var command = _sqlCreator.CreateCommand(SqlScriptCreateBackupPathTemplate, connection);
+                using ISqlConnectionWrapper connection = sqlCreator.CreateConnection(options.ConnectionString);
+                using ISqlCommandWrapper command = sqlCreator.CreateCommand(SqlScriptCreateBackupPathTemplate, connection);
                 command.AddParameters(options.BackupParameters());
                 command.SetCommandTimeout(options.CommandTimeout);
-                await connection.OpenAsync(token).ConfigureAwait(false);
-                await command.ExecuteNonQueryAsync(token).ConfigureAwait(false);
+                await connection.OpenAsync(token)
+                    .ConfigureAwait(false);
+                await command.ExecuteNonQueryAsync(token)
+                    .ConfigureAwait(false);
             }
             catch (DbException exception)
             {
                 result.Result = false;
-                result.Messages.Add($"Backup path folder check/create failed due to an exception.  Exception: {exception.Message}");
+                result.Messages.Add(
+                    $"Backup path folder check/create failed due to an exception.  Exception: {exception.Message}");
             }
 
             return result;
         }
 
-        public OperationResult ExecuteBackupDatabase(OperationResult result, ConnectionOptions options)
+        public OperationResult ExecuteBackupDatabase(
+            OperationResult result,
+            ConnectionOptions options)
         {
             try
             {
-                using var connection = _sqlCreator.CreateConnection(options.ConnectionString);
-                using var command = _sqlCreator.CreateCommand(SqlScriptBackupDatabaseTemplate, connection);
+                using ISqlConnectionWrapper connection = sqlCreator.CreateConnection(options.ConnectionString);
+                using ISqlCommandWrapper command = sqlCreator.CreateCommand(SqlScriptBackupDatabaseTemplate, connection);
                 command.AddParameters(options.ExecutionParameters());
                 command.SetCommandTimeout(options.CommandTimeout);
                 connection.Open();
@@ -92,16 +103,21 @@ WITH
             return result;
         }
 
-        public async Task<OperationResult> ExecuteBackupDatabaseAsync(OperationResult result, ConnectionOptions options, CancellationToken token)
+        public async Task<OperationResult> ExecuteBackupDatabaseAsync(
+            OperationResult result,
+            ConnectionOptions options,
+            CancellationToken token)
         {
             try
             {
-                using var connection = _sqlCreator.CreateConnection(options.ConnectionString);
-                using var command = _sqlCreator.CreateCommand(SqlScriptBackupDatabaseTemplate, connection);
+                using ISqlConnectionWrapper connection = sqlCreator.CreateConnection(options.ConnectionString);
+                using ISqlCommandWrapper command = sqlCreator.CreateCommand(SqlScriptBackupDatabaseTemplate, connection);
                 command.AddParameters(options.ExecutionParameters());
                 command.SetCommandTimeout(options.CommandTimeout);
-                await connection.OpenAsync(token).ConfigureAwait(false);
-                await command.ExecuteNonQueryAsync(token).ConfigureAwait(false);
+                await connection.OpenAsync(token)
+                    .ConfigureAwait(false);
+                await command.ExecuteNonQueryAsync(token)
+                    .ConfigureAwait(false);
             }
             catch (DbException exception)
             {

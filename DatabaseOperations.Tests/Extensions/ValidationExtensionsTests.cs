@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using DatabaseOperations.Extensions;
-using DatabaseOperations.Tests.TestTypes;
-using FluentAssertions;
-using Xunit;
-using Type = DatabaseOperations.Tests.TestTypes.Type;
-
-namespace DatabaseOperations.Tests.Extensions
+﻿namespace DatabaseOperations.Tests.Extensions
 {
+    using System;
+    using System.Collections.Generic;
+    using DatabaseOperations.Extensions;
+    using FluentAssertions;
+    using FluentValidation.Results;
+    using TestTypes;
+    using Xunit;
+    using Type = TestTypes.Type;
+
     public class ValidationExtensionsTests
     {
         [Theory]
@@ -16,10 +17,11 @@ namespace DatabaseOperations.Tests.Extensions
         {
             // Arrange.
             // Act.
-            var result = testType.CheckValidation(new TestValidator());
+            ValidationResult result = testType.CheckValidation(new TestValidator());
 
             // Assert.
-            result.IsValid.Should().BeTrue("the testType data is all made up of valid data.");
+            result.IsValid.Should()
+                .BeTrue("the testType data is all made up of valid data.");
         }
 
         [Theory]
@@ -28,10 +30,11 @@ namespace DatabaseOperations.Tests.Extensions
         {
             // Arrange.
             // Act.
-            var result = testType.CheckValidation(new TestValidator());
+            ValidationResult result = testType.CheckValidation(new TestValidator());
 
             // Assert.
-            result.IsValid.Should().BeFalse("the testType data is made up of invalid data.");
+            result.IsValid.Should()
+                .BeFalse("the testType data is made up of invalid data.");
         }
 
         #region Test Data.
