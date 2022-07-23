@@ -10,7 +10,6 @@
     internal static class ConnectionStringService
     {
         private static readonly char[] SplitArray = { ';' };
-        private static bool isValid;
 
         private static readonly IList<IConnectionRule> ConnectionRules = new List<IConnectionRule>
         {
@@ -33,8 +32,7 @@
 
         internal static ConnectionProperties ExtractConnectionParameters(string connectionString)
         {
-            isValid = !string.IsNullOrWhiteSpace(connectionString);
-            if (!isValid) return new ConnectionProperties();
+            if (string.IsNullOrWhiteSpace(connectionString)) return new ConnectionProperties();
 
             string[] itemArray = connectionString.Split(SplitArray, StringSplitOptions.RemoveEmptyEntries);
 

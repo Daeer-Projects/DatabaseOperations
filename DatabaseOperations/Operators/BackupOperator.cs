@@ -116,7 +116,8 @@
             options?.Invoke(optionsToUse);
             ConnectionProperties properties = ConnectionStringService.ExtractConnectionParameters(connectionString);
 
-            OperationResult result = new();
+            OperationResult result = new OperationResult()
+                .ValidateConnectionProperties(properties);
             //.ValidateConnectionOptions(options)
             //.ExecuteBackupPath(options, sqlExecutor)
             //.CheckBackupPathExecution(options)

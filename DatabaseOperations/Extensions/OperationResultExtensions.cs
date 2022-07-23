@@ -4,7 +4,9 @@
     using System.Threading;
     using System.Threading.Tasks;
     using DataTransferObjects;
+    using FluentValidation.Results;
     using Interfaces;
+    using Validators;
 
     internal static class OperationResultExtensions
     {
@@ -19,6 +21,23 @@
 
             operationResult.Result = false;
             operationResult.Messages = options.Messages;
+            return operationResult;
+        }
+
+        internal static OperationResult ValidateConnectionProperties(
+            this OperationResult operationResult,
+            ConnectionProperties properties)
+        {
+            ValidationResult validationResult = properties.CheckValidation(new ConnectionPropertiesValidator());
+
+            operationResult.Result = validationResult.IsValid;
+            if (validationResult.IsValid) return operationResult;
+
+            foreach (ValidationFailure validationResultError in validationResult.Errors)
+            {
+                operationResult.Messages.Add(validationResultError.ErrorMessage);
+            }
+
             return operationResult;
         }
 
