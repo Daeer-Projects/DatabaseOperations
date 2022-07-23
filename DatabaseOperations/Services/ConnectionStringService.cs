@@ -31,7 +31,7 @@
             new UserConnectionRule()
         };
 
-        private static ConnectionProperties ExtractConnectionParameters(string connectionString)
+        internal static ConnectionProperties ExtractConnectionParameters(string connectionString)
         {
             isValid = !string.IsNullOrWhiteSpace(connectionString);
             if (!isValid) return new ConnectionProperties();
