@@ -74,11 +74,34 @@
                 .BeTrue();
         }
 
+        /// <summary>
+        /// A test example on how to use the action for database options.
+        /// Not a real unit test.
+        /// </summary>
+        [Fact]
+        public void TestBackupWithNewOptions()
+        {
+            // Arrange.
+            string connectionString = "server=server;database=database;user id=user;password=password";
+
+            // Act.
+            OperationResult result = backupOperator.BackupDatabase(
+                connectionString,
+                options =>
+                {
+                    options.BackupPath = BackupPath;
+                    options.Timeout = 100;
+                });
+
+            // Assert.
+        }
+
         [Fact]
         public void TestBackupWithPathErrorReturnsTrue()
         {
             // Arrange.
-            OperationResult defaultResult = new() { Result = true, Messages = new List<string> { "Backup path folder check/create failed due to an exception." } };
+            OperationResult defaultResult = new()
+                { Result = true, Messages = new List<string> { "Backup path folder check/create failed due to an exception." } };
             ConnectionOptions details = GetConnectionOptions(
                 "server",
                 "database",
@@ -105,7 +128,8 @@
         public async Task TestBackupAsyncWithPathErrorReturnsTrue()
         {
             // Arrange.
-            OperationResult defaultResult = new() { Result = true, Messages = new List<string> { "Backup path folder check/create failed due to an exception." } };
+            OperationResult defaultResult = new()
+                { Result = true, Messages = new List<string> { "Backup path folder check/create failed due to an exception." } };
             ConnectionOptions details = GetConnectionOptions(
                 "server",
                 "database",
