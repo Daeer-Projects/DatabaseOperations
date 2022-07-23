@@ -114,7 +114,7 @@
         {
             OperatorOptions optionsToUse = new();
             options?.Invoke(optionsToUse);
-            ConnectionStringService service = new(connectionString);
+            ConnectionProperties properties = ConnectionStringService.ExtractConnectionParameters(connectionString);
 
             OperationResult result = new();
             //.ValidateConnectionOptions(options)
