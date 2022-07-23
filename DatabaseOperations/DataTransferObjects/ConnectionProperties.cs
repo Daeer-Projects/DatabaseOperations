@@ -1,6 +1,6 @@
 ﻿namespace DatabaseOperations.DataTransferObjects
 {
-    internal struct ConnectionProperties
+    public struct ConnectionProperties
     {
         internal string ConnectionString { get; set; }
         internal string ApplicationName { get; set; }
