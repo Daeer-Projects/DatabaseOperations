@@ -8,6 +8,8 @@
     using Extensions;
     using Factories;
     using Interfaces;
+    using Options;
+    using Services;
 
     /// <summary>
     ///     This is the 'backup' class of operators.
@@ -86,6 +88,39 @@
                 .ExecuteBackupAsync(options, token, sqlExecutor)
                 .CheckForCancellation(token)
                 .ConfigureAwait(false);
+
+            return result;
+        }
+
+        /// <summary>
+        ///     Uses the <paramref name="options" /> defined by the user to start
+        ///     the backup process.
+        /// </summary>
+        /// <param name="connectionString">
+        ///     The connection string defined by the consumer of the method.
+        /// </param>
+        /// <param name="options">
+        ///     The defined options required by the consumer of the method.
+        /// </param>
+        /// <exception cref="NotSupportedException">
+        ///     The database exception was not added to the 'Message' list.
+        /// </exception>
+        /// <returns>
+        ///     The result of the backup operation.
+        /// </returns>
+        public OperationResult BackupDatabase(
+            string connectionString,
+            Action<OperatorOptions>? options = null)
+        {
+            OperatorOptions optionsToUse = new();
+            options?.Invoke(optionsToUse);
+            ConnectionStringService service = new(connectionString);
+
+            OperationResult result = new();
+            //.ValidateConnectionOptions(options)
+            //.ExecuteBackupPath(options, sqlExecutor)
+            //.CheckBackupPathExecution(options)
+            //.ExecuteBackup(options, sqlExecutor);
 
             return result;
         }
