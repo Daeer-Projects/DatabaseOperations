@@ -21,5 +21,13 @@
             if (string.IsNullOrWhiteSpace(options.ConnectTimeout)) options.ConnectTimeout = ConnectionTimeoutLookUp.ToValue(item);
             return options;
         }
+
+        public ConnectionProperties ApplyChange(
+            ConnectionProperties properties,
+            string item)
+        {
+            if (string.IsNullOrWhiteSpace(properties.ConnectTimeout)) properties.ConnectTimeout = ConnectionTimeoutLookUp.ToValue(item);
+            return properties;
+        }
     }
 }

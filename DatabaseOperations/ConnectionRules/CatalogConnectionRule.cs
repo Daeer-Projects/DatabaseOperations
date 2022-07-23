@@ -21,5 +21,13 @@
             if (string.IsNullOrWhiteSpace(options.DatabaseName)) options.DatabaseName = InitialCatalogLookUp.ToValue(item);
             return options;
         }
+
+        public ConnectionProperties ApplyChange(
+            ConnectionProperties properties,
+            string item)
+        {
+            if (string.IsNullOrWhiteSpace(properties.DatabaseName)) properties.DatabaseName = InitialCatalogLookUp.ToValue(item);
+            return properties;
+        }
     }
 }

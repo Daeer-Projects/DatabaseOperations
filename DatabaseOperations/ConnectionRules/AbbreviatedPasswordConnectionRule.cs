@@ -21,5 +21,13 @@
             if (string.IsNullOrWhiteSpace(options.Password)) options.Password = AbbreviatedPasswordLookUp.ToValue(item);
             return options;
         }
+
+        public ConnectionProperties ApplyChange(
+            ConnectionProperties properties,
+            string item)
+        {
+            if (string.IsNullOrWhiteSpace(properties.Password)) properties.Password = AbbreviatedPasswordLookUp.ToValue(item);
+            return properties;
+        }
     }
 }

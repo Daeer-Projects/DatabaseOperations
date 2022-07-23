@@ -21,5 +21,13 @@
             if (string.IsNullOrWhiteSpace(options.Server)) options.Server = NetworkAddressLookUp.ToValue(item);
             return options;
         }
+
+        public ConnectionProperties ApplyChange(
+            ConnectionProperties properties,
+            string item)
+        {
+            if (string.IsNullOrWhiteSpace(properties.Server)) properties.Server = NetworkAddressLookUp.ToValue(item);
+            return properties;
+        }
     }
 }

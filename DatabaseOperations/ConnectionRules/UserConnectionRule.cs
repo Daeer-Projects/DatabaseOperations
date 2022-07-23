@@ -21,5 +21,13 @@
             if (string.IsNullOrWhiteSpace(options.UserId)) options.UserId = UserIdLookUp.ToValue(item);
             return options;
         }
+
+        public ConnectionProperties ApplyChange(
+            ConnectionProperties properties,
+            string item)
+        {
+            if (string.IsNullOrWhiteSpace(properties.UserId)) properties.UserId = UserIdLookUp.ToValue(item);
+            return properties;
+        }
     }
 }
