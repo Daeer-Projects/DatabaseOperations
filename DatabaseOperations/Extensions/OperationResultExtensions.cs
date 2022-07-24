@@ -35,9 +35,7 @@
             if (validationResult.IsValid) return operationResult;
 
             foreach (ValidationFailure validationResultError in validationResult.Errors)
-            {
                 operationResult.Messages.Add(validationResultError.ErrorMessage);
-            }
 
             return operationResult;
         }
@@ -94,6 +92,17 @@
             ISqlExecutor sqlExecutor)
         {
             return !operationResult.Result ? operationResult : sqlExecutor.ExecuteBackupDatabase(operationResult, options);
+        }
+
+        internal static OperationResult ExecuteBackup(
+            this OperationResult operationResult,
+            ConnectionProperties connectionProperties,
+            BackupProperties backupProperties,
+            ISqlExecutor sqlExecutor)
+        {
+            return !operationResult.Result
+                ? operationResult
+                : sqlExecutor.ExecuteBackupDatabase(operationResult, connectionProperties, backupProperties);
         }
 
         internal static async Task<OperationResult> ValidateConnectionOptionsAsync(

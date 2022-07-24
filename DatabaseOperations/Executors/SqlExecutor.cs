@@ -127,6 +127,29 @@ WITH
             return result;
         }
 
+        public OperationResult ExecuteBackupDatabase(
+            OperationResult result,
+            ConnectionProperties connectionProperties,
+            BackupProperties backupProperties)
+        {
+            try
+            {
+                using ISqlConnectionWrapper connection = sqlCreator.CreateConnection(connectionProperties.ConnectionString);
+                using ISqlCommandWrapper command = sqlCreator.CreateCommand(SqlScriptBackupDatabaseTemplate, connection);
+                command.AddParameters(backupProperties.ExecutionParameters);
+                command.SetCommandTimeout(backupProperties.CommandTimeout);
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+            catch (DbException exception)
+            {
+                result.Result = false;
+                result.Messages.Add($"Backing up the database failed due to an exception.  Exception: {exception.Message}");
+            }
+
+            return result;
+        }
+
         public async Task<OperationResult> ExecuteBackupDatabaseAsync(
             OperationResult result,
             ConnectionOptions options,

@@ -24,6 +24,11 @@
             OperationResult result,
             ConnectionOptions options);
 
+        OperationResult ExecuteBackupDatabase(
+            OperationResult result,
+            ConnectionProperties connectionProperties,
+            BackupProperties backupProperties);
+
         Task<OperationResult> ExecuteBackupDatabaseAsync(
             OperationResult result,
             ConnectionOptions options,
