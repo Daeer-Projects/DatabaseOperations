@@ -27,6 +27,18 @@
             return GetBackupProperties(connectionOptions, operatorOptions, dateTimeWrapper);
         }
 
+        internal static BackupProperties SetExecutorToUseFileNameOnly(
+            this BackupProperties backupProperties,
+            ConnectionProperties connectionProperties)
+        {
+            backupProperties.ExecutionParameters = GetParameters(
+                connectionProperties.DatabaseName,
+                backupProperties.BackupFileName,
+                backupProperties.Description);
+
+            return backupProperties;
+        }
+
         private static BackupProperties GetBackupProperties(
             ConnectionProperties connectionOptions,
             OperatorOptions operatorOptions,
@@ -35,17 +47,17 @@
             BackupProperties backupProperties = new();
 
             string location =
-                $"{operatorOptions.BackupPath}{connectionOptions.DatabaseName}_Full_{dateTimeWrapper.Now:yyyy-MM-dd-HH-mm-ss}.bak";
+                $"{connectionOptions.DatabaseName}_Full_{dateTimeWrapper.Now:yyyy-MM-dd-HH-mm-ss}.bak";
             string description = $"Full backup of the `{connectionOptions.DatabaseName}` database.";
 
-            backupProperties.BackupLocation = location;
+            backupProperties.BackupFileName = location;
             backupProperties.Description = description;
             backupProperties.BackupPath = operatorOptions.BackupPath;
             backupProperties.CommandTimeout = SetDefaultOrTimeout(operatorOptions.Timeout);
             backupProperties.BackupParameters = GetBackupParameters(operatorOptions.BackupPath);
             backupProperties.ExecutionParameters = GetParameters(
                 connectionOptions.DatabaseName,
-                backupProperties.BackupLocation,
+                backupProperties.BackupPathAndFileName(),
                 backupProperties.Description);
 
             return backupProperties;

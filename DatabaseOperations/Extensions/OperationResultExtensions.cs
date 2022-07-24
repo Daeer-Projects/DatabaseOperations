@@ -6,6 +6,7 @@
     using DataTransferObjects;
     using FluentValidation.Results;
     using Interfaces;
+    using Services;
     using Validators;
 
     internal static class OperationResultExtensions
@@ -69,6 +70,20 @@
             operationResult.Result = true;
             operationResult.Messages.Add(BackupPathCheckFailureMessage);
             options.RemovePathFromBackupLocation();
+
+            return operationResult;
+        }
+
+        internal static OperationResult CheckBackupPathExecution(
+            this OperationResult operationResult,
+            ConnectionProperties connectionProperties,
+            BackupProperties backupProperties)
+        {
+            if (!operationResult.Messages.Any()) return operationResult;
+
+            operationResult.Result = true;
+            operationResult.Messages.Add(BackupPathCheckFailureMessage);
+            backupProperties.SetExecutorToUseFileNameOnly(connectionProperties);
 
             return operationResult;
         }

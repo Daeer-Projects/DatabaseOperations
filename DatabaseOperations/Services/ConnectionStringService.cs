@@ -49,7 +49,8 @@
             return properties;
         }
 
-        private static void ApplyConnectionRules(string item,
+        private static void ApplyConnectionRules(
+            string item,
             ConnectionProperties properties)
         {
             foreach (IConnectionRule connectionRule in ConnectionRules)

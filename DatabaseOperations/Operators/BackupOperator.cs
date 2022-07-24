@@ -119,11 +119,9 @@
 
             OperationResult result = new OperationResult()
                 .ValidateConnectionProperties(connectionProperties)
-                .ExecuteBackupPath(connectionProperties, backupProperties, sqlExecutor);
+                .ExecuteBackupPath(connectionProperties, backupProperties, sqlExecutor)
+                .CheckBackupPathExecution(connectionProperties, backupProperties);
 
-            //.ValidateConnectionOptions(options)
-            //.ExecuteBackupPath(options, sqlExecutor)
-            //.CheckBackupPathExecution(options)
             //.ExecuteBackup(options, sqlExecutor);
 
             return result;
