@@ -55,6 +55,30 @@ WITH
             return result;
         }
 
+        public OperationResult ExecuteBackupPath(
+            OperationResult result,
+            ConnectionProperties connectionProperties,
+            BackupProperties backupProperties)
+        {
+            try
+            {
+                using ISqlConnectionWrapper connection = sqlCreator.CreateConnection(connectionProperties.ConnectionString);
+                using ISqlCommandWrapper command = sqlCreator.CreateCommand(SqlScriptCreateBackupPathTemplate, connection);
+                command.AddParameters(backupProperties.BackupParameters);
+                command.SetCommandTimeout(backupProperties.CommandTimeout);
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+            catch (DbException exception)
+            {
+                result.Result = false;
+                result.Messages.Add(
+                    $"Backup path folder check/create failed due to an exception.  Exception: {exception.Message}");
+            }
+
+            return result;
+        }
+
         public async Task<OperationResult> ExecuteBackupPathAsync(
             OperationResult result,
             ConnectionOptions options,

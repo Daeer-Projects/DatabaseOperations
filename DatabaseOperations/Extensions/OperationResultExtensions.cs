@@ -49,6 +49,17 @@
             return !operationResult.Result ? operationResult : sqlExecutor.ExecuteBackupPath(operationResult, options);
         }
 
+        internal static OperationResult ExecuteBackupPath(
+            this OperationResult operationResult,
+            ConnectionProperties connectionProperties,
+            BackupProperties backupProperties,
+            ISqlExecutor sqlExecutor)
+        {
+            return !operationResult.Result
+                ? operationResult
+                : sqlExecutor.ExecuteBackupPath(operationResult, connectionProperties, backupProperties);
+        }
+
         internal static OperationResult CheckBackupPathExecution(
             this OperationResult operationResult,
             ConnectionOptions options)

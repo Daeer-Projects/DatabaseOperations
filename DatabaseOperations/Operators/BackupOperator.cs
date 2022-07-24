@@ -114,10 +114,13 @@
         {
             OperatorOptions optionsToUse = new();
             options?.Invoke(optionsToUse);
-            ConnectionProperties properties = ConnectionStringService.ExtractConnectionParameters(connectionString);
+            ConnectionProperties connectionProperties = ConnectionStringService.ExtractConnectionParameters(connectionString);
+            BackupProperties backupProperties = BackupParameterService.GetBackupProperties(connectionProperties, optionsToUse);
 
             OperationResult result = new OperationResult()
-                .ValidateConnectionProperties(properties);
+                .ValidateConnectionProperties(connectionProperties)
+                .ExecuteBackupPath(connectionProperties, backupProperties, sqlExecutor);
+
             //.ValidateConnectionOptions(options)
             //.ExecuteBackupPath(options, sqlExecutor)
             //.CheckBackupPathExecution(options)

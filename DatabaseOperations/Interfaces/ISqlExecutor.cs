@@ -10,6 +10,11 @@
             OperationResult result,
             ConnectionOptions options);
 
+        OperationResult ExecuteBackupPath(
+            OperationResult result,
+            ConnectionProperties connectionProperties,
+            BackupProperties backupProperties);
+
         Task<OperationResult> ExecuteBackupPathAsync(
             OperationResult result,
             ConnectionOptions options,
