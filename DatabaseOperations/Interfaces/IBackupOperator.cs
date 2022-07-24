@@ -65,5 +65,28 @@
         Task<OperationResult> BackupDatabaseAsync(
             ConnectionOptions options,
             CancellationToken token);
+
+        /// <summary>
+        ///     Uses the <paramref name="connectionString" /> and <paramref name="options" /> defined by the user to start
+        ///     the backup process.
+        ///     This is the async version.
+        /// </summary>
+        /// <param name="connectionString">
+        ///     The connection string defined by the consumer of the method.
+        /// </param>
+        /// <param name="options">
+        ///     The connection options defined by the consumer of the method.
+        /// </param>
+        /// <param name="token"> The cancellation token supplied by the calling application. </param>
+        /// <exception cref="NotSupportedException">
+        ///     The database exception was not added to the 'Message' list.
+        /// </exception>
+        /// <returns>
+        ///     The result of the backup operation.
+        /// </returns>
+        Task<OperationResult> BackupDatabaseAsync(
+            string connectionString,
+            Action<OperatorOptions>? options = null,
+            CancellationToken token = default);
     }
 }

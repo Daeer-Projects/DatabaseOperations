@@ -119,6 +119,24 @@
                 .ConfigureAwait(false);
         }
 
+        internal static async Task<OperationResult> ValidateConnectionPropertiesAsync(
+            this OperationResult operationResult,
+            ConnectionProperties properties)
+        {
+            ValidationResult validationResult = properties.CheckValidation(new ConnectionPropertiesValidator());
+
+            operationResult.Result = validationResult.IsValid;
+            if (validationResult.IsValid)
+                return await Task.FromResult(operationResult)
+                    .ConfigureAwait(false);
+
+            foreach (ValidationFailure validationResultError in validationResult.Errors)
+                operationResult.Messages.Add(validationResultError.ErrorMessage);
+
+            return await Task.FromResult(operationResult)
+                .ConfigureAwait(false);
+        }
+
         internal static async Task<OperationResult> CheckForCancellation(
             this Task<OperationResult> operationResult,
             CancellationToken token)
@@ -146,6 +164,25 @@
                     .ConfigureAwait(false);
         }
 
+        internal static async Task<OperationResult> ExecuteBackupPathAsync(
+            this Task<OperationResult> operationResult,
+            ConnectionProperties connectionProperties,
+            BackupProperties backupProperties,
+            CancellationToken token,
+            ISqlExecutor sqlExecutor)
+        {
+            OperationResult result = await operationResult.ConfigureAwait(false);
+            return !result.Result
+                ? await Task.FromResult(result)
+                    .ConfigureAwait(false)
+                : await sqlExecutor.ExecuteBackupPathAsync(
+                        result,
+                        connectionProperties,
+                        backupProperties,
+                        token)
+                    .ConfigureAwait(false);
+        }
+
         internal static async Task<OperationResult> CheckBackupPathExecutionAsync(
             this Task<OperationResult> operationResult,
             ConnectionOptions options,
@@ -164,6 +201,25 @@
                 .ConfigureAwait(false);
         }
 
+        internal static async Task<OperationResult> CheckBackupPathExecutionAsync(
+            this Task<OperationResult> operationResult,
+            ConnectionProperties connectionProperties,
+            BackupProperties backupProperties,
+            CancellationToken token)
+        {
+            OperationResult result = await operationResult.ConfigureAwait(false);
+            if (!result.Messages.Any() || token.IsCancellationRequested)
+                return await Task.FromResult(result)
+                    .ConfigureAwait(false);
+
+            result.Result = true;
+            result.Messages.Add(BackupPathCheckFailureMessage);
+            backupProperties.SetExecutorToUseFileNameOnly(connectionProperties);
+
+            return await Task.FromResult(result)
+                .ConfigureAwait(false);
+        }
+
         internal static async Task<OperationResult> ExecuteBackupAsync(
             this Task<OperationResult> operationResult,
             ConnectionOptions options,
@@ -176,6 +232,26 @@
                 ? await Task.FromResult(result)
                     .ConfigureAwait(false)
                 : await sqlExecutor.ExecuteBackupDatabaseAsync(result, options, token)
+                    .ConfigureAwait(false);
+        }
+
+        internal static async Task<OperationResult> ExecuteBackupAsync(
+            this Task<OperationResult> operationResult,
+            ConnectionProperties connectionProperties,
+            BackupProperties backupProperties,
+            CancellationToken token,
+            ISqlExecutor sqlExecutor)
+        {
+            OperationResult result = await operationResult.ConfigureAwait(false);
+
+            return !result.Result
+                ? await Task.FromResult(result)
+                    .ConfigureAwait(false)
+                : await sqlExecutor.ExecuteBackupDatabaseAsync(
+                        result,
+                        connectionProperties,
+                        backupProperties,
+                        token)
                     .ConfigureAwait(false);
         }
     }

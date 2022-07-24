@@ -105,6 +105,33 @@ WITH
             return result;
         }
 
+        public async Task<OperationResult> ExecuteBackupPathAsync(
+            OperationResult result,
+            ConnectionProperties connectionProperties,
+            BackupProperties backupProperties,
+            CancellationToken token)
+        {
+            try
+            {
+                using ISqlConnectionWrapper connection = sqlCreator.CreateConnection(connectionProperties.ConnectionString);
+                using ISqlCommandWrapper command = sqlCreator.CreateCommand(SqlScriptCreateBackupPathTemplate, connection);
+                command.AddParameters(backupProperties.BackupParameters);
+                command.SetCommandTimeout(backupProperties.CommandTimeout);
+                await connection.OpenAsync(token)
+                    .ConfigureAwait(false);
+                await command.ExecuteNonQueryAsync(token)
+                    .ConfigureAwait(false);
+            }
+            catch (DbException exception)
+            {
+                result.Result = false;
+                result.Messages.Add(
+                    $"Backup path folder check/create failed due to an exception.  Exception: {exception.Message}");
+            }
+
+            return result;
+        }
+
         public OperationResult ExecuteBackupDatabase(
             OperationResult result,
             ConnectionOptions options)
@@ -161,6 +188,32 @@ WITH
                 using ISqlCommandWrapper command = sqlCreator.CreateCommand(SqlScriptBackupDatabaseTemplate, connection);
                 command.AddParameters(options.ExecutionParameters());
                 command.SetCommandTimeout(options.CommandTimeout);
+                await connection.OpenAsync(token)
+                    .ConfigureAwait(false);
+                await command.ExecuteNonQueryAsync(token)
+                    .ConfigureAwait(false);
+            }
+            catch (DbException exception)
+            {
+                result.Result = false;
+                result.Messages.Add($"Backing up the database failed due to an exception.  Exception: {exception.Message}");
+            }
+
+            return result;
+        }
+
+        public async Task<OperationResult> ExecuteBackupDatabaseAsync(
+            OperationResult result,
+            ConnectionProperties connectionProperties,
+            BackupProperties backupProperties,
+            CancellationToken token)
+        {
+            try
+            {
+                using ISqlConnectionWrapper connection = sqlCreator.CreateConnection(connectionProperties.ConnectionString);
+                using ISqlCommandWrapper command = sqlCreator.CreateCommand(SqlScriptBackupDatabaseTemplate, connection);
+                command.AddParameters(backupProperties.ExecutionParameters);
+                command.SetCommandTimeout(backupProperties.CommandTimeout);
                 await connection.OpenAsync(token)
                     .ConfigureAwait(false);
                 await command.ExecuteNonQueryAsync(token)

@@ -20,6 +20,12 @@
             ConnectionOptions options,
             CancellationToken token);
 
+        Task<OperationResult> ExecuteBackupPathAsync(
+            OperationResult result,
+            ConnectionProperties connectionProperties,
+            BackupProperties backupProperties,
+            CancellationToken token);
+
         OperationResult ExecuteBackupDatabase(
             OperationResult result,
             ConnectionOptions options);
@@ -32,6 +38,12 @@
         Task<OperationResult> ExecuteBackupDatabaseAsync(
             OperationResult result,
             ConnectionOptions options,
+            CancellationToken token);
+
+        Task<OperationResult> ExecuteBackupDatabaseAsync(
+            OperationResult result,
+            ConnectionProperties connectionProperties,
+            BackupProperties backupProperties,
             CancellationToken token);
     }
 }
