@@ -777,7 +777,7 @@
         internal async Task TestBackupAsyncActionWithCancelledBackupPathReturnsFalse()
         {
             // Arrange.
-            CancellationTokenSource source = new(400);
+            CancellationTokenSource source = new(100);
             CancellationToken token = source.Token;
             token.ThrowIfCancellationRequested();
 
