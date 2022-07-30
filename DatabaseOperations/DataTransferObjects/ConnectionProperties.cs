@@ -1,14 +1,14 @@
 ﻿namespace DatabaseOperations.DataTransferObjects
 {
-    public struct ConnectionProperties
+    public class ConnectionProperties
     {
-        internal string ConnectionString { get; set; }
-        internal string ApplicationName { get; set; }
-        internal string DatabaseName { get; set; }
-        internal string ConnectTimeout { get; set; }
-        internal string IntegratedSecurity { get; set; }
-        internal string Password { get; set; }
-        internal string Server { get; set; }
-        internal string UserId { get; set; }
+        internal string ConnectionString { get; set; } = string.Empty;
+        internal string ApplicationName { get; set; } = string.Empty;
+        internal string DatabaseName { get; set; } = string.Empty;
+        internal string ConnectTimeout { get; set; } = string.Empty;
+        internal string IntegratedSecurity { get; set; } = string.Empty;
+        internal string Password { get; set; } = string.Empty;
+        internal string Server { get; set; } = string.Empty;
+        internal string UserId { get; set; } = string.Empty;
     }
 }

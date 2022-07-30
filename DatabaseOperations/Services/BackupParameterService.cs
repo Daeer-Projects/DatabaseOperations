@@ -11,20 +11,20 @@
     internal static class BackupParameterService
     {
         internal static BackupProperties GetBackupProperties(
-            ConnectionProperties connectionOptions,
+            ConnectionProperties connectionProperties,
             OperatorOptions operatorOptions)
         {
             IDateTimeWrapper dateTimeWrapper = new DateTimeWrapper();
-            return GetBackupProperties(connectionOptions, operatorOptions, dateTimeWrapper);
+            return GetBackupProperties(connectionProperties, operatorOptions, dateTimeWrapper);
         }
 
         internal static BackupProperties GetBackupPropertiesForTests(
-            ConnectionProperties connectionOptions,
+            ConnectionProperties connectionProperties,
             OperatorOptions operatorOptions,
             IDateTimeWrapper dateTimeWrapper
         )
         {
-            return GetBackupProperties(connectionOptions, operatorOptions, dateTimeWrapper);
+            return GetBackupProperties(connectionProperties, operatorOptions, dateTimeWrapper);
         }
 
         internal static BackupProperties SetExecutorToUseFileNameOnly(
@@ -40,15 +40,15 @@
         }
 
         private static BackupProperties GetBackupProperties(
-            ConnectionProperties connectionOptions,
+            ConnectionProperties connectionProperties,
             OperatorOptions operatorOptions,
             IDateTimeWrapper dateTimeWrapper)
         {
             BackupProperties backupProperties = new();
 
             string location =
-                $"{connectionOptions.DatabaseName}_Full_{dateTimeWrapper.Now:yyyy-MM-dd-HH-mm-ss}.bak";
-            string description = $"Full backup of the `{connectionOptions.DatabaseName}` database.";
+                $"{connectionProperties.DatabaseName}_Full_{dateTimeWrapper.Now:yyyy-MM-dd-HH-mm-ss}.bak";
+            string description = $"Full backup of the `{connectionProperties.DatabaseName}` database.";
 
             backupProperties.BackupFileName = location;
             backupProperties.Description = description;
@@ -56,7 +56,7 @@
             backupProperties.CommandTimeout = SetDefaultOrTimeout(operatorOptions.Timeout);
             backupProperties.BackupParameters = GetBackupParameters(operatorOptions.BackupPath);
             backupProperties.ExecutionParameters = GetParameters(
-                connectionOptions.DatabaseName,
+                connectionProperties.DatabaseName,
                 backupProperties.BackupPathAndFileName(),
                 backupProperties.Description);
 

@@ -131,8 +131,7 @@
                 {
                     options.BackupPath = BackupPath;
                     options.Timeout = 100;
-                },
-                new CancellationToken());
+                });
 
             // Assert.
             result.Result.Should()
@@ -270,8 +269,7 @@
                 {
                     options.BackupPath = BackupPath;
                     options.Timeout = 100;
-                },
-                new CancellationToken());
+                });
 
             // Assert.
             result.Result.Should()
@@ -434,8 +432,7 @@
                 {
                     options.BackupPath = BackupPath;
                     options.Timeout = 100;
-                },
-                new CancellationToken());
+                });
 
             // Assert.
             result.Messages.Should()
@@ -573,8 +570,7 @@
                 {
                     options.BackupPath = BackupPath;
                     options.Timeout = 100;
-                },
-                new CancellationToken());
+                });
 
             // Assert.
             result.Result.Should()
@@ -728,8 +724,7 @@
                 {
                     options.BackupPath = BackupPath;
                     options.Timeout = 100;
-                },
-                new CancellationToken());
+                });
 
             // Assert.
             result.Messages.Should()
@@ -782,7 +777,7 @@
         internal async Task TestBackupAsyncActionWithCancelledBackupPathReturnsFalse()
         {
             // Arrange.
-            CancellationTokenSource source = new(100);
+            CancellationTokenSource source = new(400);
             CancellationToken token = source.Token;
             token.ThrowIfCancellationRequested();
 
@@ -801,7 +796,7 @@
                         Arg.Any<BackupProperties>(),
                         Arg.Any<CancellationToken>()))
                 .Do(_ => Thread.Sleep(500));
-            const string connectionString = "server=server;database=database;user id=user;password=password";
+            const string connectionString = "server=server;database=database;user id=user;password=password;Connect Timeout=10;";
 
             // Act.
             OperationResult result = await backupOperator.BackupDatabaseAsync(
@@ -891,7 +886,7 @@
                         Arg.Any<BackupProperties>(),
                         Arg.Any<CancellationToken>()))
                 .Do(_ => Thread.Sleep(500));
-            const string connectionString = "server=server;database=database;user id=user;password=password";
+            const string connectionString = "server=server;database=database;user id=user;password=password;Connect Timeout=10;";
 
             // Act.
             OperationResult result = await backupOperator.BackupDatabaseAsync(
