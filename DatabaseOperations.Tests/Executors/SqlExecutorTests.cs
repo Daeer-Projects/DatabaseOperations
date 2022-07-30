@@ -1,6 +1,7 @@
 ﻿namespace DatabaseOperations.Tests.Executors
 {
     using System.Collections.Generic;
+    using System.Data;
     using System.Threading;
     using System.Threading.Tasks;
     using DatabaseOperations.DataTransferObjects;
@@ -44,6 +45,32 @@
 
             // Act.
             result = sqlExecutor.ExecuteBackupPath(result, details);
+
+            // Assert.
+            result.Result.Should()
+                .BeTrue();
+        }
+
+        [Fact]
+        public void TestBackupPathActionWithValidDetailsReturnsTrue()
+        {
+            // Arrange.
+            ConnectionProperties connProps = new() { Server = "server", DatabaseName = "database", IntegratedSecurity = "True", ConnectTimeout = "5" };
+            SqlParameter dataParam = new() { ParameterName = "@Database", DbType = DbType.String };
+            BackupProperties backup = new()
+            {
+                BackupFileName = "BackupFile.bak",
+                BackupPath = BackupPath,
+                BackupParameters = new[] { dataParam },
+                CommandTimeout = 5,
+                Description = "Some backup",
+                ExecutionParameters = new[] { dataParam }
+            };
+
+            OperationResult result = new();
+
+            // Act.
+            result = sqlExecutor.ExecuteBackupPath(result, connProps, backup);
 
             // Assert.
             result.Result.Should()
