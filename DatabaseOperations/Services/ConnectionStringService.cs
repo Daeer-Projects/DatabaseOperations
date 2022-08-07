@@ -37,6 +37,7 @@
             string[] itemArray = connectionString.Split(SplitArray, StringSplitOptions.RemoveEmptyEntries);
 
             ConnectionProperties connectionProperties = ProcessItemArray(itemArray);
+            connectionProperties.ConnectionString = connectionString;
             connectionProperties.ConnectionString = UpdateConnectionString(connectionProperties);
             return connectionProperties;
         }

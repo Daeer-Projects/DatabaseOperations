@@ -1,13 +1,13 @@
 ﻿namespace DatabaseOperations.Tests.Extensions
 {
     using System.Collections.Generic;
-using System.Data;
+    using System.Data;
     using System.Threading;
     using System.Threading.Tasks;
     using DatabaseOperations.DataTransferObjects;
     using DatabaseOperations.Extensions;
     using FluentAssertions;
-using Interfaces;
+    using Interfaces;
     using Microsoft.Data.SqlClient;
     using NSubstitute;
     using Xunit;
@@ -24,8 +24,7 @@ using Interfaces;
                 .ApplyPassword("password")
                 .ApplyConnectTimeOut("205");
 
-            connectionProperties = new()
-                { Server = "server", DatabaseName = "database", IntegratedSecurity = "True", ConnectTimeout = "5" };
+            connectionProperties = new ConnectionProperties { Server = "server", DatabaseName = "database", IntegratedSecurity = "True", ConnectTimeout = "5" };
 
             SqlParameter dataParam = new() { ParameterName = "@Database", DbType = DbType.String };
             backupProperties = new()

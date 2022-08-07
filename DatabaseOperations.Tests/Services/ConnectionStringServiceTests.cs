@@ -77,6 +77,19 @@
         }
 
         [Theory]
+        [MemberData(nameof(ConnectionStrings))]
+        internal void TestExtractWithValidDataReturnsExpectedConnectionString(string connection)
+        {
+            // Arrange.
+            // Act.
+            ConnectionProperties actual = ConnectionStringService.ExtractConnectionParameters(connection);
+
+            // Assert.
+            actual.ConnectionString.Should()
+                .NotBeNullOrWhiteSpace();
+        }
+
+        [Theory]
         [MemberData(nameof(UserConnectionStrings))]
         internal void TestExtractWithValidDataReturnsExpectedUserId(string connection)
         {
