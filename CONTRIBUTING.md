@@ -32,8 +32,8 @@ We would like you to follow these guidelines:
 Start by reading the code base and you will notice how things should be layed out.  We optimise for readability.
 
 * Use spaces, not tabs
-* Use `var` unless it is not obvious what the variable will be
-* Follow the SOLID principles
+* Don't use `var`, use the defined type and the new `new()` style
+* Follow the SOLID/CUPID principles
 * Investigate the options shown in the IDE/ReSharper -> if it looks good, use it, if it becomes unreadable, then don't
 
 ## Conclusion
