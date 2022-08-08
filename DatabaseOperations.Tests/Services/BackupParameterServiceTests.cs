@@ -8,7 +8,7 @@
     using DatabaseOperations.Services;
     using FluentAssertions;
     using Interfaces;
-using Microsoft.Data.SqlClient;
+    using Microsoft.Data.SqlClient;
     using NSubstitute;
     using Options;
     using Xunit;
@@ -226,7 +226,7 @@ using Microsoft.Data.SqlClient;
         private static ConnectionProperties GetValidConnectionProperties()
         {
             ConnectionProperties connProps = new()
-                { Server = "server", DatabaseName = "database", IntegratedSecurity = "True", ConnectTimeout = "5" };
+            { Server = "server", DatabaseName = "database", IntegratedSecurity = "True", ConnectTimeout = "5" };
             return connProps;
         }
     }

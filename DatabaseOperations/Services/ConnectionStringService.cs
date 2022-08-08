@@ -38,7 +38,7 @@
 
             ConnectionProperties connectionProperties = ProcessItemArray(itemArray);
             connectionProperties.ConnectionString = connectionString;
-            connectionProperties.ConnectionString = UpdateConnectionString(connectionProperties);
+            connectionProperties.ConnectionString = UpdateConnectionString(connectionString, connectionProperties.ConnectTimeout);
             return connectionProperties;
         }
 
@@ -59,11 +59,12 @@
                     connectionRule.ApplyChange(properties, item);
         }
 
-        private static string UpdateConnectionString(ConnectionProperties properties)
+        private static string UpdateConnectionString(string connectionString,
+            string connectTimeout)
         {
-            return !string.IsNullOrWhiteSpace(properties.ConnectTimeout)
-                ? Regex.Replace(properties.ConnectionString, "Connect Timeout=[0-9]{1,3}", "Connect Timeout=5")
-                : properties.ConnectionString;
+            return !string.IsNullOrWhiteSpace(connectTimeout)
+                ? Regex.Replace(connectionString, "Connect Timeout=[0-9]{1,3}", "Connect Timeout=5")
+                : connectionString;
         }
     }
 }
