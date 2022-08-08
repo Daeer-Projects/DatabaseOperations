@@ -22,5 +22,14 @@
                 options.IntegratedSecurity = TrustedConnectionLookUp.ToValue(item);
             return options;
         }
+
+        public ConnectionProperties ApplyChange(
+            ConnectionProperties properties,
+            string item)
+        {
+            if (string.IsNullOrWhiteSpace(properties.IntegratedSecurity))
+                properties.IntegratedSecurity = TrustedConnectionLookUp.ToValue(item);
+            return properties;
+        }
     }
 }

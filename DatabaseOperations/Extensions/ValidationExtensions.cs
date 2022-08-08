@@ -7,7 +7,7 @@
     {
         internal static ValidationResult CheckValidation<T>(
             this T component,
-            AbstractValidator<T> validator) where T : class
+            AbstractValidator<T> validator)
         {
             ValidationResult? result = validator.Validate(component);
             return result;

@@ -21,5 +21,13 @@
             if (string.IsNullOrWhiteSpace(options.ApplicationName)) options.ApplicationName = ApplicationNameLookUp.ToValue(item);
             return options;
         }
+
+        public ConnectionProperties ApplyChange(
+            ConnectionProperties properties,
+            string item)
+        {
+            if (string.IsNullOrWhiteSpace(properties.ApplicationName)) properties.ApplicationName = ApplicationNameLookUp.ToValue(item);
+            return properties;
+        }
     }
 }

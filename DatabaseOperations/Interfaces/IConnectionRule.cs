@@ -9,5 +9,9 @@
         ConnectionOptions ApplyChange(
             ConnectionOptions options,
             string item);
+
+        ConnectionProperties ApplyChange(
+            ConnectionProperties properties,
+            string item);
     }
 }

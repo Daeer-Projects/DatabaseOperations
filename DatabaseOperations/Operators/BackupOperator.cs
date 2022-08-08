@@ -8,6 +8,8 @@
     using Extensions;
     using Factories;
     using Interfaces;
+    using Options;
+    using Services;
 
     /// <summary>
     ///     This is the 'backup' class of operators.
@@ -58,6 +60,40 @@
         }
 
         /// <summary>
+        ///     Uses the <paramref name="connectionString" /> and <paramref name="options" /> defined by the user to start
+        ///     the backup process.
+        /// </summary>
+        /// <param name="connectionString">
+        ///     The connection string defined by the consumer of the method.
+        /// </param>
+        /// <param name="options">
+        ///     The defined options required by the consumer of the method.
+        /// </param>
+        /// <exception cref="NotSupportedException">
+        ///     The database exception was not added to the 'Message' list.
+        /// </exception>
+        /// <returns>
+        ///     The result of the backup operation.
+        /// </returns>
+        public OperationResult BackupDatabase(
+            string connectionString,
+            Action<OperatorOptions>? options = null)
+        {
+            OperatorOptions optionsToUse = new();
+            options?.Invoke(optionsToUse);
+            ConnectionProperties connectionProperties = ConnectionStringService.ExtractConnectionParameters(connectionString);
+            BackupProperties backupProperties = BackupParameterService.GetBackupProperties(connectionProperties, optionsToUse);
+
+            OperationResult result = new OperationResult()
+                .ValidateConnectionProperties(connectionProperties)
+                .ExecuteBackupPath(connectionProperties, backupProperties, sqlExecutor)
+                .CheckBackupPathExecution(connectionProperties, backupProperties)
+                .ExecuteBackup(connectionProperties, backupProperties, sqlExecutor);
+
+            return result;
+        }
+
+        /// <summary>
         ///     Uses the <paramref name="options" /> defined by the user to start
         ///     the backup process.
         ///     This is the async version.
@@ -84,6 +120,56 @@
                 .CheckBackupPathExecutionAsync(options, token)
                 .CheckForCancellation(token)
                 .ExecuteBackupAsync(options, token, sqlExecutor)
+                .CheckForCancellation(token)
+                .ConfigureAwait(false);
+
+            return result;
+        }
+
+        /// <summary>
+        ///     Uses the <paramref name="connectionString" /> and <paramref name="options" /> defined by the user to start
+        ///     the backup process.
+        ///     This is the async version.
+        /// </summary>
+        /// <param name="connectionString">
+        ///     The connection string defined by the consumer of the method.
+        /// </param>
+        /// <param name="options">
+        ///     The connection options defined by the consumer of the method.
+        /// </param>
+        /// <param name="token"> The cancellation token supplied by the calling application. </param>
+        /// <exception cref="NotSupportedException">
+        ///     The database exception was not added to the 'Message' list.
+        /// </exception>
+        /// <returns>
+        ///     The result of the backup operation.
+        /// </returns>
+        public async Task<OperationResult> BackupDatabaseAsync(
+            string connectionString,
+            Action<OperatorOptions>? options = null,
+            CancellationToken token = default)
+        {
+            OperatorOptions optionsToUse = new();
+            options?.Invoke(optionsToUse);
+            ConnectionProperties connectionProperties = ConnectionStringService.ExtractConnectionParameters(connectionString);
+            BackupProperties backupProperties = BackupParameterService.GetBackupProperties(connectionProperties, optionsToUse);
+
+            OperationResult result = await new OperationResult()
+                .ValidateConnectionPropertiesAsync(connectionProperties)
+                .CheckForCancellation(token)
+                .ExecuteBackupPathAsync(
+                    connectionProperties,
+                    backupProperties,
+                    token,
+                    sqlExecutor)
+                .CheckForCancellation(token)
+                .CheckBackupPathExecutionAsync(connectionProperties, backupProperties, token)
+                .CheckForCancellation(token)
+                .ExecuteBackupAsync(
+                    connectionProperties,
+                    backupProperties,
+                    token,
+                    sqlExecutor)
                 .CheckForCancellation(token)
                 .ConfigureAwait(false);
 
