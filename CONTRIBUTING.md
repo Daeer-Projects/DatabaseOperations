@@ -1,6 +1,6 @@
 # How to contribute
 
-I'm really glad you're reading this, because we need voluteer developers to help this project come to fruition.
+I'm really glad you're reading this, because we (I) need volunteer developers to help this project come to fruition.
 
 The project is starting small, with a simple backup operation, but with work and effort, it might grow into something that will be used by many.
 
@@ -17,7 +17,7 @@ There are a few unit tests using the XUnit framework.  I want to keep the unit t
 
 ## Submitting changes
 
-We welcome changes and help with any of the issues that have been raised.  Some of the issues will have questions that can be answered by anyone.  Good suggestions will be concidered and accepted by the repository owner.
+We welcome changes and help with any of the issues that have been raised.  Some of the issues will have questions that can be answered by anyone.  Good suggestions will be considered and accepted by the repository owner.
 
 We would like you to follow these guidelines:
 
@@ -29,12 +29,16 @@ We would like you to follow these guidelines:
 
 ## Coding conventions
 
-Start by reading the code base and you will notice how things should be layed out.  We optimise for readability.
+Start by reading the code base and you will notice how things should be laid out.  We optimise for readability.
 
 * Use spaces, not tabs
 * Don't use `var`, use the defined type and the new `new()` style
 * Follow the SOLID/CUPID principles
 * Investigate the options shown in the IDE/ReSharper -> if it looks good, use it, if it becomes unreadable, then don't
+* Usings within the namespace
+  * `System` usings first
+* Constructors will be the first item in a class
+* Write unit tests as much as possible using the "Arrange/Act/Asset" pattern.
 
 ## Conclusion
 
