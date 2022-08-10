@@ -37,7 +37,7 @@ public BackupOperator()
 ```
 
 ```csharp
-var backupOperator = new BackupOperator();
+BackupOperator backupOperator = new();
 ```
 
 #### Backup Database methods
