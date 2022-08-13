@@ -3,8 +3,6 @@ trigger:
     include:
     - main
 
-name: 1.0.4$(rev:.r)
-
 resources:
   repositories:
   - repository: self
