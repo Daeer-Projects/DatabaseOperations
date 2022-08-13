@@ -1,11 +1,61 @@
 # DatabaseOperations
 
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+
 The purpose of this library is to provide the consumer with tools to perform database operations.  The library has been designed for use in deployment/utilities to automate the tasks usually done manually.
 
 [![Build Status](https://dev.azure.com/DaeerProjects/DatabaseOperations/_apis/build/status/Daeer-Projects.DatabaseOperations?branchName=main)](https://dev.azure.com/DaeerProjects/DatabaseOperations/_build/latest?definitionId=11&branchName=main)
 
 **NOTE**:  
 Microsoft SQL Server Databases only.
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#introduction">Introduction</a>
+      <ul>
+        <li><a href="#description">Description</a></li>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li><a href="#how-to-get-setup">How to get setup</a></li>
+    <li>
+        <a href="#how-to-use-the-library">How to use the library</a>
+        <ul>
+            <li>
+                <a href="#backup-operator">Backup Operator</a>
+                <ul>
+                    <li><a href="#construction">Construction</a></li>
+                    <li>
+                        <a href="#backup-database-methods">Backup Database methods</a>
+                        <ul>
+                            <li><a href="#original-versions---will-be-made-obsolete">Original Versions - will be made obsolete</a></li>
+                            <li><a href="#new-versions---the-preferred-method">New Versions - the preferred method</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="#cancellation-of-the-operation">Cancellation of the operation</a></li>
+      </ul>
+    </li>
+    <li>
+        <a href="#credits">Credits</a>
+        <ul>
+            <li><a href="#acknowledgments">Acknowledgments</a></li>
+        </ul>
+    </li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#testing">Testing</a></li>
+  </ol>
+</details>
 
 ## Introduction
 
@@ -18,6 +68,13 @@ So, I made this library that I am now putting out there for other people to use.
 ### Description
 
 This repo is a library that will grow with more features to help automate database operations.  I welcome any feedback and features to add.
+
+### Built With
+
+This library is built using the following tech stacks.
+
+* ![DotNet](https://img.shields.io/badge/.NET-5C2D91?style=for-the-badge&logo=.net&logoColor=white)
+* ![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)
 
 ## How to get setup
 
@@ -139,6 +196,11 @@ Although I am the creator of this repo, I did have help creating the original ve
 * Ashley Izat.
 * Leah Wood.
 
+### Acknowledgments
+
+* [Othneil Drew - Best README Template](https://github.com/othneildrew/Best-README-Template/blob/master/README.md)
+* [Shields IO](https://shields.io)
+
 ## License
 
 This repo and library are using the MIT license.
@@ -147,6 +209,12 @@ This repo and library are using the MIT license.
 
 See the included [Contributing File](https://github.com/Daeer-Projects/DatabaseOperations/blob/main/CONTRIBUTING.md) for more information.
 
+## Contact
+
+David Clark - [@CoderDaeer](https://twitter.com/CoderDaeer)
+
+Daeer-Projects - [Daeer Projects](https://github.com/Daeer-Projects)
+
 ## Testing
 
 The project does have a unit test project that covers as much as possible of the code base.
@@ -154,3 +222,14 @@ The project does have a unit test project that covers as much as possible of the
 There is also a test app that can be found here: [Test App Repo](https://github.com/Daeer-Projects/DatabaseOperations-TestApp)
 
 This will show more usages and examples of how to consume the library.
+
+[contributors-shield]: https://img.shields.io/github/contributors/Daeer-Projects/DatabaseOperations?style=flat-square
+[contributors-url]: https://github.com/Daeer-Projects/DatabaseOperations/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/Daeer-Projects/DatabaseOperations?style=flat-square
+[forks-url]: https://github.com/Daeer-Projects/DatabaseOperations/network/members
+[stars-shield]: https://img.shields.io/github/stars/Daeer-Projects/DatabaseOperations?style=flat-square
+[stars-url]: https://github.com/Daeer-Projects/DatabaseOperations/stargazers
+[issues-shield]: https://img.shields.io/github/issues/Daeer-Projects/DatabaseOperations?style=flat-square
+[issues-url]: https://github.com/Daeer-Projects/DatabaseOperations/issues
+[license-shield]: https://img.shields.io/github/license/Daeer-Projects/DatabaseOperations?style=flat-square
+[license-url]: https://github.com/Daeer-Projects/DatabaseOperations/blob/main/LICENSE
