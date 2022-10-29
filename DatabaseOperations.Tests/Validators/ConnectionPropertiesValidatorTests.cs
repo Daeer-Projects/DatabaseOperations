@@ -101,7 +101,7 @@
                 .BeFalse();
         }
 
-        internal static IEnumerable<object[]> ConnectionProperties()
+        public static IEnumerable<object[]> ConnectionProperties()
         {
             yield return new object[]
             {
