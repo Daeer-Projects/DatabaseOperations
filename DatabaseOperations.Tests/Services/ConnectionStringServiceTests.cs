@@ -130,7 +130,7 @@
                 .Be(expectedConnection);
         }
 
-        internal static IEnumerable<object[]> ConnectionStrings()
+        public static IEnumerable<object[]> ConnectionStrings()
         {
             yield return new object[]
             {
@@ -190,7 +190,7 @@
             };
         }
 
-        internal static IEnumerable<object[]> UserConnectionStrings()
+        public static IEnumerable<object[]> UserConnectionStrings()
         {
             yield return new object[]
             {
@@ -226,7 +226,7 @@
             };
         }
 
-        internal static IEnumerable<object[]> TrustedConnectionStrings()
+        public static IEnumerable<object[]> TrustedConnectionStrings()
         {
             yield return new object[]
             {
