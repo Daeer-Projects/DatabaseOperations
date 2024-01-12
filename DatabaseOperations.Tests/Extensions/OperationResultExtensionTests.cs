@@ -27,14 +27,14 @@
             connectionProperties = new ConnectionProperties { Server = "server", DatabaseName = "database", IntegratedSecurity = "True", ConnectTimeout = "5" };
 
             SqlParameter dataParam = new() { ParameterName = "@Database", DbType = DbType.String };
-            backupProperties = new()
+            backupProperties = new BackupProperties
             {
                 BackupFileName = "BackupFile.bak",
                 BackupPath = @"C:\Database Backups\",
-                BackupParameters = new[] { dataParam },
+                BackupParameters = [dataParam],
                 CommandTimeout = 5,
                 Description = "Some backup",
-                ExecutionParameters = new[] { dataParam }
+                ExecutionParameters = [dataParam]
             };
 
             sqlExecutor = Substitute.For<ISqlExecutor>();
@@ -413,7 +413,7 @@
 
             // Act.
             OperationResult actual = await expected.ValidateConnectionOptionsAsync(connectionOptions)
-                .ConfigureAwait(false);
+;
 
             // Assert.
             actual.Messages.Should()
@@ -430,7 +430,7 @@
 
             // Act.
             OperationResult actual = await expected.ValidateConnectionPropertiesAsync(connectionProperties)
-                .ConfigureAwait(false);
+;
 
             // Assert.
             actual.Messages.Should()
@@ -448,7 +448,7 @@
 
             // Act.
             OperationResult actual = await expected.ValidateConnectionOptionsAsync(connectionOptions)
-                .ConfigureAwait(false);
+;
 
             // Assert.
             actual.Messages.Count.Should()
@@ -466,7 +466,7 @@
 
             // Act.
             OperationResult actual = await expected.ValidateConnectionPropertiesAsync(connectionProperties)
-                .ConfigureAwait(false);
+;
 
             // Assert.
             actual.Messages.Count.Should()
@@ -485,7 +485,7 @@
             // Act.
             OperationResult actual = await Task.FromResult(expected)
                 .CheckForCancellation(token)
-                .ConfigureAwait(false);
+;
 
             // Assert.
             actual.Should()
@@ -508,7 +508,7 @@
             // Act.
             OperationResult actual = await Task.FromResult(input)
                 .CheckForCancellation(token)
-                .ConfigureAwait(false);
+;
 
             // Assert.
             actual.Should()
@@ -530,7 +530,7 @@
             // Act.
             OperationResult actual = await Task.FromResult(expected)
                 .CheckForCancellation(token)
-                .ConfigureAwait(false);
+;
 
             // Assert.
             actual.Should()
@@ -551,14 +551,14 @@
             // Act.
             OperationResult actual = await Task.FromResult(expected)
                 .ExecuteBackupPathAsync(connectionOptions, token, sqlExecutor)
-                .ConfigureAwait(false);
+;
 
             // Assert.
             actual.Should()
                 .BeEquivalentTo(expected);
             await sqlExecutor.Received(0)
                 .ExecuteBackupPathAsync(Arg.Any<OperationResult>(), Arg.Any<ConnectionOptions>(), Arg.Any<CancellationToken>())
-                .ConfigureAwait(false);
+;
         }
 
         [Fact]
@@ -579,7 +579,7 @@
                     backupProperties,
                     token,
                     sqlExecutor)
-                .ConfigureAwait(false);
+;
 
             // Assert.
             actual.Should()
@@ -590,7 +590,7 @@
                     Arg.Any<ConnectionProperties>(),
                     Arg.Any<BackupProperties>(),
                     Arg.Any<CancellationToken>())
-                .ConfigureAwait(false);
+;
         }
 
         [Fact]
@@ -608,14 +608,14 @@
             // Act.
             OperationResult actual = await Task.FromResult(expected)
                 .ExecuteBackupPathAsync(connectionOptions, token, sqlExecutor)
-                .ConfigureAwait(false);
+;
 
             // Assert.
             actual.Should()
                 .BeEquivalentTo(expected);
             await sqlExecutor.Received(1)
                 .ExecuteBackupPathAsync(Arg.Any<OperationResult>(), Arg.Any<ConnectionOptions>(), Arg.Any<CancellationToken>())
-                .ConfigureAwait(false);
+;
         }
 
         [Fact]
@@ -634,7 +634,7 @@
             // Act.
             OperationResult actual = await Task.FromResult(expected)
                 .ExecuteBackupPathAsync(connectionProperties, backupProperties, token, sqlExecutor)
-                .ConfigureAwait(false);
+;
 
             // Assert.
             actual.Should()
@@ -645,7 +645,7 @@
                     Arg.Any<ConnectionProperties>(),
                     Arg.Any<BackupProperties>(),
                     Arg.Any<CancellationToken>())
-                .ConfigureAwait(false);
+;
         }
 
         [Fact]
@@ -671,7 +671,7 @@
             // Act.
             OperationResult actual = await Task.FromResult(input)
                 .CheckBackupPathExecutionAsync(connectionOptions, token)
-                .ConfigureAwait(false);
+;
 
             // Assert.
             actual.Messages.Should()
@@ -707,7 +707,7 @@
             // Act.
             OperationResult actual = await Task.FromResult(input)
                 .CheckBackupPathExecutionAsync(connectionProperties, backupProperties, token)
-                .ConfigureAwait(false);
+;
 
             // Assert.
             actual.Messages.Should()
@@ -733,7 +733,7 @@
             // Act.
             OperationResult actual = await Task.FromResult(expected)
                 .CheckBackupPathExecutionAsync(connectionOptions, token)
-                .ConfigureAwait(false);
+;
 
             // Assert.
             actual.Should()
@@ -753,7 +753,7 @@
             // Act.
             OperationResult actual = await Task.FromResult(expected)
                 .CheckBackupPathExecutionAsync(connectionProperties, backupProperties, token)
-                .ConfigureAwait(false);
+;
 
             // Assert.
             actual.Should()
@@ -773,7 +773,7 @@
             // Act.
             OperationResult actual = await Task.FromResult(expected)
                 .CheckBackupPathExecutionAsync(connectionOptions, token)
-                .ConfigureAwait(false);
+;
 
             // Assert.
             actual.Should()
@@ -793,7 +793,7 @@
             // Act.
             OperationResult actual = await Task.FromResult(expected)
                 .CheckBackupPathExecutionAsync(connectionProperties, backupProperties, token)
-                .ConfigureAwait(false);
+;
 
             // Assert.
             actual.Should()
@@ -814,7 +814,7 @@
             // Act.
             OperationResult actual = await Task.FromResult(expected)
                 .ExecuteBackupAsync(connectionOptions, token, sqlExecutor)
-                .ConfigureAwait(false);
+;
 
             // Assert.
             actual.Should()
@@ -824,7 +824,7 @@
                     Arg.Any<OperationResult>(),
                     Arg.Any<ConnectionOptions>(),
                     Arg.Any<CancellationToken>())
-                .ConfigureAwait(false);
+;
         }
 
         [Fact]
@@ -845,7 +845,7 @@
                     backupProperties,
                     token,
                     sqlExecutor)
-                .ConfigureAwait(false);
+;
 
             // Assert.
             actual.Should()
@@ -856,7 +856,7 @@
                     Arg.Any<ConnectionProperties>(),
                     Arg.Any<BackupProperties>(),
                     Arg.Any<CancellationToken>())
-                .ConfigureAwait(false);
+;
         }
 
         [Fact]
@@ -874,7 +874,7 @@
             // Act.
             OperationResult actual = await Task.FromResult(expected)
                 .ExecuteBackupAsync(connectionOptions, token, sqlExecutor)
-                .ConfigureAwait(false);
+;
 
             // Assert.
             actual.Should()
@@ -884,7 +884,7 @@
                     Arg.Any<OperationResult>(),
                     Arg.Any<ConnectionOptions>(),
                     Arg.Any<CancellationToken>())
-                .ConfigureAwait(false);
+;
         }
 
         [Fact]
@@ -907,7 +907,7 @@
                     backupProperties,
                     token,
                     sqlExecutor)
-                .ConfigureAwait(false);
+;
 
             // Assert.
             actual.Should()
@@ -918,7 +918,7 @@
                     Arg.Any<ConnectionProperties>(),
                     Arg.Any<BackupProperties>(),
                     Arg.Any<CancellationToken>())
-                .ConfigureAwait(false);
+;
         }
     }
 }

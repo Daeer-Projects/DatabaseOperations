@@ -995,10 +995,10 @@
             {
                 BackupFileName = "BackupFile.bak",
                 BackupPath = BackupPath,
-                BackupParameters = new[] { dataParam },
+                BackupParameters = [dataParam],
                 CommandTimeout = 5,
                 Description = "Some backup",
-                ExecutionParameters = new[] { dataParam }
+                ExecutionParameters = [dataParam]
             };
             return backup;
         }
