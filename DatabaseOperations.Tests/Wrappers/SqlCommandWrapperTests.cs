@@ -48,7 +48,7 @@
             ISqlConnectionWrapper? sqlConnection = Substitute.For<ISqlConnectionWrapper>();
             SqlCommandWrapper sqlCommand = new("SELECT '0';", sqlConnection);
             SqlParameter[] parameters =
-            {
+            [
                 new("@First", SqlDbType.VarChar)
                 {
                     Value = "Name"
@@ -57,7 +57,7 @@
                 {
                     Value = "Thing"
                 }
-            };
+            ];
 
             sqlCommand.AddParameters(parameters);
 
