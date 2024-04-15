@@ -11,11 +11,11 @@
         [Theory]
         [InlineData("")]
         [InlineData(null)]
-        internal void TestExtractWithEmptyConnectionStringReturnsNewProperties(string connection)
+        internal void TestExtractWithEmptyConnectionStringReturnsNewProperties(string? connection)
         {
             // Arrange.
             // Act.
-            ConnectionProperties actual = ConnectionStringService.ExtractConnectionParameters(connection);
+            ConnectionProperties actual = ConnectionStringService.ExtractConnectionParameters(connection!);
 
             // Assert.
             actual.Should()
