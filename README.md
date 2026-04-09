@@ -59,15 +59,15 @@ Microsoft SQL Server Databases only.
 
 ## Introduction
 
-I have used tools in Microsoft SQL Server Management Studio or Azure Data Studio to back up databases.  The programs provided me with the tools needed to conduct the tasks required.
+I have used tools in Microsoft SQL Server Management Studio or Azure Data Studio to back up databases. The programs provided me with the tools needed to conduct the tasks required.
 
-The problem came when I had to create a tool used in C# to do the same process for me.  Now the process is easy using a small SQL script.  However, when I went looking for a library on NuGet for me to use, there were none.
+The problem came when I had to create a tool used in C# to do the same process for me. Now the process is easy using a small SQL script.  However, when I went looking for a library on NuGet for me to use, there were none.
 
 So, I made this library that I am now putting out there for other people to use.
 
 ### Description
 
-This repo is a library that will grow with more features to help automate database operations.  I welcome any feedback and features to add.
+This repo is a library that will grow with more features to help automate database operations. I welcome any feedback and features to add.
 
 ### Built With
 
@@ -87,11 +87,11 @@ The project is a Visual Studio solution (`.sln`).
 
 ## How to use the library
 
-There are more details on the project [wiki](https://github.com/daeer73/DatabaseOperations/wiki).  Here are some basics.
+There are more details on the project [wiki](https://github.com/daeer73/DatabaseOperations/wiki). Here are some basics.
 
 ### Backup Operator
 
-The `BackupOperator` is the only operator in the project at the moment.  Other operators will be added in due course.
+The `BackupOperator` is the only operator in the project at the moment. Other operators will be added in due course.
 
 #### Construction
 
@@ -109,7 +109,7 @@ BackupOperator backupOperator = new();
 
 #### Backup Database methods
 
-There are two methods to enable the user to backup a database.  Both methods have an `async` version.
+There are two methods to enable the user to backup a database. Both methods have an `async` version.
 
 ##### Original Versions - will be made obsolete
 
@@ -134,7 +134,7 @@ public async Task<OperationResult> BackupDatabaseAsync(
             CancellationToken token = default)
 ```
 
-The `OperatorOptions` class has defaults set, so can be left out of the call.  This would mean the backup would be saved to the default location used by SQL Server and the execution timeout will be set to one hour.
+The `OperatorOptions` class has defaults set, so can be left out of the call. This would mean the backup would be saved to the default location used by SQL Server and the execution timeout will be set to one hour.
 
 To perform the backup operation synchronously:
 

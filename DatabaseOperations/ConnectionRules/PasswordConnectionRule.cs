@@ -4,7 +4,7 @@
     using Extensions;
     using Interfaces;
 
-    internal class PasswordConnectionRule : IConnectionRule
+    internal sealed class PasswordConnectionRule : IConnectionRule
     {
         private const string PasswordLookUp = "password";
 

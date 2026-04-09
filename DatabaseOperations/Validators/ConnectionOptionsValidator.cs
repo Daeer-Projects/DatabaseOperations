@@ -3,7 +3,7 @@
     using DataTransferObjects;
     using FluentValidation;
 
-    internal class ConnectionOptionsValidator : AbstractValidator<ConnectionOptions>
+    internal sealed class ConnectionOptionsValidator : AbstractValidator<ConnectionOptions>
     {
         internal ConnectionOptionsValidator()
         {

@@ -3,7 +3,7 @@
     using System;
     using FluentValidation;
 
-    internal class TestValidator : AbstractValidator<Type>
+    internal sealed class TestValidator : AbstractValidator<Type>
     {
         public TestValidator()
         {

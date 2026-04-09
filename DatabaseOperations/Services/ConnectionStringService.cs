@@ -9,7 +9,7 @@
 
     internal static class ConnectionStringService
     {
-        private static readonly char[] SplitArray = { ';' };
+        private static readonly char[] SplitArray = [';'];
 
         private static readonly IList<IConnectionRule> ConnectionRules = new List<IConnectionRule>
         {

@@ -13,7 +13,7 @@
     using Options;
     using Xunit;
 
-    public class BackupParameterServiceTests
+    public sealed class BackupParameterServiceTests
     {
         public BackupParameterServiceTests()
         {
@@ -164,7 +164,7 @@
                 .HaveCount(3);
 
             string? actualNameValue = actualParameters.First(p => p.ParameterName == Parameters.NameParameter)
-                .Value.ToString();
+                .Value?.ToString();
             actualNameValue.Should()
                 .NotBeNullOrWhiteSpace();
             actualNameValue.Should()
@@ -190,7 +190,7 @@
                 .HaveCount(3);
 
             string? actualLocationValue = actualParameters.First(p => p.ParameterName == Parameters.LocationParameter)
-                .Value.ToString();
+                .Value?.ToString();
             actualLocationValue.Should()
                 .NotBeNullOrWhiteSpace();
             actualLocationValue.Should()
@@ -216,7 +216,7 @@
                 .HaveCount(3);
 
             string? actualDescriptionValue = actualParameters.First(p => p.ParameterName == Parameters.DescriptionParameter)
-                .Value.ToString();
+                .Value?.ToString();
             actualDescriptionValue.Should()
                 .NotBeNullOrWhiteSpace();
             actualDescriptionValue.Should()
@@ -226,7 +226,7 @@
         private static ConnectionProperties GetValidConnectionProperties()
         {
             ConnectionProperties connProps = new()
-            { Server = "server", DatabaseName = "database", IntegratedSecurity = "True", ConnectTimeout = "5" };
+                { Server = "server", DatabaseName = "database", IntegratedSecurity = "True", ConnectTimeout = "5" };
             return connProps;
         }
     }

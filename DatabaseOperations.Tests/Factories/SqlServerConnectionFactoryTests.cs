@@ -6,7 +6,7 @@
     using Interfaces;
     using Xunit;
 
-    public class SqlServerConnectionFactoryTests
+    public sealed class SqlServerConnectionFactoryTests
     {
         private readonly ISqlServerConnectionFactory connectionFactory = new SqlServerConnectionFactory();
 

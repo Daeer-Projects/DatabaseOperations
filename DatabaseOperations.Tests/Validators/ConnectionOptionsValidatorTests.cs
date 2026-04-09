@@ -5,7 +5,7 @@
     using FluentAssertions;
     using Xunit;
 
-    public class ConnectionOptionsValidatorTests
+    public sealed class ConnectionOptionsValidatorTests
     {
         private const string BackupPath = @"C:\Database Backups\";
 
@@ -114,134 +114,134 @@
 
         public static IEnumerable<object[]> ConnectionOptions()
         {
-            yield return new object[]
-            {
+            yield return
+            [
                 new ConnectionOptions("something", BackupPath, 5)
                     .ApplyServer("")
                     .ApplyDatabaseName("Bananas")
                     .ApplyUserId("sa")
                     .ApplyPassword("password")
                     .ApplyConnectTimeOut("205")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 new ConnectionOptions("something", BackupPath, 5)
                     .ApplyServer("    ")
                     .ApplyDatabaseName("Bananas")
                     .ApplyUserId("sa")
                     .ApplyPassword("password")
                     .ApplyConnectTimeOut("205")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 new ConnectionOptions("something", BackupPath, 5)
                     .ApplyServer("(localDb)")
                     .ApplyDatabaseName("")
                     .ApplyUserId("sa")
                     .ApplyPassword("password")
                     .ApplyConnectTimeOut("205")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 new ConnectionOptions("something", BackupPath, 5)
                     .ApplyServer("(localDb)")
                     .ApplyDatabaseName("    ")
                     .ApplyUserId("sa")
                     .ApplyPassword("password")
                     .ApplyConnectTimeOut("205")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 new ConnectionOptions("something", BackupPath, 5)
                     .ApplyServer("(localDb)")
                     .ApplyDatabaseName("Banana")
                     .ApplyUserId("")
                     .ApplyPassword("password")
                     .ApplyConnectTimeOut("205")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 new ConnectionOptions("something", BackupPath, 5)
                     .ApplyServer("(localDb)")
                     .ApplyDatabaseName("Banana")
                     .ApplyUserId("  ")
                     .ApplyPassword("password")
                     .ApplyConnectTimeOut("205")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 new ConnectionOptions("something", BackupPath, 5)
                     .ApplyServer("(localDb)")
                     .ApplyDatabaseName("Banana")
                     .ApplyUserId("Pooh")
                     .ApplyPassword("")
                     .ApplyConnectTimeOut("205")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 new ConnectionOptions("something", BackupPath, 5)
                     .ApplyServer("(localDb)")
                     .ApplyDatabaseName("Banana")
                     .ApplyUserId("Pooh")
                     .ApplyPassword("\r\n")
                     .ApplyConnectTimeOut("205")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 new ConnectionOptions("something", BackupPath, 5)
                     .ApplyServer("(localDb)")
                     .ApplyDatabaseName("Banana")
                     .ApplyIntegratedSecurity("yes")
                     .ApplyConnectTimeOut("205")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 new ConnectionOptions("something", BackupPath, 5)
                     .ApplyServer("(localDb)")
                     .ApplyDatabaseName("Banana")
                     .ApplyIntegratedSecurity("no")
                     .ApplyConnectTimeOut("205")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 new ConnectionOptions("something", BackupPath, 5)
                     .ApplyServer("(localDb)")
                     .ApplyDatabaseName("Banana")
                     .ApplyIntegratedSecurity("nope")
                     .ApplyConnectTimeOut("205")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 new ConnectionOptions("something", BackupPath, 5)
                     .ApplyServer("(localDb)")
                     .ApplyDatabaseName("Banana")
                     .ApplyIntegratedSecurity("")
                     .ApplyConnectTimeOut("205")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 new ConnectionOptions("something", BackupPath, 5)
                     .ApplyServer("(localDb)")
                     .ApplyDatabaseName("Banana")
                     .ApplyIntegratedSecurity("\t")
                     .ApplyConnectTimeOut("205")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 new ConnectionOptions("something", BackupPath, 5)
                     .ApplyServer("(localDb)")
                     .ApplyDatabaseName("Banana")
                     .ApplyIntegratedSecurity("True")
                     .ApplyConnectTimeOut("-1")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 new ConnectionOptions("something", BackupPath, 5)
                     .ApplyServer("(localDb)")
                     .ApplyDatabaseName("Banana")
                     .ApplyIntegratedSecurity("False")
                     .ApplyConnectTimeOut("-1000")
-            };
+            ];
         }
     }
 }

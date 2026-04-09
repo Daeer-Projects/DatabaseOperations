@@ -8,7 +8,7 @@
     using NSubstitute;
     using Xunit;
 
-    public class SqlCommandWrapperTests
+    public sealed class SqlCommandWrapperTests
     {
         [Fact]
         public void TestGetReturnsNonNullCommand()

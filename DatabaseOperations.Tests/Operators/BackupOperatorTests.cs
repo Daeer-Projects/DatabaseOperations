@@ -98,7 +98,7 @@
                 "Thing");
 
             // Act.
-            OperationResult result = await backupOperator.BackupDatabaseAsync(details, new CancellationToken());
+            OperationResult result = await backupOperator.BackupDatabaseAsync(details, CancellationToken.None);
 
             // Assert.
             result.Result.Should()
@@ -131,7 +131,8 @@
                 {
                     options.BackupPath = BackupPath;
                     options.Timeout = 100;
-                });
+                },
+                TestContext.Current.CancellationToken);
 
             // Assert.
             result.Result.Should()
@@ -230,7 +231,7 @@
                     Arg.Any<CancellationToken>())
                 .Returns(defaultResult);
             // Act.
-            OperationResult result = await backupOperator.BackupDatabaseAsync(details, new CancellationToken());
+            OperationResult result = await backupOperator.BackupDatabaseAsync(details, CancellationToken.None);
 
             // Assert.
             result.Result.Should()
@@ -269,7 +270,8 @@
                 {
                     options.BackupPath = BackupPath;
                     options.Timeout = 100;
-                });
+                },
+                TestContext.Current.CancellationToken);
 
             // Assert.
             result.Result.Should()
@@ -280,11 +282,11 @@
         internal void TestBackupWithPathErrorReturnsExpectedMessages()
         {
             // Arrange.
-            List<string> expectedMessages = new()
-            {
+            List<string> expectedMessages =
+            [
                 "Backing up the database failed due to an exception.",
                 "Unable to check the path, reverting to default save path."
-            };
+            ];
 
             OperationResult defaultResult = new() { Result = true, Messages = expectedMessages };
             ConnectionOptions details = GetConnectionOptions(
@@ -315,11 +317,11 @@
         internal void TestBackupActionWithPathErrorReturnsExpectedMessages()
         {
             // Arrange.
-            List<string> expectedMessages = new()
-            {
+            List<string> expectedMessages =
+            [
                 "Backing up the database failed due to an exception.",
                 "Unable to check the path, reverting to default save path."
-            };
+            ];
 
             OperationResult defaultResult = new() { Result = true, Messages = expectedMessages };
             sqlExecutor.ExecuteBackupPath(
@@ -363,11 +365,11 @@
         internal async Task TestBackupAsyncWithPathErrorReturnsExpectedMessages()
         {
             // Arrange.
-            List<string> expectedMessages = new()
-            {
+            List<string> expectedMessages =
+            [
                 "Backing up the database failed due to an exception.",
                 "Unable to check the path, reverting to default save path."
-            };
+            ];
 
             OperationResult defaultResult = new() { Result = true, Messages = expectedMessages };
             ConnectionOptions details = GetConnectionOptions(
@@ -387,7 +389,7 @@
                 .Returns(defaultResult);
 
             // Act.
-            OperationResult result = await backupOperator.BackupDatabaseAsync(details, new CancellationToken());
+            OperationResult result = await backupOperator.BackupDatabaseAsync(details, CancellationToken.None);
 
             // Assert.
             result.Messages.Should()
@@ -404,11 +406,11 @@
         internal async Task TestBackupAsyncActionWithPathErrorReturnsExpectedMessages()
         {
             // Arrange.
-            List<string> expectedMessages = new()
-            {
+            List<string> expectedMessages =
+            [
                 "Backing up the database failed due to an exception.",
                 "Unable to check the path, reverting to default save path."
-            };
+            ];
 
             OperationResult defaultResult = new() { Result = true, Messages = expectedMessages };
             sqlExecutor.ExecuteBackupPathAsync(
@@ -432,7 +434,8 @@
                 {
                     options.BackupPath = BackupPath;
                     options.Timeout = 100;
-                });
+                },
+                TestContext.Current.CancellationToken);
 
             // Assert.
             result.Messages.Should()
@@ -533,7 +536,7 @@
                     });
 
             // Act.
-            OperationResult result = await backupOperator.BackupDatabaseAsync(details, new CancellationToken());
+            OperationResult result = await backupOperator.BackupDatabaseAsync(details, CancellationToken.None);
 
             // Assert.
             result.Result.Should()
@@ -570,7 +573,8 @@
                 {
                     options.BackupPath = BackupPath;
                     options.Timeout = 100;
-                });
+                },
+                TestContext.Current.CancellationToken);
 
             // Assert.
             result.Result.Should()
@@ -581,10 +585,7 @@
         internal void TestBackupWithDatabaseErrorReturnsExpectedMessages()
         {
             // Arrange.
-            List<string> expectedMessages = new()
-            {
-                "Backing up the database failed due to an exception."
-            };
+            List<string> expectedMessages = ["Backing up the database failed due to an exception."];
 
             OperationResult defaultResult = new();
             sqlExecutor.ExecuteBackupPath(Arg.Any<OperationResult>(), Arg.Any<ConnectionOptions>())
@@ -615,10 +616,7 @@
         internal void TestBackupActionWithDatabaseErrorReturnsExpectedMessages()
         {
             // Arrange.
-            List<string> expectedMessages = new()
-            {
-                "Backing up the database failed due to an exception."
-            };
+            List<string> expectedMessages = ["Backing up the database failed due to an exception."];
 
             OperationResult defaultResult = new();
             sqlExecutor.ExecuteBackupPath(
@@ -657,10 +655,7 @@
         internal async Task TestBackupAsyncWithDatabaseErrorReturnsExpectedMessages()
         {
             // Arrange.
-            List<string> expectedMessages = new()
-            {
-                "Backing up the database failed due to an exception."
-            };
+            List<string> expectedMessages = ["Backing up the database failed due to an exception."];
 
             OperationResult defaultResult = new();
             sqlExecutor.ExecuteBackupPathAsync(
@@ -680,7 +675,7 @@
                 .Returns(new OperationResult { Result = false, Messages = expectedMessages });
 
             // Act.
-            OperationResult result = await backupOperator.BackupDatabaseAsync(details, new CancellationToken());
+            OperationResult result = await backupOperator.BackupDatabaseAsync(details, CancellationToken.None);
 
             // Assert.
             result.Messages.Should()
@@ -697,10 +692,7 @@
         internal async Task TestBackupAsyncActionWithDatabaseErrorReturnsExpectedMessages()
         {
             // Arrange.
-            List<string> expectedMessages = new()
-            {
-                "Backing up the database failed due to an exception."
-            };
+            List<string> expectedMessages = ["Backing up the database failed due to an exception."];
 
             OperationResult defaultResult = new();
             sqlExecutor.ExecuteBackupPathAsync(
@@ -724,7 +716,8 @@
                 {
                     options.BackupPath = BackupPath;
                     options.Timeout = 100;
-                });
+                },
+                TestContext.Current.CancellationToken);
 
             // Assert.
             result.Messages.Should()
@@ -752,11 +745,10 @@
                     Arg.Any<CancellationToken>())
                 .Returns(defaultResult);
             sqlExecutor
-                .When(
-                    e => e.ExecuteBackupPathAsync(
-                        Arg.Any<OperationResult>(),
-                        Arg.Any<ConnectionOptions>(),
-                        Arg.Any<CancellationToken>()))
+                .When(e => e.ExecuteBackupPathAsync(
+                    Arg.Any<OperationResult>(),
+                    Arg.Any<ConnectionOptions>(),
+                    Arg.Any<CancellationToken>()))
                 .Do(_ => Thread.Sleep(500));
 
             ConnectionOptions details = GetConnectionOptions(
@@ -789,12 +781,11 @@
                     Arg.Any<CancellationToken>())
                 .Returns(defaultResult);
             sqlExecutor
-                .When(
-                    e => e.ExecuteBackupPathAsync(
-                        Arg.Any<OperationResult>(),
-                        Arg.Any<ConnectionProperties>(),
-                        Arg.Any<BackupProperties>(),
-                        Arg.Any<CancellationToken>()))
+                .When(e => e.ExecuteBackupPathAsync(
+                    Arg.Any<OperationResult>(),
+                    Arg.Any<ConnectionProperties>(),
+                    Arg.Any<BackupProperties>(),
+                    Arg.Any<CancellationToken>()))
                 .Do(_ => Thread.Sleep(500));
             const string connectionString = "server=server;database=database;user id=user;password=password;Connect Timeout=10;";
 
@@ -817,10 +808,7 @@
         internal async Task TestBackupAsyncWithCancelledBackupPathReturnsCancelledMessage()
         {
             // Arrange.
-            List<string> expectedMessages = new()
-            {
-                "Cancel called on the token."
-            };
+            List<string> expectedMessages = ["Cancel called on the token."];
             CancellationTokenSource source = new(100);
             CancellationToken token = source.Token;
             token.ThrowIfCancellationRequested();
@@ -832,11 +820,10 @@
                     Arg.Any<CancellationToken>())
                 .Returns(defaultResult);
             sqlExecutor
-                .When(
-                    e => e.ExecuteBackupPathAsync(
-                        Arg.Any<OperationResult>(),
-                        Arg.Any<ConnectionOptions>(),
-                        Arg.Any<CancellationToken>()))
+                .When(e => e.ExecuteBackupPathAsync(
+                    Arg.Any<OperationResult>(),
+                    Arg.Any<ConnectionOptions>(),
+                    Arg.Any<CancellationToken>()))
                 .Do(_ => Thread.Sleep(500));
 
             ConnectionOptions details = GetConnectionOptions(
@@ -863,10 +850,7 @@
         internal async Task TestBackupAsyncActionWithCancelledBackupPathReturnsCancelledMessage()
         {
             // Arrange.
-            List<string> expectedMessages = new()
-            {
-                "Cancel called on the token."
-            };
+            List<string> expectedMessages = ["Cancel called on the token."];
             CancellationTokenSource source = new(100);
             CancellationToken token = source.Token;
             token.ThrowIfCancellationRequested();
@@ -879,12 +863,11 @@
                     Arg.Any<CancellationToken>())
                 .Returns(defaultResult);
             sqlExecutor
-                .When(
-                    e => e.ExecuteBackupPathAsync(
-                        Arg.Any<OperationResult>(),
-                        Arg.Any<ConnectionProperties>(),
-                        Arg.Any<BackupProperties>(),
-                        Arg.Any<CancellationToken>()))
+                .When(e => e.ExecuteBackupPathAsync(
+                    Arg.Any<OperationResult>(),
+                    Arg.Any<ConnectionProperties>(),
+                    Arg.Any<BackupProperties>(),
+                    Arg.Any<CancellationToken>()))
                 .Do(_ => Thread.Sleep(500));
             const string connectionString = "server=server;database=database;user id=user;password=password;Connect Timeout=10;";
 
@@ -935,11 +918,10 @@
                     Arg.Any<CancellationToken>())
                 .Returns(new OperationResult { Result = true });
             sqlExecutor
-                .When(
-                    e => e.ExecuteBackupDatabaseAsync(
-                        Arg.Any<OperationResult>(),
-                        Arg.Any<ConnectionOptions>(),
-                        Arg.Any<CancellationToken>()))
+                .When(e => e.ExecuteBackupDatabaseAsync(
+                    Arg.Any<OperationResult>(),
+                    Arg.Any<ConnectionOptions>(),
+                    Arg.Any<CancellationToken>()))
                 .Do(_ => Thread.Sleep(500));
 
             // Act.
@@ -954,10 +936,7 @@
         internal async Task TestBackupAsyncWithCancelledBackupDatabaseReturnsCancelledMessage()
         {
             // Arrange.
-            List<string> expectedMessages = new()
-            {
-                "Cancel called on the token."
-            };
+            List<string> expectedMessages = ["Cancel called on the token."];
             CancellationTokenSource source = new(100);
             CancellationToken token = source.Token;
             token.ThrowIfCancellationRequested();
@@ -980,11 +959,10 @@
                     Arg.Any<CancellationToken>())
                 .Returns(new OperationResult { Result = true });
             sqlExecutor
-                .When(
-                    e => e.ExecuteBackupPathAsync(
-                        Arg.Any<OperationResult>(),
-                        Arg.Any<ConnectionOptions>(),
-                        Arg.Any<CancellationToken>()))
+                .When(e => e.ExecuteBackupPathAsync(
+                    Arg.Any<OperationResult>(),
+                    Arg.Any<ConnectionOptions>(),
+                    Arg.Any<CancellationToken>()))
                 .Do(_ => Thread.Sleep(500));
 
             // Act.

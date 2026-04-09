@@ -6,7 +6,7 @@
     using DataTransferObjects;
     using Interfaces;
 
-    internal class SqlExecutor : ISqlExecutor
+    internal sealed class SqlExecutor : ISqlExecutor
     {
         internal SqlExecutor(ISqlServerConnectionFactory creator)
         {

@@ -3,7 +3,7 @@
     using System;
     using Interfaces;
 
-    internal class DateTimeWrapper : IDateTimeWrapper
+    internal sealed class DateTimeWrapper : IDateTimeWrapper
     {
         internal DateTimeWrapper()
         {

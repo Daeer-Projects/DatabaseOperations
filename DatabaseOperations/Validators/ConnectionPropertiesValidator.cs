@@ -3,7 +3,7 @@
     using DataTransferObjects;
     using FluentValidation;
 
-    internal class ConnectionPropertiesValidator : AbstractValidator<ConnectionProperties>
+    internal sealed class ConnectionPropertiesValidator : AbstractValidator<ConnectionProperties>
     {
         public ConnectionPropertiesValidator()
         {

@@ -6,7 +6,7 @@
     using Microsoft.Data.SqlClient;
     using Xunit;
 
-    public class SqlConnectionWrapperTests
+    public sealed class SqlConnectionWrapperTests
     {
         [Fact]
         public void TestGetConnectionReturnsNonNullObject()

@@ -1,6 +1,6 @@
 ﻿namespace DatabaseOperations.DataTransferObjects
 {
-    public class ConnectionProperties
+    public sealed class ConnectionProperties
     {
         internal string ConnectionString { get; set; } = string.Empty;
         internal string ApplicationName { get; set; } = string.Empty;

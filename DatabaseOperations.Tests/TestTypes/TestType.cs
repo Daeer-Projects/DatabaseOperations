@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class Type
+    public sealed class Type
     {
         public int Identity { get; set; }
         public string Name { get; set; } = string.Empty;

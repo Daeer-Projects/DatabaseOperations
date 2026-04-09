@@ -4,7 +4,7 @@
     using Extensions;
     using Interfaces;
 
-    internal class CatalogConnectionRule : IConnectionRule
+    internal sealed class CatalogConnectionRule : IConnectionRule
     {
         private const string InitialCatalogLookUp = "initial catalog";
 

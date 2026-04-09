@@ -9,7 +9,7 @@
     using NSubstitute;
     using Xunit;
 
-    public class ConnectionOptionsTests
+    public sealed class ConnectionOptionsTests
     {
         public ConnectionOptionsTests()
         {
@@ -321,9 +321,9 @@
             for (int i = 0; i < actualParameters.Length; i++)
             {
                 string actualLocation = actualParameters[i]
-                    .Value.ToString()!;
+                    .Value?.ToString()!;
                 string expectedLocation = expectedParameters[i]
-                    .Value.ToString()!;
+                    .Value?.ToString()!;
 
                 actualLocation.Should()
                     .Be(expectedLocation);
@@ -398,8 +398,8 @@
 
         public static IEnumerable<object[]> ConnectionStrings()
         {
-            yield return new object[]
-            {
+            yield return
+            [
                 "server=127.0.0.1;database=Bananas;User Id=sa;Password=password;Connect Timeout=205;",
                 30,
                 "",
@@ -414,9 +414,9 @@
                     .ApplyPassword("password")
                     .ApplyConnectTimeOut("205")
                     .OverrideConnectionString("server=127.0.0.1;database=Bananas;User Id=sa;Password=password;Connect Timeout=5;")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 "server=127.0.0.1;database=Bananas;User Id=sa;Password=password;Connect Timeout=205;",
                 30,
                 BackupPath,
@@ -431,9 +431,9 @@
                     .ApplyPassword("password")
                     .ApplyConnectTimeOut("205")
                     .OverrideConnectionString("server=127.0.0.1;database=Bananas;User Id=sa;Password=password;Connect Timeout=5;")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 "Server=192.168.11.65;Database=Whoop;User Id=sa;Password=password;Connect Timeout=1;",
                 10,
                 BackupPath,
@@ -449,9 +449,9 @@
                     .ApplyConnectTimeOut("1")
                     .OverrideConnectionString(
                         "Server=192.168.11.65;Database=Whoop;User Id=sa;Password=password;Connect Timeout=5;")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 "SERVER=(localDb);DATABASE=PoohBear;User Id=sa;Password=password;Connect Timeout=30;",
                 0,
                 BackupPath,
@@ -467,9 +467,9 @@
                     .ApplyConnectTimeOut("30")
                     .OverrideConnectionString(
                         "SERVER=(localDb);DATABASE=PoohBear;User Id=sa;Password=password;Connect Timeout=5;")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 "Server=127.0.0.1;Address=127.0.0.1;Initial Catalog=Banana;User Id=Pooh;Password=password;Pwd=password;Application Name=TestingStuff;",
                 30,
                 BackupPath,
@@ -485,9 +485,9 @@
                     .ApplyApplicationName("TestingStuff")
                     .OverrideConnectionString(
                         "Server=127.0.0.1;Address=127.0.0.1;Initial Catalog=Banana;User Id=Pooh;Password=password;Pwd=password;Application Name=TestingStuff;")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 "Server=127.0.0.1;Address=127.0.0.1;Database=Banana;Integrated Security=true;Trusted_Connection=true;Connect Timeout=5;Connection Timeout=5;Application Name=TestingStuff;Um=42;",
                 4,
                 BackupPath,
@@ -503,9 +503,9 @@
                     .ApplyApplicationName("TestingStuff")
                     .OverrideConnectionString(
                         "Server=127.0.0.1;Address=127.0.0.1;Database=Banana;Integrated Security=true;Trusted_Connection=true;Connect Timeout=5;Connection Timeout=5;Application Name=TestingStuff;Um=42;")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 "Server=127.0.0.1;Um=42;Address=127.0.0.1;Database=Banana;Um=42;Integrated Security=true;;Trusted_Connection=true;Connect Timeout=5;Um=42;Connection Timeout=6;Application Name=TestingStuff;",
                 8,
                 BackupPath,
@@ -521,9 +521,9 @@
                     .ApplyApplicationName("TestingStuff")
                     .OverrideConnectionString(
                         "Server=127.0.0.1;Um=42;Address=127.0.0.1;Database=Banana;Um=42;Integrated Security=true;;Trusted_Connection=true;Connect Timeout=5;Um=42;Connection Timeout=6;Application Name=TestingStuff;")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 "Server=127.0.0.1;Something weird here;Address=127.0.0.1;Database=Banana;Um=42;Integrated Security=false;;Trusted_Connection=true;    ;Connect Timeout=5;Um=42;Connection Timeout=5;Application Name=TestingStuff;",
                 15,
                 BackupPath,
@@ -539,9 +539,9 @@
                     .ApplyApplicationName("TestingStuff")
                     .OverrideConnectionString(
                         "Server=127.0.0.1;Something weird here;Address=127.0.0.1;Database=Banana;Um=42;Integrated Security=false;;Trusted_Connection=true;    ;Connect Timeout=5;Um=42;Connection Timeout=5;Application Name=TestingStuff;")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 "Server=127.0.0.1;Something weird here;Address=127.0.0.1;Database=Banana;Um=42;Integrated Security=SSPI;;Trusted_Connection=true;    ;Connect Timeout=5;Um=42;Connection Timeout=5;Application Name=TestingStuff;",
                 15,
                 BackupPath,
@@ -557,9 +557,9 @@
                     .ApplyApplicationName("TestingStuff")
                     .OverrideConnectionString(
                         "Server=127.0.0.1;Something weird here;Address=127.0.0.1;Database=Banana;Um=42;Integrated Security=SSPI;;Trusted_Connection=true;    ;Connect Timeout=5;Um=42;Connection Timeout=5;Application Name=TestingStuff;")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 "Server=127.0.0.1;Data Source=127.0.0.1;addr=192.168.0.1;Initial Catalog=Banana;User Id=Pooh;Password=password;Pwd=nope;Application Name=TestingStuff;",
                 25,
                 BackupPath,
@@ -575,9 +575,9 @@
                     .ApplyApplicationName("TestingStuff")
                     .OverrideConnectionString(
                         "Server=127.0.0.1;Data Source=127.0.0.1;addr=192.168.0.1;Initial Catalog=Banana;User Id=Pooh;Password=password;Pwd=nope;Application Name=TestingStuff;")
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 "; ;    ;;  ;Yep;Um not really;Pooh woz ere;",
                 25,
                 BackupPath,
@@ -587,7 +587,7 @@
                         BackupPath,
                         25)
                     .OverrideConnectionString("; ;    ;;  ;Yep;Um not really;Pooh woz ere;")
-            };
+            ];
         }
 
         private static IDateTimeWrapper SetupAndReturnWrapper()

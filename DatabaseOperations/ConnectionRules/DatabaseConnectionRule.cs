@@ -4,7 +4,7 @@
     using Extensions;
     using Interfaces;
 
-    internal class DatabaseConnectionRule : IConnectionRule
+    internal sealed class DatabaseConnectionRule : IConnectionRule
     {
         private const string DatabaseLookUp = "database";
 

@@ -4,7 +4,7 @@
     using Extensions;
     using Interfaces;
 
-    internal class DataSourceConnectionRule : IConnectionRule
+    internal sealed class DataSourceConnectionRule : IConnectionRule
     {
         private const string DataSourceLookUp = "data source";
 

@@ -3,7 +3,7 @@
     using Interfaces;
     using Wrappers;
 
-    internal class SqlServerConnectionFactory : ISqlServerConnectionFactory
+    internal sealed class SqlServerConnectionFactory : ISqlServerConnectionFactory
     {
         public ISqlConnectionWrapper CreateConnection(string connectionString)
         {

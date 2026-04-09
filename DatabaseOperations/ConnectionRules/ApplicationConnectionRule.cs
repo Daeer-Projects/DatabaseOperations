@@ -4,7 +4,7 @@
     using Extensions;
     using Interfaces;
 
-    internal class ApplicationConnectionRule : IConnectionRule
+    internal sealed class ApplicationConnectionRule : IConnectionRule
     {
         private const string ApplicationNameLookUp = "application name";
 

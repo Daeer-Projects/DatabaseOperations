@@ -4,7 +4,7 @@
     using Extensions;
     using Interfaces;
 
-    internal class AbbreviatedAddressConnectionRule : IConnectionRule
+    internal sealed class AbbreviatedAddressConnectionRule : IConnectionRule
     {
         private const string AbbreviatedAddressLookUp = "addr";
 
