@@ -12,7 +12,7 @@
     ///         Messages could be errors or information about the process for logging.
     ///     </para>
     /// </summary>
-    public class OperationResult
+    public sealed class OperationResult
     {
         /// <summary>
         ///     The actual result from the operation.

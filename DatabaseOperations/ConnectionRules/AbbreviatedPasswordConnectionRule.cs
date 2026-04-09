@@ -4,7 +4,7 @@
     using Extensions;
     using Interfaces;
 
-    internal class AbbreviatedPasswordConnectionRule : IConnectionRule
+    internal sealed class AbbreviatedPasswordConnectionRule : IConnectionRule
     {
         private const string AbbreviatedPasswordLookUp = "pwd";
 

@@ -4,7 +4,7 @@
     using Extensions;
     using Interfaces;
 
-    internal class ServerConnectionRule : IConnectionRule
+    internal sealed class ServerConnectionRule : IConnectionRule
     {
         private const string ServerLookUp = "server";
 

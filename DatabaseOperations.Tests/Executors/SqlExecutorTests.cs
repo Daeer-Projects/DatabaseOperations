@@ -12,7 +12,7 @@
     using NSubstitute;
     using Xunit;
 
-    public class SqlExecutorTests
+    public sealed class SqlExecutorTests
     {
         public SqlExecutorTests()
         {
@@ -80,7 +80,7 @@
             OperationResult result = new();
 
             // Act.
-            result = await sqlExecutor.ExecuteBackupPathAsync(result, details, new CancellationToken());
+            result = await sqlExecutor.ExecuteBackupPathAsync(result, details, CancellationToken.None);
 
             // Assert.
             result.Result.Should()
@@ -101,7 +101,7 @@
                 result,
                 connProps,
                 backup,
-                new CancellationToken());
+                CancellationToken.None);
 
             // Assert.
             result.Result.Should()
@@ -154,7 +154,7 @@
         public async Task TestBackupPathAsyncWithConnectionErrorReturnsFalse()
         {
             // Arrange.
-            CancellationToken token = new();
+            CancellationToken token = CancellationToken.None;
             ConnectionOptions details = GetConnectionOptions(
                 "server",
                 "database",
@@ -177,7 +177,7 @@
         public async Task TestBackupPathAsyncActionWithConnectionErrorReturnsFalse()
         {
             // Arrange.
-            CancellationToken token = new();
+            CancellationToken token = CancellationToken.None;
             ConnectionProperties connProps = GetValidConnectionProperties();
             BackupProperties backup = GetValidBackupProperties();
             connection
@@ -255,7 +255,7 @@
             OperationResult result = new();
 
             // Act.
-            result = await sqlExecutor.ExecuteBackupPathAsync(result, details, new CancellationToken());
+            result = await sqlExecutor.ExecuteBackupPathAsync(result, details, CancellationToken.None);
 
             // Assert.
             result.Result.Should()
@@ -279,7 +279,7 @@
                 result,
                 connProps,
                 backup,
-                new CancellationToken());
+                CancellationToken.None);
 
             // Assert.
             result.Result.Should()
@@ -332,7 +332,7 @@
         public async Task TestBackupPathAsyncWithCommandExecuteErrorReturnsFalse()
         {
             // Arrange.
-            CancellationToken token = new();
+            CancellationToken token = CancellationToken.None;
             ConnectionOptions details = GetConnectionOptions(
                 "server",
                 "database",
@@ -355,7 +355,7 @@
         public async Task TestBackupPathAsyncActionWithCommandExecuteErrorReturnsFalse()
         {
             // Arrange.
-            CancellationToken token = new();
+            CancellationToken token = CancellationToken.None;
             ConnectionProperties connProps = GetValidConnectionProperties();
             BackupProperties backup = GetValidBackupProperties();
             command
@@ -390,10 +390,7 @@
                 .Do(_ => throw new DbTestException("Execute is not working!"));
             OperationResult result = new();
 
-            List<string> expectedMessages = new()
-            {
-                "Backup path folder check/create failed due to an exception."
-            };
+            List<string> expectedMessages = ["Backup path folder check/create failed due to an exception."];
 
             // Act.
             result = sqlExecutor.ExecuteBackupPath(result, details);
@@ -421,10 +418,7 @@
 
             OperationResult result = new();
 
-            List<string> expectedMessages = new()
-            {
-                "Backup path folder check/create failed due to an exception."
-            };
+            List<string> expectedMessages = ["Backup path folder check/create failed due to an exception."];
 
             // Act.
             result = sqlExecutor.ExecuteBackupPath(result, connProps, backup);
@@ -444,7 +438,7 @@
         public async Task TestBackupPathAsyncWithCommandExecuteErrorReturnsExpectedMessages()
         {
             // Arrange.
-            CancellationToken token = new();
+            CancellationToken token = CancellationToken.None;
             ConnectionOptions details = GetConnectionOptions(
                 "server",
                 "database",
@@ -455,10 +449,7 @@
                 .Do(_ => throw new DbTestException("Execute is not working!"));
             OperationResult result = new();
 
-            List<string> expectedMessages = new()
-            {
-                "Backup path folder check/create failed due to an exception."
-            };
+            List<string> expectedMessages = ["Backup path folder check/create failed due to an exception."];
 
             // Act.
             result = await sqlExecutor.ExecuteBackupPathAsync(result, details, token);
@@ -478,7 +469,7 @@
         public async Task TestBackupPathAsyncActionWithCommandExecuteErrorReturnsExpectedMessages()
         {
             // Arrange.
-            CancellationToken token = new();
+            CancellationToken token = CancellationToken.None;
             ConnectionProperties connProps = GetValidConnectionProperties();
             BackupProperties backup = GetValidBackupProperties();
             command
@@ -487,10 +478,7 @@
 
             OperationResult result = new();
 
-            List<string> expectedMessages = new()
-            {
-                "Backup path folder check/create failed due to an exception."
-            };
+            List<string> expectedMessages = ["Backup path folder check/create failed due to an exception."];
 
             // Act.
             result = await sqlExecutor.ExecuteBackupPathAsync(
@@ -558,7 +546,7 @@
             OperationResult result = new();
 
             // Act.
-            result = await sqlExecutor.ExecuteBackupDatabaseAsync(result, details, new CancellationToken());
+            result = await sqlExecutor.ExecuteBackupDatabaseAsync(result, details, CancellationToken.None);
 
             // Assert.
             result.Result.Should()
@@ -579,7 +567,7 @@
                 result,
                 connProps,
                 backup,
-                new CancellationToken());
+                CancellationToken.None);
 
             // Assert.
             result.Result.Should()
@@ -632,7 +620,7 @@
         public async Task TestBackupDatabaseAsyncWithConnectionErrorReturnsFalse()
         {
             // Arrange.
-            CancellationToken token = new();
+            CancellationToken token = CancellationToken.None;
             ConnectionOptions details = GetConnectionOptions(
                 "server",
                 "database",
@@ -655,7 +643,7 @@
         public async Task TestBackupDatabaseAsyncActionWithConnectionErrorReturnsFalse()
         {
             // Arrange.
-            CancellationToken token = new();
+            CancellationToken token = CancellationToken.None;
             ConnectionProperties connProps = GetValidConnectionProperties();
             BackupProperties backup = GetValidBackupProperties();
             connection
@@ -733,7 +721,7 @@
             OperationResult result = new();
 
             // Act.
-            result = await sqlExecutor.ExecuteBackupDatabaseAsync(result, details, new CancellationToken());
+            result = await sqlExecutor.ExecuteBackupDatabaseAsync(result, details, CancellationToken.None);
 
             // Assert.
             result.Result.Should()
@@ -757,7 +745,7 @@
                 result,
                 connProps,
                 backup,
-                new CancellationToken());
+                CancellationToken.None);
 
             // Assert.
             result.Result.Should()
@@ -810,7 +798,7 @@
         public async Task TestBackupDatabaseAsyncWithCommandExecuteErrorReturnsFalse()
         {
             // Arrange.
-            CancellationToken token = new();
+            CancellationToken token = CancellationToken.None;
             ConnectionOptions details = GetConnectionOptions(
                 "server",
                 "database",
@@ -833,7 +821,7 @@
         public async Task TestBackupDatabaseAsyncActionWithCommandExecuteErrorReturnsFalse()
         {
             // Arrange.
-            CancellationToken token = new();
+            CancellationToken token = CancellationToken.None;
             ConnectionProperties connProps = GetValidConnectionProperties();
             BackupProperties backup = GetValidBackupProperties();
             command
@@ -868,10 +856,7 @@
                 .Do(_ => throw new DbTestException("Execute is not working!"));
             OperationResult result = new();
 
-            List<string> expectedMessages = new()
-            {
-                "Backing up the database failed due to an exception."
-            };
+            List<string> expectedMessages = ["Backing up the database failed due to an exception."];
 
             // Act.
             result = sqlExecutor.ExecuteBackupDatabase(result, details);
@@ -899,10 +884,7 @@
 
             OperationResult result = new();
 
-            List<string> expectedMessages = new()
-            {
-                "Backing up the database failed due to an exception."
-            };
+            List<string> expectedMessages = ["Backing up the database failed due to an exception."];
 
             // Act.
             result = sqlExecutor.ExecuteBackupDatabase(result, connProps, backup);
@@ -922,7 +904,7 @@
         public async Task TestBackupDatabaseAsyncWithCommandExecuteErrorReturnsExpectedMessages()
         {
             // Arrange.
-            CancellationToken token = new();
+            CancellationToken token = CancellationToken.None;
             ConnectionOptions details = GetConnectionOptions(
                 "server",
                 "database",
@@ -933,10 +915,7 @@
                 .Do(_ => throw new DbTestException("Execute is not working!"));
             OperationResult result = new();
 
-            List<string> expectedMessages = new()
-            {
-                "Backing up the database failed due to an exception."
-            };
+            List<string> expectedMessages = ["Backing up the database failed due to an exception."];
 
             // Act.
             result = await sqlExecutor.ExecuteBackupDatabaseAsync(result, details, token);
@@ -956,7 +935,7 @@
         public async Task TestBackupDatabaseAsyncActionWithCommandExecuteErrorReturnsExpectedMessages()
         {
             // Arrange.
-            CancellationToken token = new();
+            CancellationToken token = CancellationToken.None;
             ConnectionProperties connProps = GetValidConnectionProperties();
             BackupProperties backup = GetValidBackupProperties();
             command
@@ -965,10 +944,7 @@
 
             OperationResult result = new();
 
-            List<string> expectedMessages = new()
-            {
-                "Backing up the database failed due to an exception."
-            };
+            List<string> expectedMessages = ["Backing up the database failed due to an exception."];
 
             // Act.
             result = await sqlExecutor.ExecuteBackupDatabaseAsync(

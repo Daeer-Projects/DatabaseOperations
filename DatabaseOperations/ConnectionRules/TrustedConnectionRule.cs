@@ -4,7 +4,7 @@
     using Extensions;
     using Interfaces;
 
-    internal class TrustedConnectionRule : IConnectionRule
+    internal sealed class TrustedConnectionRule : IConnectionRule
     {
         private const string TrustedConnectionLookUp = "trusted_connection";
 

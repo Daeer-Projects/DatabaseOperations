@@ -14,7 +14,7 @@
     /// <summary>
     ///     This is the 'backup' class of operators.
     /// </summary>
-    public class BackupOperator : IBackupOperator
+    public sealed class BackupOperator : IBackupOperator
     {
         /// <summary>
         ///     The <see langword="internal" /> constructor used for unit tests.

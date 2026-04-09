@@ -4,7 +4,7 @@
     using Extensions;
     using Interfaces;
 
-    internal class NetworkAddressConnectionRule : IConnectionRule
+    internal sealed class NetworkAddressConnectionRule : IConnectionRule
     {
         private const string NetworkAddressLookUp = "network address";
 

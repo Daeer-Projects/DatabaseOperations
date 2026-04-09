@@ -41,13 +41,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.20.0" />
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.0" />
-    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.17.0" />
-    <PackageReference Include="System.Drawing.Common" Version="10.0.5" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.17.0" />
-    <PackageReference Include="System.Runtime.Caching" Version="10.0.5" />
     <PackageReference Include="Useful.Extensions" Version="3.0.7" />
 
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.201">

@@ -4,7 +4,7 @@
     using Extensions;
     using Interfaces;
 
-    internal class SecurityConnectionRule : IConnectionRule
+    internal sealed class SecurityConnectionRule : IConnectionRule
     {
         private const string IntegratedSecurityLookUp = "integrated security";
 

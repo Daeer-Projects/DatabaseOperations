@@ -72,7 +72,7 @@
         {
             SqlParameter pathParameter = new(Parameters.PathParameter, SqlDbType.VarChar) { Value = backupPath };
 
-            return new[] { pathParameter };
+            return [pathParameter];
         }
 
         private static SqlParameter[] GetParameters(
@@ -86,7 +86,7 @@
             SqlParameter descriptionParameter = new(Parameters.DescriptionParameter, SqlDbType.VarChar)
                 { Value = description };
 
-            return new[] { nameParameter, locationParameter, descriptionParameter };
+            return [nameParameter, locationParameter, descriptionParameter];
         }
     }
 }

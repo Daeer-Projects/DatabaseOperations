@@ -4,7 +4,7 @@
     using Extensions;
     using Interfaces;
 
-    internal class UserConnectionRule : IConnectionRule
+    internal sealed class UserConnectionRule : IConnectionRule
     {
         private const string UserIdLookUp = "user id";
 

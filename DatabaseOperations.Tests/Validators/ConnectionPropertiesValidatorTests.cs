@@ -8,7 +8,7 @@
     using FluentValidation.Results;
     using Xunit;
 
-    public class ConnectionPropertiesValidatorTests
+    public sealed class ConnectionPropertiesValidatorTests
     {
         [Fact]
         public void TestIsValidWithValidPropertiesReturnsTrue()
@@ -103,55 +103,55 @@
 
         public static IEnumerable<object[]> ConnectionProperties()
         {
-            yield return new object[]
-            {
+            yield return
+            [
                 new ConnectionProperties
                 {
                     DatabaseName = "Bananas", ConnectTimeout = "5", IntegratedSecurity = "SSPI"
                 }
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 new ConnectionProperties
                 {
                     Server = "   ", DatabaseName = "Bananas", ConnectTimeout = "5", IntegratedSecurity = "SSPI"
                 }
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 new ConnectionProperties
                 {
                     Server = "127.0.0.1", ConnectTimeout = "5", IntegratedSecurity = "SSPI"
                 }
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 new ConnectionProperties
                 {
                     Server = "127.0.0.1", DatabaseName = "  ", ConnectTimeout = "5", IntegratedSecurity = "SSPI"
                 }
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 new ConnectionProperties
                 {
                     Server = "127.0.0.1", DatabaseName = "Bananas", ConnectTimeout = "5"
                 }
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 new ConnectionProperties
                 {
                     Server = "127.0.0.1", DatabaseName = "Bananas", ConnectTimeout = "-1", IntegratedSecurity = "SSPI"
                 }
-            };
-            yield return new object[]
-            {
+            ];
+            yield return
+            [
                 new ConnectionProperties
                 {
                     Server = "127.0.0.1", DatabaseName = "Bananas", ConnectTimeout = "5", IntegratedSecurity = "hello"
                 }
-            };
+            ];
         }
     }
 }

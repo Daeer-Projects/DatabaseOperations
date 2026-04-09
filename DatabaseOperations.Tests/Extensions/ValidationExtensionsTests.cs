@@ -9,7 +9,7 @@
     using Xunit;
     using Type = TestTypes.Type;
 
-    public class ValidationExtensionsTests
+    public sealed class ValidationExtensionsTests
     {
         [Theory]
         [MemberData(nameof(GetGoodTestType))]
@@ -43,33 +43,33 @@
         {
             get
             {
-                yield return new object[]
-                {
+                yield return
+                [
                     new Type
                     {
                         Identity = 1,
                         Name = "TestOne",
                         DateTime = new DateTime(2019, 01, 01)
                     }
-                };
-                yield return new object[]
-                {
+                ];
+                yield return
+                [
                     new Type
                     {
                         Identity = 2,
                         Name = "TestTwo",
                         DateTime = new DateTime(2019, 01, 02)
                     }
-                };
-                yield return new object[]
-                {
+                ];
+                yield return
+                [
                     new Type
                     {
                         Identity = 2,
                         Name = "TestThree",
                         DateTime = new DateTime(2019, 01, 03)
                     }
-                };
+                ];
             }
         }
 
@@ -77,78 +77,78 @@
         {
             get
             {
-                yield return new object[]
-                {
+                yield return
+                [
                     new Type
                     {
                         Identity = -100,
                         Name = "TestOne",
                         DateTime = new DateTime(2019, 01, 01)
                     }
-                };
-                yield return new object[]
-                {
+                ];
+                yield return
+                [
                     new Type
                     {
                         Identity = -1,
                         Name = "TestOne",
                         DateTime = new DateTime(2019, 01, 01)
                     }
-                };
-                yield return new object[]
-                {
+                ];
+                yield return
+                [
                     new Type
                     {
                         Identity = 0,
                         Name = "TestOne",
                         DateTime = new DateTime(2019, 01, 01)
                     }
-                };
-                yield return new object[]
-                {
+                ];
+                yield return
+                [
                     new Type
                     {
                         Identity = 1,
                         Name = string.Empty,
                         DateTime = new DateTime(2019, 01, 02)
                     }
-                };
-                yield return new object[]
-                {
+                ];
+                yield return
+                [
                     new Type
                     {
                         Identity = 2,
                         Name = null!,
                         DateTime = new DateTime(2019, 01, 02)
                     }
-                };
-                yield return new object[]
-                {
+                ];
+                yield return
+                [
                     new Type
                     {
                         Identity = 2,
                         Name = "    ",
                         DateTime = new DateTime(2019, 01, 02)
                     }
-                };
-                yield return new object[]
-                {
+                ];
+                yield return
+                [
                     new Type
                     {
                         Identity = 3,
                         Name = "TestThree",
                         DateTime = new DateTime(2009, 12, 31)
                     }
-                };
-                yield return new object[]
-                {
+                ];
+                yield return
+                [
                     new Type
                     {
                         Identity = 100,
                         Name = "TestThree",
                         DateTime = new DateTime(2031, 01, 01)
                     }
-                };
+                ];
             }
         }
 

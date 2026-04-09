@@ -117,6 +117,6 @@ OperationResult taskThree = await resultThree.ConfigureAwait(false);
 
 The `CancellationTokenSource` object can be created with a timeout in milliseconds or a `TimeSpan`.
 
-The token source can be cancelled from any event, or when the timeout is reached.
+The token source can be cancelled from any event or when the timeout is reached.
 
 If no token is supplied to the call, it will create one, but the calling application will not be able to raise the cancellation of the task.

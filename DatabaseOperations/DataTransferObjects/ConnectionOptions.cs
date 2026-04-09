@@ -17,7 +17,7 @@
     /// <summary>
     ///     The options used for connecting to the database.
     /// </summary>
-    public class ConnectionOptions
+    public sealed class ConnectionOptions
     {
         /// <summary>
         ///     Initialises a new instance of the ConnectionOptions.
@@ -72,10 +72,10 @@
 
         private readonly IDateTimeWrapper dateTimeWrapper;
 
-        private readonly char[] splitArray = { ';' };
-        private SqlParameter[] backupParameters = Array.Empty<SqlParameter>();
+        private readonly char[] splitArray = [';'];
+        private SqlParameter[] backupParameters = [];
 
-        private SqlParameter[] executionParameters = Array.Empty<SqlParameter>();
+        private SqlParameter[] executionParameters = [];
         private bool isValid;
 
         internal string ApplicationName { get; set; } = string.Empty;
@@ -175,7 +175,7 @@
         {
             SqlParameter pathParameter = new(Parameters.PathParameter, SqlDbType.VarChar) { Value = backupPath };
 
-            return new[] { pathParameter };
+            return [pathParameter];
         }
 
         private static SqlParameter[] GetParameters(
@@ -189,7 +189,7 @@
             SqlParameter descriptionParameter = new(Parameters.DescriptionParameter, SqlDbType.VarChar)
                 { Value = description };
 
-            return new[] { nameParameter, locationParameter, descriptionParameter };
+            return [nameParameter, locationParameter, descriptionParameter];
         }
     }
 }

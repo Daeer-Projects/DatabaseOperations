@@ -2,7 +2,7 @@
 {
     using System.Data.Common;
 
-    public class DbTestException : DbException
+    public sealed class DbTestException : DbException
     {
         public DbTestException(string errorMessage)
         {

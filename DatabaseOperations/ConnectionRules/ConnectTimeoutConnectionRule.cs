@@ -4,7 +4,7 @@
     using Extensions;
     using Interfaces;
 
-    internal class ConnectTimeoutConnectionRule : IConnectionRule
+    internal sealed class ConnectTimeoutConnectionRule : IConnectionRule
     {
         private const string ConnectTimeoutLookUp = "connect timeout";
 

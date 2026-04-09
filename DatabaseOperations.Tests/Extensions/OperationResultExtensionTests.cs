@@ -12,7 +12,7 @@
     using NSubstitute;
     using Xunit;
 
-    public class OperationResultExtensionTests
+    public sealed class OperationResultExtensionTests
     {
         public OperationResultExtensionTests()
         {
