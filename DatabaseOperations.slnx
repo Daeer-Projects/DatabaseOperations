@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="DatabaseOperations.Tests/DatabaseOperations.Tests.csproj" />
+  <Project Path="DatabaseOperations/DatabaseOperations.csproj" />
+</Solution>
