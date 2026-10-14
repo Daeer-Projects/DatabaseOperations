@@ -45,7 +45,7 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.0" />
     <PackageReference Include="Useful.Extensions" Version="3.0.7" />
 
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.201">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.303">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
