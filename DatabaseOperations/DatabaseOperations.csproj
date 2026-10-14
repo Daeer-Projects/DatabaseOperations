@@ -51,6 +51,15 @@
     </PackageReference>
   </ItemGroup>
 
+  <!-- Pin transitive dependency of Microsoft.Data.SqlClient due to vulnerability (GHSA-846f-f764-76mx). -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'NET8.0'">
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="8.0.2" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'NET8.0'">
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="9.0.21" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Update="Nerdbank.GitVersioning" Version="3.10.94" />
   </ItemGroup>
